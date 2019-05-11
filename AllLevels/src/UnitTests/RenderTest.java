@@ -11,7 +11,7 @@ import renderer.ImageWriter;
 import renderer.Render;
 import scene.Scene;
 
-public class TestRender {
+public class RenderTest {
 
 	@Test
 	
