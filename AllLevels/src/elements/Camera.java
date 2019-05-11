@@ -1,0 +1,89 @@
+package elements;
+import primitives.*;
+public class Camera {
+	private Point3D _P0;
+	private Vector _vUp;
+	private Vector _vRight;
+	private Vector _vTo;
+	
+	// ***************** Constructors ********************** //
+	//default constractor 
+	public Camera() {
+		this._P0 = new Point3D(0,0,0);
+		_vUp = new Vector(0,1,0);
+		_vTo = new Vector(0,0,-1);
+		_vRight = new Vector(_vUp.crossProduct(_vTo));
+	}
+	//Copy Constractor
+	public Camera(Camera camera) throws Exception
+	{
+
+		this._P0 = camera._P0;
+		_vUp = camera._vUp.normalize();
+		_vRight = camera._vRight.normalize();
+		_vTo = camera._vTo.normalize();
+		//normalize vectors//
+	}
+	//CTOR by vectors + normalize vectors//
+	public Camera(Point3D P0, Vector vUp, Vector vTo) throws Exception {
+		this._P0 = new Point3D(P0);
+		_vUp = new Vector(vUp).normalize();
+		_vRight = _vUp.crossProduct(_vTo).normalize();
+		_vTo = vTo.normalize();
+	}
+	//Not required in file
+	public Camera(Vector vec1, Vector vec2) throws Exception
+	{
+		_vUp=new Vector(vec1).normalize();
+		_vTo = new Vector(vec2).normalize();
+		_vRight = new Vector(_vUp.crossProduct(_vTo));
+	}
+
+	/************GETTERS & SETTERS************/
+	public Vector get_vUp() {return _vUp;}
+	public void set_vUp(Vector vUP) {_vUp = vUP;}
+	public Vector get_vTo() {return _vTo;}
+	public void set_vTo(Vector vTOWARD) {_vTo = vTOWARD;}
+	public Point3D getP0() {return _P0;}
+	public void setP0(Point3D _p) {this._P0 = _p;}
+	public Vector get_vRight() {return _vRight;}
+	//Not required in file
+	public void setVRIGHT(Vector vRIGHT) {_vRight = vRIGHT;}
+	// ***************** Administration ********************** //
+	@Override
+	public String toString() {
+		return "Camera [_p=" + _P0 + ", VUP=" + _vUp + ", VRIGHT=" + _vRight + ", VTOWARD=" + _vTo + "]";
+	}
+
+	/**
+	 * function that creates a ray through a pixel
+	 * @param Nx - The width of each single pixel
+	 * @param Ny - The height of each single pixel
+	 * @param x - Point
+	 * @param y - Point
+	 * @param screenDist - Distance from the main screen
+	 * @param screenWidth - Screen width 
+	 * @param screenHeight - Screen height
+	 * @return Ray
+	 * @throws Exception 
+	 */
+	public Ray constructRayThroughPixel(int Nx, int Ny, double x, double y, double screenDist, double screenWidth,double screenHeight) throws Exception
+	{
+		Vector pc=new Vector(this._vTo);
+		pc.scale(screenDist);
+		double Rx = screenWidth/Nx;
+		double Ry = screenHeight/Ny;
+		double Right = (x-(double)Nx/2)*Rx+(Rx/2);
+		double UP = (y-(double)Ny/2)*Ry+(Ry/2);
+		Vector Temp_VRIGHT = new Vector(_vRight);
+		Vector Temp_VUP = new Vector(_vUp);	
+		Temp_VRIGHT.scale(Right);
+		Temp_VUP.scale(UP);
+		Vector P = new Vector(Temp_VRIGHT);
+		P.subtract(Temp_VUP);
+		P.add(pc);
+		Point3D centerPoint= new Point3D(Right,UP*(-1),screenDist*(-1));
+		Ray R = new Ray(centerPoint,P);
+		return R;
+	}
+}
