@@ -80,7 +80,7 @@ public class Plane extends Geometry
 	public int compareTo(Plane plane) {
 		return this.equals(plane) ? 0 : 1;
 	}
-	
+	/**
 	@Override
 	public List<Point3D> findIntersection(Ray ray){
 		//create -N
@@ -95,20 +95,17 @@ public class Plane extends Geometry
 		//create t
 		double nv = NV.dotProduct(ray.getDirection());
 		double t = (NegetiveN.dotProduct(PQ))/nv;
-
 		//create p
 		Point3D p=new Point3D(ray.getPOO());
 		Vector temp1 = new Vector(ray.getDirection());
 		temp1.scale(t);
 		p.add(temp1);
-		
-		//Dynamic allocation
 		ArrayList<Point3D> array=new ArrayList<Point3D>();
 		array.add(p);
 		return array;
    
-	}
-/**	@Override
+	}**/
+	@Override
 	public List<Point3D> findIntersection(Ray ray) throws Exception
 	{
 		ArrayList<Point3D> intersectionPoint = new ArrayList<Point3D>();
@@ -116,29 +113,27 @@ public class Plane extends Geometry
 		Point3D Q0 = new Point3D(this._Q);
 		//v = p0-q0
 		Vector v = new Vector(Q0,P0);
+
 		//Ray Direction
-		Vector V = new Vector(ray.getDirection().normalize());
-		//create -N
-		Vector N = new Vector(_normal.getHead()).scale(-1);
+		Vector V = new Vector(ray.getDirection());
+		// finding -N
+		Vector N = new Vector(_normal.getHead());
 		double NV = N.dotProduct(V);
-		double t = (N.dotProduct(v))/NV;	
+		double t = (N.scale(-1).dotProduct(v))/NV;	
 		//*****************************to delete*******************************************
 		
-		System.out.print("rayDrection: "+V+"\n");
-		System.out.print("NV: "+NV+"\n");
-		System.out.println("distance from ray P0 to plane is: "+t);
 		if (t>=0)
 		{
-			V.scale(t);
+			V = V.scale(t);
+			
 			P0.add(V);
 			intersectionPoint.add(P0);
-			System.out.print("p0 is:"+P0);
 			return intersectionPoint;
 		}
 		else 
 			return intersectionPoint;
 	}
-	**/
+	
 
 	/************** To String - Print ***************/
 	@Override

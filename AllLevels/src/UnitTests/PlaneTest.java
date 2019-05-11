@@ -49,7 +49,7 @@ public class PlaneTest { //
 		
 		Point3D directionPoint = new Point3D(0, 0, -1);
 		Point3D planePoint = new Point3D(0, 100, -200);
-				
+			
 		Vector direction = new Vector(directionPoint);
 		
 		Plane plane = new Plane(Color.white, direction, planePoint);
@@ -63,7 +63,6 @@ public class PlaneTest { //
 		
 		List<Point3D> list = new ArrayList<Point3D>();
 		list = plane.findIntersection(ray);
-
 		assertEquals(answerList, list);
 	}
 }

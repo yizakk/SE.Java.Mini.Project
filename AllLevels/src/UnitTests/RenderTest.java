@@ -11,7 +11,7 @@ import renderer.ImageWriter;
 import renderer.Render;
 import scene.Scene;
 
-public class TestRender {
+public class RenderTest {
 
 	@Test
 	
@@ -19,7 +19,7 @@ public class TestRender {
 			
 			Scene scene = new Scene();
 			
-			scene.addGeometry(new Sphere(Color.blue,50,new Point3D(0.0, 0.0, -150)));
+			scene.addGeometry(new Sphere(Color.blue,50, new Point3D(0.0, 0.0, -150)));
 			
 			Triangle triangle = new Triangle(Color.red,new Point3D( 100, 0, -149),
 					 						 new Point3D(  0, 100, -149),
@@ -44,7 +44,8 @@ public class TestRender {
 			
 			ImageWriter imageWriter = new ImageWriter("Render test", 500, 500, 500, 500);
 			
-			Render render = new Render(imageWriter, scene);
+			Render render = new Render(imageWriter,scene);
+			
 			render.renderImage();
 			render.printGrid(50);
 			imageWriter.writeToimage();
