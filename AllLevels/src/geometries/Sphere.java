@@ -63,7 +63,7 @@ public class Sphere extends RadialGeometry {
 	public List<Point3D> findIntersection(Ray ray) 
 	{
 		Point3D center = new Point3D(_center);
-		center.substract(ray.getPOO());
+		center.subtract(ray.getPOO());
 		Vector L = new Vector(center);
 		Vector V = new Vector(ray.getDirection());
 		double tm =L.dotProduct(V);

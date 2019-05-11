@@ -35,8 +35,8 @@ public class Point2D
 	//
 	//Important! "_x" is NOT equal to the second "_x" but this is the prototype in the moodle file so i did like the file
 
-	public void setX(Coordinate _x) { _x=new Coordinate(_x);}
-	public void setY(Coordinate _y) { _y=new Coordinate(_y);}
+	public void setX(Coordinate x) { _x=new Coordinate(x);}
+	public void setY(Coordinate y) { _y=new Coordinate(y);}
 
 	// ***************** Administration ******************** //
 

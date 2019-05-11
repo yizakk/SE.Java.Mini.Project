@@ -86,8 +86,9 @@ public final class Coordinate
 	}
 	//toString - print 
 	@Override
-	public String toString() {
-		return "Coordinate [_coordinate=" + _coordinate + "]";
+	public String toString()
+	{
+		return "" + _coordinate;
 	}
 
 }

@@ -88,7 +88,7 @@ public class Plane extends Geometry
 		NegetiveN.scale(-1);
 		//create (P0-Q0) = PQ
 		Point3D temp = ray.getPOO();
-		temp.substract(this._Q);
+		temp.subtract(this._Q);
 		Vector PQ = new Vector(temp);
 		//create N*V
 		Vector NV = new Vector(this._normal);

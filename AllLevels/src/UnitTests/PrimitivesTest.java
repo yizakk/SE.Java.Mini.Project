@@ -26,7 +26,8 @@ public class PrimitivesTest
 		p2.setX(new Coordinate(3.0));
 		p2.setY(new Coordinate(4.0));
 		p2.setZ(new Coordinate(5.0));
-		p1.substract(new Vector(p2));
+		//now p2 is (3.0,4.0,5.0)
+		p1.subtract((p2));
 		assertEquals(p1.toString(),"(-2.0,-2.0,-2.0)");
 
 		// Test05: Point3D distance
@@ -54,7 +55,7 @@ public class PrimitivesTest
 		// Test08: Vector Scaling test
 
 		Vector v2 = new Vector(1.2,2.4,3.6);
-		v2.scale(5);
+		v2=v2.scale(5);
 		assertEquals("Vector via: (6.0,12.0,18.0)", v2.toString());
 
 		// Test09: Vector Dot product test
@@ -87,7 +88,7 @@ public class PrimitivesTest
 		v2.setHead(new Point3D(1,2,2));
 		v3.setHead(new Point3D(2, 3, 1));
 		v1 = v2.crossProduct(v3);
-		assertEquals("Vector via: (4.0,-3.0,1.0)",v1.toString());
+		assertEquals("Vector via: (-4.0,3.0,-1.0)",v1.toString());
 
 	}
 }

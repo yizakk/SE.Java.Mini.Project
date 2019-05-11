@@ -28,7 +28,7 @@ public class Vector {
 	//Constractor get 2 Point
 	public Vector(Point3D p1, Point3D p2)
 	{
-		_head = new Point3D(p2.substract(p1));
+		_head = new Point3D(p2.subtract(p1));
 		//_head = (new Point3D(p2.getX().subtract(p1.getX()), p2.getY().subtract(p1.getY()),p2.getZ().subtract(p1.getZ())));
 	}
 	/*

@@ -33,7 +33,7 @@ public class Point3D extends Point2D
 
 	public Coordinate getZ() { return new Coordinate(_z);}
 	//Important! "_z" is NOT equal to the second "_z" but this is the prototype in the moodle file so i did like the file
-	public void setZ(Coordinate _z) { _z=new Coordinate(_z); }
+	public void setZ(Coordinate z) { _z=new Coordinate(z); }
 
 	// ***************** Administration ******************** //
 
@@ -88,16 +88,16 @@ public class Point3D extends Point2D
 		this._z = _z.subtract(vector.getHead().getZ());
 		return new Point3D(_x,_y,_z);
 	}
-	//substract point from Vector*********************************check if needed **************************
-	/*public Vector substract_(Vector vector)
+	/*//substract point from Vector*********************************check if needed **************************
+	public Vector substract_(Vector vector)
 	{
-		this._x = _x.subtract(vector.getPoint().getX());
-		this._y = _y.subtract(vector.getPoint().getY());
-		this._z = _z.subtract(vector.getPoint().getZ());
+		this._x = _x.subtract(vector.getHead().getX());
+		this._y = _y.subtract(vector.getHead().getY());
+		this._z = _z.subtract(vector.getHead().getZ());
 		return new Vector(_x,_y,_z);
 	}*/
 	//substract point from another
-	public Point3D substract(Point3D point)
+	public Point3D subtract(Point3D point)
 	{
 		this._x = _x.subtract(point._x);
 		this._y = _y.subtract(point._y);
