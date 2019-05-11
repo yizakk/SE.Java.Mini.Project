@@ -13,7 +13,7 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
-public class PlaneTest {
+public class PlaneTest { //
 
 	@Test
 	public void test() throws Exception {
