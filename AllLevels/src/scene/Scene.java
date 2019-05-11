@@ -25,7 +25,7 @@ public class Scene {
 		this._camera = new Camera();
 		this._screenDistance = 150;
 	}
-	/*********Construcotr********/
+	// ***************** Constructors ********************** //
 	public Scene(String sceneName, Color background, AmbientLight ambientLight, ArrayList<Geometry> geometries, Camera camera, double screenDistance) throws Exception {
 		this._sceneName = sceneName;
 		this._background = background;
@@ -100,7 +100,7 @@ public class Scene {
 	 * @param _geometries
 	 */
 	public void set_geometries(ArrayList<Geometry> geometries) {
-		this._geometries = new ArrayList<>(geometries);
+		this._geometries = new ArrayList<Geometry>(geometries);
 	}
 	/**
 	 * get_camera
@@ -132,6 +132,8 @@ public class Scene {
 	public void set_screenDistance(double _screenDistance) {
 		this._screenDistance = _screenDistance;
 	}
+	
+	// ***************** Administration ******************** //
 	/**
 	 * equals
 	 */

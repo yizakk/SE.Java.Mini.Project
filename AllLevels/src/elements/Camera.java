@@ -7,14 +7,14 @@ public class Camera {
 	private Vector _vTo;
 	
 	// ***************** Constructors ********************** //
-	//default constractor 
+	//default constructor 
 	public Camera() {
 		this._P0 = new Point3D(0,0,0);
 		_vUp = new Vector(0,1,0);
 		_vTo = new Vector(0,0,-1);
 		_vRight = new Vector(_vUp.crossProduct(_vTo));
 	}
-	//Copy Constractor
+	//Copy Constructor
 	public Camera(Camera camera) throws Exception
 	{
 
@@ -28,8 +28,9 @@ public class Camera {
 	public Camera(Point3D P0, Vector vUp, Vector vTo) throws Exception {
 		this._P0 = new Point3D(P0);
 		_vUp = new Vector(vUp).normalize();
-		_vRight = _vUp.crossProduct(_vTo).normalize();
 		_vTo = vTo.normalize();
+		_vRight = _vUp.crossProduct(_vTo).normalize();
+		
 	}
 	//Not required in file
 	public Camera(Vector vec1, Vector vec2) throws Exception
@@ -49,6 +50,7 @@ public class Camera {
 	public Vector get_vRight() {return _vRight;}
 	//Not required in file
 	public void setVRIGHT(Vector vRIGHT) {_vRight = vRIGHT;}
+	
 	// ***************** Administration ********************** //
 	@Override
 	public String toString() {
