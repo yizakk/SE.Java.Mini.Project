@@ -14,7 +14,7 @@ public class Sphere extends RadialGeometry {
 	//Copy constructor
 	public Sphere(Sphere sphere) {
 		super(sphere);
-		this._center=sphere._center;
+		this._center=sphere.getCenter();
 	}
 	public Sphere(double _raduis,Point3D center)
 	{
@@ -27,7 +27,7 @@ public class Sphere extends RadialGeometry {
 		this._center = new Point3D(center);
 	}
 	/**********************Get/Set******************************/
-	public Point3D getCenter() {return _center;}
+	public Point3D getCenter() {return new Point3D( _center);}
 	public void setCenter(Point3D center) {this._center = center;}
 	public Vector getNormal(Point3D point) throws Exception
 	{
@@ -57,18 +57,19 @@ public class Sphere extends RadialGeometry {
 			return this.equals(sphere) ? 0:1;
 		}
 		
-	/***************************************findIntersection**********************/
+	/***************************************findIntersection* @throws Exception **********************/
 
 	@Override
-	public List<Point3D> findIntersection(Ray ray) 
+	public List<Point3D> findIntersection(Ray ray) throws Exception 
 	{
-		Point3D center = new Point3D(_center);
-		center.subtract(ray.getPOO());
+		Point3D center = new Point3D(_center).subtract(ray.getPOO());
 		Vector L = new Vector(center);
-		Vector V = new Vector(ray.getDirection());
+		//direction vector of ray
+		Vector V = new Vector(ray.getDirection().normalize());
 		double tm =L.dotProduct(V);
-		//find D by pitagoras no using Math library
+		//find D by pitagoras using Math library
 		double d = Math.sqrt(Math.pow(L.length(), 2)-Math.pow(tm, 2));
+		//find th by pitagoras using Math library
 		double th = Math.sqrt(Math.pow(this.getRadius(), 2)-(Math.pow(d, 2)));
 		double t1 = tm-th;
 		double t2 = tm + th;
@@ -78,7 +79,7 @@ public class Sphere extends RadialGeometry {
 		if (t1>0)
 		{
 			Vector pv1=new Vector(V);
-			pv1.scale(t1);
+			pv1=pv1.scale(t1);
 			Point3D p1 = new Point3D(ray.getPOO());
 			p1.add(pv1);
 			array.add(p1);
@@ -86,7 +87,7 @@ public class Sphere extends RadialGeometry {
 		if (t2>0)
 		{
 			Vector pv2=new Vector(V);
-			pv2.scale(t2);
+			pv2=pv2.scale(t2);
 			Point3D p2 = new Point3D(ray.getPOO());
 			p2.add(pv2);
 			array.add(p2);

@@ -40,11 +40,6 @@ public class TriangleTest {
 
 		List<Point3D> list = new ArrayList<Point3D>();
 		list = t2.findIntersection(ray);
-	    System.out.println("list is:\n");
-	    System.out.println(list);
-
-	    System.out.print("answerList is:\n");
-	    System.out.print(answerList);
 		//assertEquals(answerList, list);	
 	}
 

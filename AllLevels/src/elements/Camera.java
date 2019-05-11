@@ -12,7 +12,7 @@ public class Camera {
 		this._P0 = new Point3D(0,0,0);
 		_vUp = new Vector(0,1,0);
 		_vTo = new Vector(0,0,-1);
-		_vRight = new Vector(_vUp.crossProduct(_vTo));
+		_vRight = new Vector(_vUp.crossProduct(_vTo));//(-1,0,0)
 	}
 	//Copy Constructor
 	public Camera(Camera camera) throws Exception
@@ -38,6 +38,7 @@ public class Camera {
 		_vUp=new Vector(vec1).normalize();
 		_vTo = new Vector(vec2).normalize();
 		_vRight = new Vector(_vUp.crossProduct(_vTo));
+		this._P0 = new Point3D();
 	}
 
 	/************GETTERS & SETTERS************/

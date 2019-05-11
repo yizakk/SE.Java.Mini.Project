@@ -127,6 +127,8 @@ public class Point3D extends Point2D
 
 	public Point3D scale(double num)
 	{
-		return new Point3D(new Coordinate(_x.getCoordinate()*num),new Coordinate(_y.getCoordinate()*num),new Coordinate(_z.getCoordinate()*num));
+		return new Point3D( new Coordinate(_x.getCoordinate()*num),
+							new Coordinate(_y.getCoordinate()*num),
+							new Coordinate(_z.getCoordinate()*num));
 	}
 }

@@ -83,24 +83,30 @@ public class Triangle extends Geometry {
 			return false;
 		return true;
 	}
-	
+
 	public int compareTo(Triangle triangle)
 	{
 		return this.equals(triangle) ? 0:1;
 	}
-	
 
 
 
-//function that find intersections points between the ray and the Triangle
+
+	//function that find intersections points between the ray and the Triangle
 	public List<Point3D> findIntersection(Ray ray) throws Exception
 	{
-		//Point3D p0 = new Point3D(ray.getPoint());
+		Point3D p0 = new Point3D(ray.getPOO());
 		Point3D p1 = new Point3D(_p1);
-		p1.subtract(_p2);
+		p1.subtract(p0);
+		// v1= p1-p0
 		Vector v1 = new Vector(p1);
-		Point3D p2 = new Point3D(_p1);
-		p1.subtract(_p3);
+		
+		Point3D p2 = new Point3D(_p2);
+		
+		
+		//p1 = new Point3D(_p1);
+		p2.subtract(p0);
+		// v2= p2-p0
 		Vector v2 = new Vector(p2);
 		Vector N = v1.crossProduct(v2);
 		Plane plane = new Plane(N,_p1);
@@ -111,33 +117,31 @@ public class Triangle extends Geometry {
 			return array;	
 		}
 		Point3D p = new Point3D(array.get(0));
-		p.subtract(ray.getPOO());
-		Vector t1=new Vector(_p1.subtract(ray.getPOO()));
-		Vector t2=new Vector(_p2.subtract(ray.getPOO()));
-		Vector t3=new Vector(_p3.subtract(ray.getPOO()));
+		p.subtract(ray.getDirection().getHead());
+		Vector t1=new Vector(new Point3D(_p1).subtract(p0));
+		Vector t2=new Vector(new Point3D(_p2).subtract(p0));
+		Vector t3=new Vector(new Point3D(_p3).subtract(p0));
 		Vector N1=t1.crossProduct(t2).normalize();
 		Vector N2=t2.crossProduct(t3).normalize();
 		Vector N3=t3.crossProduct(t1).normalize();
-		
+		double n1=N1.dotProduct(new Vector(p));
+		double n2=N2.dotProduct(new Vector(p));
+		double n3=N3.dotProduct(new Vector(p));
 		//if it is the same sign then return the array intersection**/
 
-		if(N1.dotProduct(new Vector(p))>0&&N2.dotProduct(new Vector(p))>0&&N3.dotProduct(new Vector(p))>0)
+		if(n1>0&&n2>0&&n3>0||n1<0&&n2<0&&n3<0)
 		{
-			System.out.println("same sign - positive - findIntersection- triangle\n");
-			return array;
-		}
-		if(N1.dotProduct(new Vector(p))<0&&N2.dotProduct(new Vector(p))<0&&N3.dotProduct(new Vector(p))<0)
-		{
-			System.out.println("same sign - negative - findIntersection- triangle\n");
+			//System.out.println("same sign - positive - findIntersection- triangle\n");
+			array.add(p);
 			return array;
 		}
 		else {
-			System.out.println("diffrent sign - findIntersection- triangle\n");
-			
-			return new ArrayList<Point3D>();}
+		//	System.out.println("diffrent sign - findIntersection- triangle\n");			
+			return new ArrayList<Point3D>();
+			}
 	}
 
-//toString - print
+	//toString - print
 	@Override
 	public String toString() {
 		return "Triangle [_p1=" + _p1 + ", _p2=" + _p2 + ", _p3=" + _p3 + "]";
