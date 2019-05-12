@@ -7,28 +7,28 @@ public class Vector {
 	private Point3D _head;
 
 	// ***************** Constructors ********************** //
-	//	Default Constractor
+	//	Default Constructor
 	public Vector() 
 	{
 		this._head = new Point3D();
 	}
-	// Constractor get Point3D Object
+	// Constructor get Point3D Object
 	public Vector(Point3D head) 
 	{
 		_head = new Point3D(head);
 	}
-	//Copy constractor
+	//Copy constructor
 	public Vector(Vector v) {
 		_head = new Point3D(v._head);
 	}
-	//Constractor get 3 double
+	//Constructor get 3 double
 	public Vector(double xHead, double yHead, double zHead) {
 		_head = new Point3D(xHead, yHead, zHead);
 	}
-	//Constractor get 2 Point
+	//Constructor get 2 Point
 	public Vector(Point3D p1, Point3D p2)
 	{
-		_head = new Point3D(new Point3D(p2).subtract(p1));
+		_head = new Point3D(p2).subtract(p1);
 	}
 	/*
 	//Ctor get 3 coordinate - check with line 74 in point3D
@@ -103,6 +103,7 @@ public class Vector {
 	 */
 	public Vector scale(double scalingFactor)
 	{
+		
 		return new Vector(new Point3D(this._head.scale(scalingFactor)));
 	}
 	/**

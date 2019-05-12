@@ -60,13 +60,6 @@ public class Camera {
 		return "Camera [_p=" + _P0 + ", VUP=" + _vUp + ", VRIGHT=" + _vRight + ", VTOWARD=" + _vTo + "]";
 	}
 	
-/*	
-	@Override
-	public Boolean equals(object other)
-	{
-		
-	}
-*/
 	
 	/**
 	 * function that creates a ray through a pixel
@@ -88,16 +81,13 @@ public class Camera {
 		double Ry = screenHeight/Ny;
 		double Right = (x-(double)Nx/2)*Rx+(Rx/2);
 		double UP = (y-(double)Ny/2)*Ry+(Ry/2);
-		Vector Temp_VRIGHT = new Vector(_vRight).scale(Right);
-		Vector Temp_VUP = new Vector(_vUp).scale(UP);	
-/*		Temp_VRIGHT.scale(Right);
-		Temp_VUP.scale(UP);
-*/
+		Vector Temp_VRIGHT = _vRight.scale(Right);
+		Vector Temp_VUP = _vUp.scale(UP);	
 		Vector P = new Vector(Temp_VRIGHT);
 		P.subtract(Temp_VUP);
 		P.add(pc);
 		Point3D centerPoint= new Point3D(Right,UP*(-1),screenDist*(-1));
-		Ray R = new Ray(centerPoint,P);
-		return R;
+		return new Ray(centerPoint,P);
+		
 	}
 }

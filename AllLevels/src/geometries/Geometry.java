@@ -28,17 +28,10 @@ public abstract class Geometry {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
+		if (obj == null || !(obj instanceof Geometry))
 			return false;
 		Geometry other = (Geometry) obj;
-		if (_emmission == null) {
-			if (other._emmission != null)
-				return false;
-		} else if (!_emmission.equals(other._emmission))
-			return false;
-		return true;
+		return this._emmission == other._emmission;
 	}
 	//***************abstract Vector getNormal Function************
 

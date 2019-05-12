@@ -53,6 +53,7 @@ public class Triangle extends Geometry {
 
 
 	// ***************** Operations ******************** //
+	@Override
 	public Vector getNormal(Point3D point) throws Exception 
 	{
 		Vector v1=new Vector(_p1,_p2);

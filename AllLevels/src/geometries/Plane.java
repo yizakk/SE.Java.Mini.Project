@@ -33,16 +33,12 @@ public class Plane extends Geometry
 		_normal = new Vector(normal);
 		_Q = new Point3D(q);
 	}
-	/*public Plane(Point3D _p1,Point3D _p2,Point3D _p3) throws Exception
-	{
-		this._Q=_p3;
-		Vector v1=new Vector(_p2,_p1);
-		Vector v2=new Vector(_p3,_p1);;
-		this._normal=v1.crossProduct(v2).normalize();
-	}*/
+
 
 	/************** Getters/Setters ***********/
+	@Override
 	public Vector getNormal(Point3D point){return this._normal;}
+	
 	public Point3D getQ() {return _Q;}
 	public void setNormal(Vector _normal) {this._normal = _normal;}
 	public void setQ(Point3D _point3) {this._Q = _point3;}
@@ -80,31 +76,7 @@ public class Plane extends Geometry
 	public int compareTo(Plane plane) {
 		return this.equals(plane) ? 0 : 1;
 	}
-	/**
-	@Override
-	public List<Point3D> findIntersection(Ray ray){
-		//create -N
-		Vector NegetiveN = new Vector(this._normal.getHead());
-		NegetiveN.scale(-1);
-		//create (P0-Q0) = PQ
-		Point3D temp = ray.getPOO();
-		temp.subtract(this._Q);
-		Vector PQ = new Vector(temp);
-		//create N*V
-		Vector NV = new Vector(this._normal);
-		//create t
-		double nv = NV.dotProduct(ray.getDirection());
-		double t = (NegetiveN.dotProduct(PQ))/nv;
-		//create p
-		Point3D p=new Point3D(ray.getPOO());
-		Vector temp1 = new Vector(ray.getDirection());
-		temp1.scale(t);
-		p.add(temp1);
-		ArrayList<Point3D> array=new ArrayList<Point3D>();
-		array.add(p);
-		return array;
-   
-	}**/
+	
 	@Override
 	public List<Point3D> findIntersection(Ray ray) throws Exception
 	{

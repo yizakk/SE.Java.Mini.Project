@@ -4,9 +4,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 import primitives.*;
 public class Sphere extends RadialGeometry {
+	
 	Point3D _center;
+	
 	//**************** Constructors *****************
-	//Default Constractor
+	//Default Constructor
 	public Sphere() {
 		super();
 		this._center = new Point3D();	
@@ -29,6 +31,7 @@ public class Sphere extends RadialGeometry {
 	/**********************Get/Set******************************/
 	public Point3D getCenter() {return new Point3D( _center);}
 	public void setCenter(Point3D center) {this._center = center;}
+	@Override
 	public Vector getNormal(Point3D point) throws Exception
 	{
 		return new Vector(_center,point).normalize();

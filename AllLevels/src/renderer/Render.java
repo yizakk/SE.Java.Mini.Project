@@ -89,12 +89,17 @@ public class Render {
                 	_imagewriter.writePixel(j,i,Color.WHITE); 
             }   
 	}
+	
 	public void renderImage() throws Exception
 	{
 		for (int i=0;i<_imagewriter.getHeight();i++){
             for (int j=0;j<_imagewriter.getWidth();j++)
             {
-        		Ray ray = _scene.get_camera().constructRayThroughPixel(_imagewriter.getNx(), _imagewriter.getNy(),i,j, _scene.get_screenDistance(), _imagewriter.getWidth(),_imagewriter.getHeight());
+        		Ray ray = _scene.get_camera().constructRayThroughPixel(_imagewriter.getNx(),
+        															   _imagewriter.getNy(),i,j, 
+        															   _scene.get_screenDistance(), 
+        															   _imagewriter.getWidth(),
+        															   _imagewriter.getHeight());
         		Map<Geometry, List<Point3D>> intersectionPoints = getSceneRayIntersections(ray);
         		if (intersectionPoints.isEmpty())
         			_imagewriter.writePixel(i, j, _scene.get_background());
@@ -108,7 +113,7 @@ public class Render {
 	}
 	
 	/**
-	 * getSceneRayIntersections 
+	 * returning map of geometries and for each- it's intersections 
 	 * @param ray
 	 * @return
 	 * @throws Exception 
@@ -126,10 +131,9 @@ public class Render {
 				intersectionPoints.put(geometry, geometryIntersectionPoints);
 		}
 		return intersectionPoints;
-		
 	}
 	/**
-	 * getClosestPoint - A function that receives a list of points and finds the nearest point
+	 * receives a list of points and finds the nearest point
 	 * @param intersectionPoints
 	 * @return
 	 * @throws Exception 
