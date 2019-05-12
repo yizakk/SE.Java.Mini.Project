@@ -75,31 +75,41 @@ public class Vector {
 	public String toString() {
 		return "Vector via: " + _head.toString();
 	}
-	/**
-	 * CrossProduct 2 vec
-	 * 
-	 * @param vector
-	 * @return
-	 */
 
 	// ****************** Operations *************//
-	//Add Vector to another
+	/**
+	 * Adding a vector to the instance, changing the origin vector
+	 * @param vec
+	 * @return copy of the updated vector
+	 */
 	public Vector add(Vector vec)
 	{
 		_head.add(vec);
 		return new Vector(_head);
 	}
-	//Substact Vector from another
+	/**
+	 * subtracting one vector from other, changing the origin vector
+	 * @param vec
+	 * @return copy of the new, subtracted, vector
+	 */
 	public Vector subtract(Vector vec) {
 		_head.substract(vec);
 		return new Vector(_head);
 	}
-	//scale vector in some number
+	/**
+	 * returning a new vector, scaling the origin vector by given factor, without changing the origin
+	 * @param scalingFactor
+	 * @return new vector, equal to the origin vector*scalingFactor
+	 */
 	public Vector scale(double scalingFactor)
 	{
 		return new Vector(new Point3D(this._head.scale(scalingFactor)));
 	}
-	//Cross product , return the new Vector
+	/**
+	 * returning a new vector, equal to the crossProduct of the origin vector and the @param vector
+	 * @param vector
+	 * @return
+	 */
 	public Vector crossProduct(Vector vector) 
 	{
 		double x1 = _head.getX().getCoordinate();
@@ -115,7 +125,10 @@ public class Vector {
 		Coordinate k = new Coordinate(usubtract(uscale(x1, y2), uscale(y1, x2)));
 		return new Vector(new Point3D(i,j,k));
 	}
-	//return the length of the vector
+	/**
+	 * Calculating the length of the vector
+	 * @return double
+	 */
 	public double length() {
 		double x = _head.getX().getCoordinate();
 		double y = _head.getY().getCoordinate();
@@ -124,8 +137,9 @@ public class Vector {
 		return sqrt(x * x + y * y + z * z);
 	}
 	/**
-	 * Normalize vector (without using math library) return the new vector (with length = 1). 
-	 * throws Exception if the length is 0 
+	 * Normalizing a vector, changing the origin
+	 * @return copy of the normalized vector
+	 * @throws Exception
 	 */
 	public Vector normalize() throws Exception {
 		double length = length();
@@ -140,7 +154,11 @@ public class Vector {
 		return new Vector(_head);
 	}
 	
-	//scalar product vectors return number
+	/**
+	 * Calculating the dotProduct of the origin vector by @param vector 
+	 * @param vec
+	 * @return double
+	 */
 	public double dotProduct(Vector vec) {
 		double x = this._head.getX().getCoordinate() * vec._head.getX().getCoordinate();
 		double y = this._head.getY().getCoordinate() * vec._head.getY().getCoordinate();

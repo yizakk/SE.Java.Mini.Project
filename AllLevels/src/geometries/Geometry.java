@@ -5,7 +5,7 @@ import java.util.List;
 public abstract class Geometry {
 	Color _emmission; 
 
- //****************Constractor****************/
+ //****************Constructor****************/
 
 	public Geometry() {
 		this._emmission= new Color(0, 0, 0);

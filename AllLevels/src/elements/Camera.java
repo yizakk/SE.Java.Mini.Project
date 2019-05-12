@@ -73,15 +73,16 @@ public class Camera {
 	public Ray constructRayThroughPixel(int Nx, int Ny, double x, double y, double screenDist, double screenWidth,double screenHeight) throws Exception
 	{
 		Vector pc=new Vector(this._vTo);
-		pc.scale(screenDist);
+		pc=pc.scale(screenDist);
 		double Rx = screenWidth/Nx;
 		double Ry = screenHeight/Ny;
 		double Right = (x-(double)Nx/2)*Rx+(Rx/2);
 		double UP = (y-(double)Ny/2)*Ry+(Ry/2);
-		Vector Temp_VRIGHT = new Vector(_vRight);
-		Vector Temp_VUP = new Vector(_vUp);	
-		Temp_VRIGHT.scale(Right);
+		Vector Temp_VRIGHT = new Vector(_vRight).scale(Right);
+		Vector Temp_VUP = new Vector(_vUp).scale(UP);	
+/*		Temp_VRIGHT.scale(Right);
 		Temp_VUP.scale(UP);
+*/
 		Vector P = new Vector(Temp_VRIGHT);
 		P.subtract(Temp_VUP);
 		P.add(pc);

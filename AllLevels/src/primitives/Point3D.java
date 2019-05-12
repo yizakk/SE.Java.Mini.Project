@@ -5,19 +5,19 @@ public class Point3D extends Point2D
 	private Coordinate _z;
 
 	// ***************** Constructors ********************** //
-	//Default Constractor
+	//Default Constructor
 	public Point3D()
 	{
 		super();
 		this._z = new Coordinate();
 	}
-	//Constractor get 3 coordinates
+	//Constructor get 3 coordinates
 	public Point3D(Coordinate x, Coordinate y,Coordinate z)
 	{
 		super(x,y);
 		_z = new Coordinate(z);
 	}
-	//Constractor get 3 doubles
+	//Constructor get 3 doubles
 	public Point3D(double x, double y, double z)
 	{
 		super(x,y);
@@ -72,7 +72,12 @@ public class Point3D extends Point2D
 		return "("+_x.toString()+","+_y.toString()+","+_z.toString()+")";
 	}
 	// ***************** Operations ******************** //
-	//****************************************ADD Descri*****************************************************
+	
+	/**
+	 * adding a vector to Point3D, changing the origin point
+	 * @param vector
+	 * @return copy of the updated point3d
+	 */
 	public Point3D add(Vector vector)
 	{
 		this._x = (_x.add(vector.getHead()._x));
@@ -80,7 +85,11 @@ public class Point3D extends Point2D
 		this._z = (_z.add(vector.getHead()._z));
 		return new Point3D(_x,_y,_z);
 	}
-	//****************************************ADD Descri*****************************************************
+	/**
+	 * subtracting a vector from point, changing the origin point
+	 * @param vector
+	 * @return copy of the updated point3d
+	 */
 	public Point3D substract(Vector vector)
 	{
 		this._x = _x.subtract(vector.getHead().getX());
@@ -88,15 +97,23 @@ public class Point3D extends Point2D
 		this._z = _z.subtract(vector.getHead().getZ());
 		return new Point3D(_x,_y,_z);
 	}
-	/*//substract point from Vector*********************************check if needed **************************
+	
+	/*
+	 * //subtract point from Vector*********************************check if needed **************************
 	public Vector substract_(Vector vector)
 	{
 		this._x = _x.subtract(vector.getHead().getX());
 		this._y = _y.subtract(vector.getHead().getY());
 		this._z = _z.subtract(vector.getHead().getZ());
 		return new Vector(_x,_y,_z);
-	}*/
-	//substract point from another
+	}
+	*/
+
+	/**
+	 * subtracting a point from another, changing the origin point
+	 * @param point
+	 * @return copy of the updated point
+	 */
 	public Point3D subtract(Point3D point)
 	{
 		this._x = _x.subtract(point._x);
@@ -105,13 +122,17 @@ public class Point3D extends Point2D
 		return new Point3D(_x,_y,_z);
 	}
 
-	// Find the distance between some Point3D instance to the current Point3D
+	/**
+	 * Calculating the distance between two points
+	 * @param the right-hand point
+	 * @return double
+	 */
 
 	public double distance(Point3D point)
 	{
-		double X=_x.subtract(point._x).getCoordinate();
-		double Y=_y.subtract(point._y).getCoordinate();
-		double Z=_z.subtract(point._z).getCoordinate();
+		double X=new Coordinate(_x).subtract(point._x).getCoordinate();
+		double Y=new Coordinate(_y).subtract(point._y).getCoordinate();
+		double Z=new Coordinate(_z).subtract(point._z).getCoordinate();
 		return sqrt(X*X+Y*Y+Z*Z);
 	}
 
@@ -123,7 +144,11 @@ public class Point3D extends Point2D
 		return distance*distance;
 	}
 
-	// Scale Point3D in some Number
+	/**
+	 * scaling the point3d in given factor, without changing the origin point
+	 * @param num
+	 * @return new point equal to the origin point scaled by the given factor
+	 */
 
 	public Point3D scale(double num)
 	{

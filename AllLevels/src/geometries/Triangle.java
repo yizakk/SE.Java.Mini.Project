@@ -10,7 +10,7 @@ public class Triangle extends Geometry {
 	Point3D _p2;
 	Point3D _p3;
 	// ***************** Constructors ********************** //
-	//Default Constractor
+	//Default Constructor
 	public Triangle()
 	{
 		super();
@@ -18,7 +18,7 @@ public class Triangle extends Geometry {
 		_p2=new Point3D();
 		_p3=new Point3D();
 	}
-	/*********Copy Constractor*************/
+	/*********Copy Constructor*************/
 	public Triangle(Triangle other)
 	{
 		super(other.getEmmission());
@@ -34,7 +34,7 @@ public class Triangle extends Geometry {
 	}
 	public Triangle(Color c,Point3D p1, Point3D p2, Point3D p3)
 	{
-		super();
+		super(c);
 		_p1=new Point3D(p1);
 		_p2=new Point3D(p2);
 		_p3=new Point3D(p3);
