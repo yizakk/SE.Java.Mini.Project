@@ -19,21 +19,21 @@ public class RenderTest {
 			
 			Scene scene = new Scene();
 			
-			scene.addGeometry(new Sphere(Color.blue,50,new Point3D(0.0, 0.0, -150)));
+			scene.addGeometry(new Sphere(Color.pink,50,new Point3D(0.0, 0.0, -150)));
 			
 			Triangle triangle = new Triangle(Color.red,new Point3D( 100, 0, -149),
 					 						 new Point3D(  0, 100, -149),
 					 						 new Point3D( 100, 100, -149));
 			
-			Triangle triangle2 = new Triangle(Color.green,new Point3D( 100, 0, -149),
+			Triangle triangle2 = new Triangle(Color.cyan,new Point3D( 100, 0, -149),
 					 			 			  new Point3D(  0, -100, -149),
 					 			 			  new Point3D( 100,-100, -149));
 			
-			Triangle triangle3 = new Triangle(Color.orange,new Point3D(-100, 0, -149),
+			Triangle triangle3 = new Triangle(Color.yellow,new Point3D(-100, 0, -149),
 					 						  new Point3D(  0, 100, -149),
 					 						  new Point3D(-100, 100, -149));
 			
-			Triangle triangle4 = new Triangle(Color.pink,new Point3D(-100, 0, -149),
+			Triangle triangle4 = new Triangle(Color.green,new Point3D(-100, 0, -149),
 					 			 			  new Point3D(  0,  -100, -149),
 					 			 			  new Point3D(-100, -100, -149));
 			

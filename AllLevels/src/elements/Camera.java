@@ -59,7 +59,15 @@ public class Camera {
 	public String toString() {
 		return "Camera [_p=" + _P0 + ", VUP=" + _vUp + ", VRIGHT=" + _vRight + ", VTOWARD=" + _vTo + "]";
 	}
-
+	
+/*	
+	@Override
+	public Boolean equals(object other)
+	{
+		
+	}
+*/
+	
 	/**
 	 * function that creates a ray through a pixel
 	 * @param Nx - The width of each single pixel

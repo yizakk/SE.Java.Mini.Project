@@ -13,24 +13,6 @@ public class SphereTest {
 
 	@Test
 	public void test() throws Exception {
-		/*Point3D p=new Point3D(80, 79, 38);
-		Point3D p1=new Point3D(80, 76, 24);
-		Sphere s1=new Sphere(p,100);
-		Vector v= new Vector(s1.getNormal(p1));
-		String str = v.toString();
-		assertEquals("Vector [_head=Point3D [_x=Coordinate [_coordinate=0.0], _y=Coordinate [_coordinate=-0.20952908873087345]_z=Coordinate [_coordinate=-0.9778024140774094]]]",str);
-		
-	Vector answer = new Vector(0.7071067811865475, 0.7071067811865475, 0.0);
-		
-		Point3D p4 = new Point3D(0, 0, -400);
-		Point3D p5 = new Point3D(1,1, -400);
-		
-		Sphere sphere = new Sphere(Color.white,p4,200);
-			
-		Vector vector = sphere.getNormal(p5);
-		assertEquals(answer, vector);
-		*/
-		
 
 		// creating the expected values
 		List<Point3D> answerList1 = new ArrayList<Point3D>();

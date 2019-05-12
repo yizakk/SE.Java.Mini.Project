@@ -46,7 +46,7 @@ public class PrimitivesTest
 		v1.add(v1);
 		assertEquals("Vector via: (2.2,4.4,6.6)",v1.toString());
 
-		// Test07: Vector Substruct test
+		// Test07: Vector Subtract test
 
 		Vector v3 = new Vector(1.0, 1.0, 1.0);
 		v3.subtract(new Vector(1.0, 1.0, 1.0));
@@ -72,10 +72,10 @@ public class PrimitivesTest
 		assertEquals(5,len,0);
 
 		// Test11: Vector Normalize test
-
-		v2.setHead(new Point3D(3.0,4.0,0.0));
 		try {
-			v2=v2.normalize();
+		v2.setHead(new Point3D(3.0,4.0,0.0));
+
+		v2.normalize();
 		}
 		catch(Exception a)
 		{

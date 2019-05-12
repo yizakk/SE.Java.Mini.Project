@@ -40,20 +40,7 @@ public class Render {
 	 * renderImage - A function whose function is to produce the actual image
 	 * @throws Exception 
 	 */
-	// ***************** Operations ******************** //
 
-	/**
-	 * printGrid
-	 * @param interval
-	 */
-	public void printGrid(int interval){
-		for (int i=0;i<_imagewriter.getHeight();i++)
-            for (int j=0;j<_imagewriter.getWidth();j++)
-            {
-                if(i%interval==0 || j%interval==0 )
-                	_imagewriter.writePixel(j,i,Color.WHITE); 
-            }   
-	}
 	/**
 	 * get_scene
 	 * @return
@@ -88,6 +75,20 @@ public class Render {
 		return "Render [_scene=" + _scene + ", _imagewriter=" + _imagewriter + "]";
 	}
 
+	// ***************** Operations ******************** //
+
+	/**
+	 * printGrid
+	 * @param interval
+	 */
+	public void printGrid(int interval){
+		for (int i=0;i<_imagewriter.getHeight();i++)
+            for (int j=0;j<_imagewriter.getWidth();j++)
+            {
+                if(i%interval==0 || j%interval==0 )
+                	_imagewriter.writePixel(j,i,Color.WHITE); 
+            }   
+	}
 	public void renderImage() throws Exception
 	{
 		for (int i=0;i<_imagewriter.getHeight();i++){
@@ -152,15 +153,12 @@ public class Render {
 	public Color calcColor(Geometry geometry, Point3D p)
 	{
 		Color ambientLight = _scene.get_ambientLight().getIntensity();
-		//System.out.println("color of ambient "+ambientLight);
 		Color emissionLight = geometry.getEmmission();
-		//System.out.println("color of emission "+emissionLight);
-		
+	
 		int red = Math.max(0, Math.min(255, ambientLight.getRed() + emissionLight.getRed()));
 		int green = Math.max(0, Math.min(255, ambientLight.getGreen() + emissionLight.getGreen()));
 		int blue = Math.max(0, Math.min(255, ambientLight.getBlue() + emissionLight.getBlue()));
-		Color IO = new Color(red, green, blue);
-		return IO;
+		return new Color(red, green, blue);
 	}
 
 }

@@ -47,7 +47,7 @@ public abstract class Geometry {
 	//***************abstract findIntersection Function**************//
 	public abstract List<Point3D> findIntersection(Ray ray) throws Exception;
 	
-	/******ToString - Print***/
+	
 	@Override
 	public String toString() {
 		return "Geometry [_color=" + _emmission + "]";

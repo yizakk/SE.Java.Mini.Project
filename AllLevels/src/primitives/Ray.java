@@ -33,6 +33,20 @@ public class Ray
 	public Vector getDirection() { return new Vector(_direction); }
 	public Point3D getPOO()        { return new Point3D(_POO); }
 	
+	//******************* Administration ****************//	
+	@Override
+	public boolean equals(Object other)
+	{
+		if(other==this)
+			return true;
+		if(!(other instanceof Ray))
+			return false;
+		Ray ray = (Ray) other;
+		return this._POO.equals(ray._POO) && this._direction.equals(ray._direction);
+		//return false;
+		
+	}
+	
 	@Override
 	public String toString() {
 		return "Ray [point=" + _POO + ", direction=" + _direction + "]";
