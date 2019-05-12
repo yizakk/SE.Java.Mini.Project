@@ -107,6 +107,7 @@ public class Vector {
 	}
 	/**
 	 * returning a new vector, equal to the crossProduct of the origin vector and the @param vector
+	 * not changing origin
 	 * @param vector
 	 * @return
 	 */

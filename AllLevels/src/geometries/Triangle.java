@@ -6,9 +6,11 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 public class Triangle extends Geometry {
+	
 	Point3D _p1;
 	Point3D _p2;
 	Point3D _p3;
+	
 	// ***************** Constructors ********************** //
 	//Default Constructor
 	public Triangle()

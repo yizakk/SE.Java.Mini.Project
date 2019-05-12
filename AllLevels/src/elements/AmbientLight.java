@@ -34,11 +34,17 @@ public class AmbientLight {
 	public double get_ka() {return _Ka;}
 	//public void set_ka(double _ka) {this._Ka = _ka;}
 	public Color getIntensity(Point3D p){
-        return new Color((int)((this.get_color().getRed())*_Ka),(int)((this.get_color().getGreen())*_Ka),(int)((this.get_color().getBlue())*_Ka));
+        return new Color(
+        		(int)((this.get_color().getRed())*_Ka)
+        		,(int)((this.get_color().getGreen())*_Ka)
+        		,(int)((this.get_color().getBlue())*_Ka));
 	}
 	public Color getIntensity()
 	{
-        return new Color((int)((this.get_color().getRed()/255)*_Ka),(int)((this.get_color().getGreen()/255)*_Ka),(int)((this.get_color().getBlue()/255)*_Ka));
+        return new Color(
+        		(int)((this.get_color().getRed()/255)*_Ka),
+        		(int)((this.get_color().getGreen()/255)*_Ka),
+        		(int)((this.get_color().getBlue()/255)*_Ka));
 
 	}	
 	@Override

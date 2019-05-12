@@ -18,12 +18,15 @@ public class Render {
 	//private final int RECURSION_LEVEL = 3;
 	
 	// ***************** Constructors ********************** //
+	/**
+	 * default constructor, setting name to "default", width=height=nx=ny=500
+	 */
 	public Render() {
 		super();
 		this._scene = new Scene();
 		this._imagewriter = new ImageWriter("Default",500,500,500,500);
 	}
-//Constractor get Scene and ImageWriter
+//Constructor get Scene and ImageWriter
 	public Render(ImageWriter imagewriter, Scene scene) {
 		super();
 		this._scene = new Scene(scene);

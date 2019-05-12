@@ -5,7 +5,9 @@ public class Point3D extends Point2D
 	private Coordinate _z;
 
 	// ***************** Constructors ********************** //
-	//Default Constructor
+	/**
+	 * default constructor, setting the point to (0,0,0)
+	 */
 	public Point3D()
 	{
 		super();

@@ -7,9 +7,11 @@ public class Camera {
 	private Vector _vTo;
 	
 	// ***************** Constructors ********************** //
-	//default constructor 
+	/**
+	 * default constructor, setting p0=(0,0,0), vup=(0,1,0) vto=(0,0,-1) vright=(-1,0,0) 
+	 */
 	public Camera() {
-		this._P0 = new Point3D(0,0,0);
+		this._P0 = new Point3D();
 		_vUp = new Vector(0,1,0);
 		_vTo = new Vector(0,0,-1);
 		_vRight = new Vector(_vUp.crossProduct(_vTo));//(-1,0,0)
@@ -18,17 +20,17 @@ public class Camera {
 	public Camera(Camera camera) throws Exception
 	{
 
-		this._P0 = camera._P0;
-		_vUp = camera._vUp.normalize();
-		_vRight = camera._vRight.normalize();
-		_vTo = camera._vTo.normalize();
+		this._P0 = new Point3D(camera._P0);
+		_vUp = new Vector(camera._vUp).normalize();
+		_vRight = new Vector(camera._vRight).normalize();
+		_vTo = new Vector(camera._vTo).normalize();
 		//normalize vectors//
 	}
 	//CTOR by vectors + normalize vectors//
 	public Camera(Point3D P0, Vector vUp, Vector vTo) throws Exception {
 		this._P0 = new Point3D(P0);
 		_vUp = new Vector(vUp).normalize();
-		_vTo = vTo.normalize();
+		_vTo = new Vector(vTo).normalize();
 		_vRight = _vUp.crossProduct(_vTo).normalize();
 		
 	}
@@ -42,15 +44,15 @@ public class Camera {
 	}
 
 	/************GETTERS & SETTERS************/
-	public Vector get_vUp() {return _vUp;}
-	public void set_vUp(Vector vUP) {_vUp = vUP;}
-	public Vector get_vTo() {return _vTo;}
-	public void set_vTo(Vector vTOWARD) {_vTo = vTOWARD;}
-	public Point3D getP0() {return _P0;}
-	public void setP0(Point3D _p) {this._P0 = _p;}
-	public Vector get_vRight() {return _vRight;}
+	public Vector get_vUp() {return new Vector(_vUp);}
+	public void set_vUp(Vector vUP) {_vUp = new Vector( vUP);}
+	public Vector get_vTo() {return new Vector(_vTo);}
+	public void set_vTo(Vector vTOWARD) {_vTo = new Vector(vTOWARD);}
+	public Point3D getP0() {return new Point3D(_P0);}
+	public void setP0(Point3D _p) {this._P0 = new Point3D(_p);}
+	public Vector get_vRight() {return new Vector(_vRight);}
 	//Not required in file
-	public void setVRIGHT(Vector vRIGHT) {_vRight = vRIGHT;}
+	public void setVRIGHT(Vector vRIGHT) {_vRight = new Vector(vRIGHT);}
 	
 	// ***************** Administration ********************** //
 	@Override

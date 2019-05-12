@@ -7,13 +7,13 @@ public class Ray
 	private Vector _direction;
 
 	// ***************** Constructors ********************** //
-	//Default Constrator
+	//Default Constructor
 	public Ray()
 	{
 		_POO = new Point3D();
 		_direction = new Vector();
 	}
-	//Copy constractor
+	//Copy constructor
 	public Ray(Ray ray)
 	{
 		this._POO = ray.getPOO();
@@ -28,7 +28,8 @@ public class Ray
 
 	// ***************** Getters/Setters ********************** //
 	public void setPOO(Point3D pnt) { this._POO = new Point3D(pnt); }
-	public void setDirection(Vector _direction) { this._direction = new Vector(_direction);  }
+	public void setDirection(Vector _direction) throws Exception
+	{ this._direction = new Vector(_direction).normalize();  }
 	public Vector getDirection() { return new Vector(_direction); }
 	public Point3D getPOO()        { return new Point3D(_POO); }
 	
