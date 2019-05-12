@@ -8,18 +8,17 @@ public class Camera {
 	
 	// ***************** Constructors ********************** //
 	/**
-	 * default constructor, setting p0=(0,0,0), vup=(0,1,0) vto=(0,0,-1) vright=(-1,0,0) 
+	 * default constructor, setting p0=(0,0,10), vup=(0,1,0) vto=(0,0,-1) vright=(-1,0,0) 
 	 */
 	public Camera() {
-		this._P0 = new Point3D();
+		this._P0 = new Point3D(0,0,10);
 		_vUp = new Vector(0,1,0);
 		_vTo = new Vector(0,0,-1);
-		_vRight = new Vector(_vUp.crossProduct(_vTo));//(-1,0,0)
+		_vRight = _vUp.crossProduct(_vTo);//(-1,0,0)
 	}
 	//Copy Constructor
 	public Camera(Camera camera) throws Exception
 	{
-
 		this._P0 = new Point3D(camera._P0);
 		_vUp = new Vector(camera._vUp).normalize();
 		_vRight = new Vector(camera._vRight).normalize();

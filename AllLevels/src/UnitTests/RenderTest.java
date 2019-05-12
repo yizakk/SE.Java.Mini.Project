@@ -18,8 +18,8 @@ public class RenderTest {
 		public void basicRendering() throws Exception{
 			
 			Scene scene = new Scene();
-			
-			scene.addGeometry(new Sphere(Color.pink,50,new Point3D(0.0, 0.0, -150)));
+			//scene.set_screenDistance(50);
+			scene.addGeometry(new Sphere(Color.MAGENTA,50,new Point3D(0.0, 0.0, -150)));
 			
 			Triangle triangle = new Triangle(Color.red,new Point3D( 100, 0, -149),
 					 						 new Point3D(  0, 100, -149),
@@ -36,13 +36,13 @@ public class RenderTest {
 			Triangle triangle4 = new Triangle(Color.green,new Point3D(-100, 0, -149),
 					 			 			  new Point3D(  0,  -100, -149),
 					 			 			  new Point3D(-100, -100, -149));
-			
+			//sphere.setEmmission(Color.green);
 			scene.addGeometry(triangle);
 			scene.addGeometry(triangle2);
 			scene.addGeometry(triangle3);
 			scene.addGeometry(triangle4);
 			
-			ImageWriter imageWriter = new ImageWriter("Render test", 500, 500, 500, 500);
+			ImageWriter imageWriter = new ImageWriter("Render test1", 500, 500, 500, 500);
 			
 			Render render = new Render(imageWriter, scene);
 			render.renderImage();

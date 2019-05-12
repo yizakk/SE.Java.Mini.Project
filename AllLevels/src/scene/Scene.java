@@ -2,15 +2,19 @@ package scene;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
 import elements.AmbientLight;
 import elements.Camera;
+import elements.LightSource;
 import geometries.Geometry;
 public class Scene {
 
-	String _sceneName;
+	String _sceneName = "scene";
 	Color _background;
 	AmbientLight _ambientLight;
-	ArrayList<Geometry> _geometries;
+	ArrayList<Geometry> _geometries = new ArrayList<Geometry>();
+	List<LightSource> _lights = new ArrayList<LightSource>();
 	Camera _camera;
 	double _screenDistance;
 
@@ -23,10 +27,11 @@ public class Scene {
 		this._ambientLight = new AmbientLight();
 		this._geometries = new ArrayList<Geometry>();
 		this._camera = new Camera();
-		this._screenDistance = 150;
+		this._screenDistance = 100;
 	}
 	// ***************** Constructors ********************** //
-	public Scene(String sceneName, Color background, AmbientLight ambientLight, ArrayList<Geometry> geometries, Camera camera, double screenDistance) throws Exception {
+	public Scene(String sceneName, Color background, AmbientLight ambientLight, ArrayList<Geometry> geometries, Camera camera, double screenDistance) throws Exception 
+	{
 		this._sceneName = sceneName;
 		this._background = background;
 		this._ambientLight = new AmbientLight(ambientLight);
@@ -46,6 +51,8 @@ public class Scene {
 		this._screenDistance =sce._screenDistance ;
 	}
 
+	
+//****************************** Getters / Setters *******************//
 	/**
 	 * get_sceneName
 	 * @return

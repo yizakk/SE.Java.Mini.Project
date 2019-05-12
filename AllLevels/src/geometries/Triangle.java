@@ -92,9 +92,6 @@ public class Triangle extends Geometry {
 		return this.equals(triangle) ? 0:1;
 	}
 
-
-
-
 	//function that find intersections points between the ray and the Triangle
 	public List<Point3D> findIntersection(Ray ray) throws Exception
 	{
@@ -105,9 +102,7 @@ public class Triangle extends Geometry {
 		Vector v1 = new Vector(p1);
 		
 		Point3D p2 = new Point3D(_p2);
-		
-		
-		//p1 = new Point3D(_p1);
+	
 		p2.subtract(p0);
 		// v2= p2-p0
 		Vector v2 = new Vector(p2);

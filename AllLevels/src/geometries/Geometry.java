@@ -34,12 +34,10 @@ public abstract class Geometry {
 		return this._emmission == other._emmission;
 	}
 	//***************abstract Vector getNormal Function************
-
 	public abstract Vector getNormal(Point3D point) throws Exception;
 
 	//***************abstract findIntersection Function**************//
 	public abstract List<Point3D> findIntersection(Ray ray) throws Exception;
-	
 	
 	@Override
 	public String toString() {

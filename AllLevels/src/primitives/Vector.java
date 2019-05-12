@@ -80,21 +80,19 @@ public class Vector {
 	/**
 	 * Adding a vector to the instance, changing the origin vector
 	 * @param vec
-	 * @return copy of the updated vector
+	 * @return new Vector, equal to the origin+the given vector
 	 */
 	public Vector add(Vector vec)
 	{
-		_head.add(vec);
-		return new Vector(_head);
+		return new Vector(_head.add(vec));
 	}
 	/**
-	 * subtracting one vector from other, changing the origin vector
+	 * subtracting one vector from other, without changing the origin vector
 	 * @param vec
-	 * @return copy of the new, subtracted, vector
+	 * @return new, subtracted, vector (origin - vec)
 	 */
 	public Vector subtract(Vector vec) {
-		_head.substract(vec);
-		return new Vector(_head);
+		return new Vector(_head.subtract(vec));
 	}
 	/**
 	 * returning a new vector, scaling the origin vector by given factor, without changing the origin
@@ -102,8 +100,7 @@ public class Vector {
 	 * @return new vector, equal to the origin vector*scalingFactor
 	 */
 	public Vector scale(double scalingFactor)
-	{
-		
+	{		
 		return new Vector(new Point3D(this._head.scale(scalingFactor)));
 	}
 	/**

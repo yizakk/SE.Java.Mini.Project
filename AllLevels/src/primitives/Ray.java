@@ -2,9 +2,8 @@ package primitives;
 
 public class Ray
 {
-	private Point3D _POO;
-	// direction
-	private Vector _direction;
+	private Point3D _POO; // P0
+	private Vector _direction; // Ray Direction
 
 	// ***************** Constructors ********************** //
 	//Default Constructor
@@ -22,8 +21,8 @@ public class Ray
 
 	public Ray(Point3D point, Vector direction) throws Exception
 	{
-		this._POO = new Point3D(point);
-		this._direction = new Vector (direction).normalize();
+		this._POO = point;
+		this._direction = direction.normalize();
 	}
 
 	// ***************** Getters/Setters ********************** //

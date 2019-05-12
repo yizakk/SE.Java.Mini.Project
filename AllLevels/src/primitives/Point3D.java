@@ -25,7 +25,7 @@ public class Point3D extends Point2D
 		super(x,y);
 		_z=new Coordinate(z);
 	}
-	//Copy Constractor
+	//Copy Constructor
 	public Point3D(Point3D point3D)
 	{
 		super(point3D.getX(), point3D.getY());
@@ -76,28 +76,27 @@ public class Point3D extends Point2D
 	// ***************** Operations ******************** //
 	
 	/**
-	 * adding a vector to Point3D, changing the origin point
+	 * adding a vector to Point3D, without changing the origin point
 	 * @param vector
 	 * @return copy of the updated point3d
 	 */
 	public Point3D add(Vector vector)
 	{
-		this._x = (_x.add(vector.getHead()._x));
-		this._y = (_y.add(vector.getHead()._y));
-		this._z = (_z.add(vector.getHead()._z));
-		return new Point3D(_x,_y,_z);
+		return new Point3D( (_x.add(vector.getHead()._x)),
+							(_y.add(vector.getHead()._y)),
+							(_z.add(vector.getHead()._z)));
+		
 	}
 	/**
-	 * subtracting a vector from point, changing the origin point
+	 * subtracting a vector from point, without changing the origin point
 	 * @param vector
 	 * @return copy of the updated point3d
 	 */
-	public Point3D substract(Vector vector)
+	public Point3D subtract(Vector vector)
 	{
-		this._x = _x.subtract(vector.getHead().getX());
-		this._y = _y.subtract(vector.getHead().getY());
-		this._z = _z.subtract(vector.getHead().getZ());
-		return new Point3D(_x,_y,_z);
+		return new Point3D(_x.subtract(vector.getHead().getX()),
+						   _y.subtract(vector.getHead().getY()),
+						   _z.subtract(vector.getHead().getZ()));			
 	}
 	
 	/*
@@ -112,16 +111,15 @@ public class Point3D extends Point2D
 	*/
 
 	/**
-	 * subtracting a point from another, changing the origin point
+	 * subtracting a point from another, without changing the origin point
 	 * @param point
 	 * @return copy of the updated point
 	 */
 	public Point3D subtract(Point3D point)
 	{
-		this._x = _x.subtract(point._x);
-		this._y = _y.subtract(point._y);
-		this._z = _z.subtract(point._z);
-		return new Point3D(_x,_y,_z);
+		return new Point3D( _x.subtract(point._x),
+						    _y.subtract(point._y),
+						    _z.subtract(point._z));
 	}
 
 	/**
