@@ -2,7 +2,11 @@ package renderer;
 import java.awt.Color;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 //import elements.LightSource;
 //import geometries.FlatGeometry;
 import geometries.Geometry;
@@ -29,7 +33,7 @@ public class Render {
 //Constructor get Scene and ImageWriter
 	public Render(ImageWriter imagewriter, Scene scene) {
 		super();
-		this._scene = new Scene(scene);
+		this._scene = scene;
 		this._imagewriter = imagewriter;
 	}
 	/**
@@ -37,23 +41,7 @@ public class Render {
 	 * @throws Exception 
 	 */
 	// ***************** Operations ******************** //
-	public void renderImage() throws Exception
-	{
-		for (int i=0;i<_imagewriter.getHeight();i++){
-            for (int j=0;j<_imagewriter.getWidth();j++)
-            {
-        		Ray ray = _scene.get_camera().constructRayThroughPixel(_imagewriter.getNx(), _imagewriter.getNy(),i,j, _scene.get_screenDistance(), _imagewriter.getWidth(),_imagewriter.getHeight());
-        		List<Point3D> intersectionPoints = getSceneRayIntersections(ray);
-        		if (intersectionPoints.isEmpty())
-        			_imagewriter.writePixel(i, j, _scene.get_background());
-        		else
-        		{
-        		Point3D closestPoint = getClosestPoint(intersectionPoints);
-        		_imagewriter.writePixel(i, j, calcColor(closestPoint));
-        		}
-            }
-         }	
-	}
+
 	/**
 	 * printGrid
 	 * @param interval
@@ -100,21 +88,41 @@ public class Render {
 		return "Render [_scene=" + _scene + ", _imagewriter=" + _imagewriter + "]";
 	}
 
-
+	public void renderImage() throws Exception
+	{
+		for (int i=0;i<_imagewriter.getHeight();i++){
+            for (int j=0;j<_imagewriter.getWidth();j++)
+            {
+        		Ray ray = _scene.get_camera().constructRayThroughPixel(_imagewriter.getNx(), _imagewriter.getNy(),i,j, _scene.get_screenDistance(), _imagewriter.getWidth(),_imagewriter.getHeight());
+        		Map<Geometry, List<Point3D>> intersectionPoints = getSceneRayIntersections(ray);
+        		if (intersectionPoints.isEmpty())
+        			_imagewriter.writePixel(i, j, _scene.get_background());
+        		else
+        		{
+        			Entry<Geometry, Point3D> closestPoint = getClosestPoint(intersectionPoints);
+        			_imagewriter.writePixel(i, j, calcColor(closestPoint.getKey(), closestPoint.getValue()));
+        		}
+            }
+         }	
+	}
+	
 	/**
 	 * getSceneRayIntersections 
 	 * @param ray
 	 * @return
 	 * @throws Exception 
 	 */
-	private List<Point3D> getSceneRayIntersections(Ray ray) throws Exception
+	private Map<Geometry, List<Point3D>> getSceneRayIntersections(Ray ray) throws Exception
 	{
 		Iterator<Geometry> geometries = _scene.getGeometriesIterator();
-		List<Point3D> intersectionPoints = new ArrayList<Point3D>();
+		Map<Geometry, List<Point3D>> intersectionPoints = new HashMap<Geometry, List<Point3D>>();
+		
+
 		while (geometries.hasNext()){
 			Geometry geometry = geometries.next();
-			List<Point3D> geometryIntersectionPoints = geometry.findIntersection(ray);
-			intersectionPoints.addAll(geometryIntersectionPoints);
+			ArrayList<Point3D> geometryIntersectionPoints = (ArrayList<Point3D>) geometry.findIntersection(ray);
+			if(!(geometryIntersectionPoints.isEmpty()))
+				intersectionPoints.put(geometry, geometryIntersectionPoints);
 		}
 		return intersectionPoints;
 		
@@ -125,22 +133,34 @@ public class Render {
 	 * @return
 	 * @throws Exception 
 	 */
-	private Point3D getClosestPoint(List<Point3D> intersectionPoints) throws Exception
+	private Entry<Geometry, Point3D> getClosestPoint(Map<Geometry,List<Point3D>> intersectionPoints) throws Exception
 	{
 		double distance = Double.MAX_VALUE;
 		Point3D P0 = _scene.get_camera().getP0();
-		Point3D minDistancePoint = null;
-		for (Point3D point: intersectionPoints)
-			{if (P0.distance(point) < distance)
-			{
-			minDistancePoint = new Point3D(point);
-			distance = P0.distance(point);
-			}
-		}
-		return minDistancePoint;
+		Map<Geometry, Point3D> minDistancePoint = new HashMap<Geometry, Point3D>();
+		for (Entry<Geometry, List<Point3D>> entry:intersectionPoints.entrySet())
+			for (Point3D point: entry.getValue())
+				if(P0.distance(point) < distance)
+				{
+					minDistancePoint.clear();
+					minDistancePoint.put(entry.getKey(), new Point3D(point));
+					distance = P0.distance(point);
+				}
+		return minDistancePoint.entrySet().iterator().next();
 	}
-	public Color calcColor(Point3D p){
-		return _scene.get_ambientLight().getIntensity(p);
+	
+	public Color calcColor(Geometry geometry, Point3D p)
+	{
+		Color ambientLight = _scene.get_ambientLight().getIntensity();
+		//System.out.println("color of ambient "+ambientLight);
+		Color emissionLight = geometry.getEmmission();
+		//System.out.println("color of emission "+emissionLight);
+		
+		int red = Math.max(0, Math.min(255, ambientLight.getRed() + emissionLight.getRed()));
+		int green = Math.max(0, Math.min(255, ambientLight.getGreen() + emissionLight.getGreen()));
+		int blue = Math.max(0, Math.min(255, ambientLight.getBlue() + emissionLight.getBlue()));
+		Color IO = new Color(red, green, blue);
+		return IO;
 	}
 
 }
