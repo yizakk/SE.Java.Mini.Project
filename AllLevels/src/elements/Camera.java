@@ -56,7 +56,7 @@ public class Camera {
 	// ***************** Administration ********************** //
 	@Override
 	public String toString() {
-		return "Camera [_p=" + _P0 + ", VUP=" + _vUp + ", VRIGHT=" + _vRight + ", VTOWARD=" + _vTo + "]";
+		return "Vto: " + _vTo + "\n" + "Vup: " + _vUp + "\n" + "Vright:" + _vRight + ".";
 	}
 	
 	
@@ -72,21 +72,38 @@ public class Camera {
 	 * @return Ray
 	 * @throws Exception 
 	 */
-	public Ray constructRayThroughPixel(int Nx, int Ny, double x, double y, double screenDist, double screenWidth,double screenHeight) throws Exception
+//	public Ray constructRayThroughPixel(int Nx, int Ny, double x, double y, double screenDist, double screenWidth,double screenHeight) throws Exception
+//	{
+//		Vector pc=this._vTo.scale(screenDist);
+//		//pc=pc.scale(screenDist);
+//		double Rx = screenWidth/Nx;
+//		double Ry = screenHeight/Ny;
+//		double Right = (x-(double)Nx/2)*Rx+(Rx/2);
+//		double UP = (y-(double)Ny/2)*Ry+(Ry/2);
+//		Vector Temp_VRIGHT = _vRight.scale(Right);
+//		Vector Temp_VUP = _vUp.scale(UP);	
+//		Vector P = new Vector(Temp_VRIGHT).subtract(Temp_VUP).add(pc);
+//		//P.add(pc);
+//		Point3D centerPoint= new Point3D(Right,UP*(-1),screenDist*(-1));
+//		return new Ray(centerPoint,P);
+//		
+//	}
+	public Ray constructRayThroughPixel (int Nx, int Ny,
+			double x, double y,
+			double screenDist,
+			double screenWidth,
+			double screenHeight) throws Exception
 	{
-		Vector pc=new Vector(this._vTo);
-		pc=pc.scale(screenDist);
+		Point3D Pc = this._P0.add(this._vTo.scale(screenDist));
+
 		double Rx = screenWidth/Nx;
 		double Ry = screenHeight/Ny;
-		double Right = (x-(double)Nx/2)*Rx+(Rx/2);
-		double UP = (y-(double)Ny/2)*Ry+(Ry/2);
-		Vector Temp_VRIGHT = _vRight.scale(Right);
-		Vector Temp_VUP = _vUp.scale(UP);	
-		Vector P = new Vector(Temp_VRIGHT);
-		P.subtract(Temp_VUP);
-		P.add(pc);
-		Point3D centerPoint= new Point3D(Right,UP*(-1),screenDist*(-1));
-		return new Ray(centerPoint,P);
-		
+
+		double Tright = (x-Nx/2.0)*Rx +Rx/2.0;
+		double Tup = (y-Ny/2.0)*Ry +Ry/2.0;
+
+		Point3D P = Pc.add(this._vRight.scale(Tright).subtract(this._vUp.scale(Tup)));
+		return new Ray(P,new Vector(P,_P0).normalize());
+
 	}
 }

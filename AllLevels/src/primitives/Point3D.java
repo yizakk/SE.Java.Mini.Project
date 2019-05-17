@@ -82,9 +82,10 @@ public class Point3D extends Point2D
 	 */
 	public Point3D add(Vector vector)
 	{
-		return new Point3D( (_x.add(vector.getHead()._x)),
-							(_y.add(vector.getHead()._y)),
-							(_z.add(vector.getHead()._z)));
+		Point3D tempHead = vector.getHead();
+		return new Point3D( (_x.add(tempHead._x)),
+							(_y.add(tempHead._y)),
+							(_z.add(tempHead._z)));
 		
 	}
 	/**
@@ -111,7 +112,8 @@ public class Point3D extends Point2D
 	*/
 
 	/**
-	 * subtracting a point from another, without changing the origin point
+	 * subtracting a point from another (left-right), without changing the origin point
+	 * 
 	 * @param point
 	 * @return copy of the updated point
 	 */

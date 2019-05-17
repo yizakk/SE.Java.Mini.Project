@@ -39,8 +39,8 @@ public class TriangleTest {
 		// testing the findIntersection function
 
 		List<Point3D> list = new ArrayList<Point3D>();
-		list = t2.findIntersection(ray);
-		//assertEquals(answerList, list);	
+		list = t2.findIntersections(ray);
+		assertEquals(answerList, list);	
 	}
 
 }

@@ -41,7 +41,7 @@ public class PlaneTest { //
 		// testing the findIntersection function
 		
 		List<Point3D> list = new ArrayList<Point3D>();
-		list = plane.findIntersection(ray);
+		list = plane.findIntersections(ray);
 		assertEquals(answerList, list);
 	}
 }

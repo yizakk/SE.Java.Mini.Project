@@ -10,6 +10,7 @@ public abstract class RadialGeometry extends Geometry
 	}
 	public RadialGeometry(double radius)
 	{
+		super();
 		_radius = radius;
 	}
 

@@ -3,10 +3,11 @@ import java.util.List;
 import java.awt.Color;
 import java.util.ArrayList;
 import primitives.*;
-public class Plane extends Geometry
+public class Plane extends Geometry implements FlatGeometry
 {
 	private Vector _normal;
 	private Point3D _Q;
+	
 	// ***************** Constructors ********************** //
 	public Plane()
 	{
@@ -17,8 +18,8 @@ public class Plane extends Geometry
 
 	public Plane(Plane plane) {
 		super(plane.getEmmission());
-		this._Q=plane._Q;
-		this._normal=plane._normal;
+		this._Q=new Point3D(plane._Q);
+		this._normal=new Vector(plane._normal);
 	}
 	public Plane(Vector normal, Point3D q)
 	{
@@ -37,11 +38,11 @@ public class Plane extends Geometry
 
 	/************** Getters/Setters ***********/
 	@Override
-	public Vector getNormal(Point3D point){return this._normal;}
+	public Vector getNormal(Point3D point){return new Vector(_normal);}
 	
 	public Point3D getQ() {return _Q;}
-	public void setNormal(Vector _normal) {this._normal = _normal;}
-	public void setQ(Point3D _point3) {this._Q = _point3;}
+	public void setNormal(Vector normal) {this._normal = new Vector(normal);}
+	public void setQ(Point3D _point3) {this._Q = new Point3D(_point3);}
 	// ***************** Administration ******************** //
 	@Override
 	public int hashCode() {
@@ -55,22 +56,12 @@ public class Plane extends Geometry
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (obj==null || !(obj instanceof Plane))
+				return false;
 		Plane other = (Plane) obj;
-		if (_Q == null) {
-			if (other._Q != null)
-				return false;
-		} else if (!_Q.equals(other._Q))
-			return false;
-		if (_normal == null) {
-			if (other._normal != null)
-				return false;
-		} else if (!_normal.equals(other._normal))
-			return false;
-		return true;
+		return  super.equals(obj)
+				&& this._normal.equals(other._normal) 
+				&& this._Q.equals(other._Q);
 	}
 	//Check if equals between 2 Planes
 	public int compareTo(Plane plane) {
@@ -78,27 +69,24 @@ public class Plane extends Geometry
 	}
 	
 	@Override
-	public List<Point3D> findIntersection(Ray ray) throws Exception
+	public List<Point3D> findIntersections(Ray ray) throws Exception
 	{
 		ArrayList<Point3D> intersectionPoint = new ArrayList<Point3D>();
+		
 		Point3D P0 = ray.getPOO();
-		Point3D Q0 = new Point3D(this._Q);
-		//v = p0-q0
-		Vector v = new Vector(Q0,P0);
+		//Point3D Q0 = new Point3D(this._Q);	
+		Vector v = new Vector(P0,_Q); //v = p0-q0
 
 		//Ray Direction
-		Vector V = new Vector(ray.getDirection());
+		Vector V = ray.getDirection();
 		// finding -N
-		Vector N = new Vector(_normal.getHead());
+		Vector N = getNormal(null); //new Vector(_normal.getHead());
 		double NV = N.dotProduct(V);
 		double t = (N.scale(-1).dotProduct(v))/NV;	
-		//*****************************to delete*******************************************
-		
+
 		if (t>=0)
 		{
-			V = V.scale(t);
-			
-			P0.add(V);
+			P0 = P0.add(V.scale(t)); // P=P0+t*V (scaling V by t, and adding it to P0)
 			intersectionPoint.add(P0);
 			return intersectionPoint;
 		}

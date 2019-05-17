@@ -18,6 +18,6 @@ public abstract class Light implements LightSource {
 		_color= color;
 	}
 	// ***************** Getters/Setters ********************** //
-	public abstract Color getIntensity();
+//	public abstract Color getIntensity();
 		
 }

@@ -43,12 +43,12 @@ public class SphereTest {
 		
 	  // testing the findIntersection functions
 		List<Point3D> list1 = new ArrayList<Point3D>();
-		list1 = sphere1.findIntersection(ray1);
+		list1 = sphere1.findIntersections(ray1);
 		assertEquals(answerList1, list1);
 		
 		
 		List<Point3D> list2 = new ArrayList<Point3D>();
-		list2 = sphere2.findIntersection(ray2);
+		list2 = sphere2.findIntersections(ray2);
 		assertEquals(answerList2, list2);
 		
 	}

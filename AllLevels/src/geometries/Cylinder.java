@@ -89,7 +89,7 @@ public class Cylinder extends RadialGeometry {
 	
 	/************s*****findIntersections***********/
 	@Override
-	public ArrayList<Point3D> findIntersection(Ray ray) {
+	public ArrayList<Point3D> findIntersections(Ray ray) {
 		return null;
 	}
 	/**************GetNormal**********************/

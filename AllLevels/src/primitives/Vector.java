@@ -26,21 +26,19 @@ public class Vector {
 		_head = new Point3D(xHead, yHead, zHead);
 	}
 	//Constructor get 2 Point
+	/**
+	 * Getting two points, creating a vector = p1-p2 (left-right)
+	 * @param p1
+	 * @param p2
+	 */
 	public Vector(Point3D p1, Point3D p2)
 	{
-		_head = new Point3D(p2).subtract(p1);
+		_head = new Point3D(p1).subtract(p2);
 	}
-	/*
-	//Ctor get 3 coordinate - check with line 74 in point3D
-
-	public Vector(Coordinate x, Coordinate y, Coordinate z) {
-		_head = new Point3D(x, y, z);
-	}
-	 */
 
 	// ***************** Getters/Setters ********************** //
 	public Point3D getHead() {return new Point3D(_head);}
-	public void setHead(Point3D head) {this._head = head;}
+	public void setHead(Point3D head) {this._head = new Point3D(head);}
 
 	// ***************Administration**********************//
 
@@ -55,17 +53,10 @@ public class Vector {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
+		if (obj == null || !(obj instanceof Vector))
 			return false;
 		Vector other = (Vector) obj;
-		if (_head == null) {
-			if (other._head != null)
-				return false;
-		} else if (!_head.equals(other._head))
-			return false;
-		return true;
+		return _head.equals(other._head);
 	}
 	//Check if equals between 2 Vectors
 	public int compareTo(Vector vector) {
@@ -73,7 +64,7 @@ public class Vector {
 	}
 	@Override
 	public String toString() {
-		return "Vector via: " + _head.toString();
+		return _head.toString();
 	}
 
 	// ****************** Operations *************//

@@ -34,7 +34,7 @@ public class Sphere extends RadialGeometry {
 	@Override
 	public Vector getNormal(Point3D point) throws Exception
 	{
-		return new Vector(_center,point).normalize();
+		return new Vector(point,_center).normalize();
 	}
 
 	/**********************Equals******************************/
@@ -42,17 +42,11 @@ public class Sphere extends RadialGeometry {
 		public boolean equals(Object obj) {
 			if (this == obj)
 				return true;
-			if (!super.equals(obj))
+			if (!super.equals(obj) || obj==null || !(obj instanceof Sphere))
 				return false;
-			if (getClass() != obj.getClass())
-				return false;
+
 			Sphere other = (Sphere) obj;
-			if (_center == null) {
-				if (other._center != null)
-					return false;
-			} else if (!_center.equals(other._center))
-				return false;
-			return true;
+			return this._center.equals(other._center);
 		}
 		
 		public int compareTo(Sphere sphere)
@@ -60,20 +54,21 @@ public class Sphere extends RadialGeometry {
 			return this.equals(sphere) ? 0:1;
 		}
 		
-	/***************************************findIntersection* @throws Exception **********************/
+	/***************************************findIntersections* @throws Exception **********************/
 
 	@Override
-	public List<Point3D> findIntersection(Ray ray) throws Exception 
+	public List<Point3D> findIntersections(Ray ray)  
 	{
-		Point3D center = new Point3D(_center).subtract(ray.getPOO());
-		Vector L = new Vector(center);
+		Point3D P0 = ray.getPOO();
+		//Point3D center = P0.subtract(_center); 
+		Vector L = new Vector(_center,P0); // center = Q0 - P0
 		//direction vector of ray
-		Vector V = new Vector(ray.getDirection().normalize());
+		Vector V = ray.getDirection();
 		double tm =L.dotProduct(V);
 		//find D by pitagoras using Math library
-		double d = Math.sqrt(Math.pow(L.length(), 2)-Math.pow(tm, 2));
+		double d = Math.sqrt(L.length()*L.length() - tm*tm);
 		//find th by pitagoras using Math library
-		double th = Math.sqrt(Math.pow(this.getRadius(), 2)-(Math.pow(d, 2)));
+		double th = Math.sqrt(_radius*_radius- d*d);
 		double t1 = tm-th;
 		double t2 = tm + th;
 		ArrayList<Point3D> array = new ArrayList<Point3D>();
@@ -81,18 +76,12 @@ public class Sphere extends RadialGeometry {
 			return array;	    
 		if (t1>0)
 		{
-			Vector pv1=new Vector(V);
-			pv1=pv1.scale(t1);
-			Point3D p1 = new Point3D(ray.getPOO());
-			p1.add(pv1);
+			Point3D p1 = P0.add(V.scale(t1)); // P1 = P0+t1*direction
 			array.add(p1);
 		}
 		if (t2>0)
 		{
-			Vector pv2=new Vector(V);
-			pv2=pv2.scale(t2);
-			Point3D p2 = new Point3D(ray.getPOO());
-			p2.add(pv2);
+			Point3D p2 = P0.add(V.scale(t2)); // P2= P0+t2*direction
 			array.add(p2);
 		}
 		return array;
@@ -100,10 +89,7 @@ public class Sphere extends RadialGeometry {
 	
 	@Override
 	public String toString() {
-		return "Point:"+_center.toString()+" "+"Radius:"+this._radius+" ";
+		return "Point:"+_center.toString()+" Radius:"+this._radius+". ";
 	}
 
 }
-
-
-

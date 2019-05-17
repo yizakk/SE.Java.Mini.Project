@@ -42,7 +42,6 @@ public class Ray
 			return false;
 		Ray ray = (Ray) other;
 		return this._POO.equals(ray._POO) && this._direction.equals(ray._direction);
-		//return false;
 		
 	}
 	

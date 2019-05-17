@@ -30,22 +30,24 @@ public class AmbientLight extends Light
 		this._Ka=1.0;
 	}
 	//*******************GETTES & SETTERS *******************//
-	public Color get_color() {return _color;}
-	public void set_color(Color _color) {this._color = _color;}
-	public double get_ka() {return _Ka;}
-	public void set_ka(double _ka) {this._Ka = _ka;}
+	public Color getColor() {return _color;}
+	public void setColor(Color _color) {this._color = _color;}
+	public double getKa() {return _Ka;}
+	public void setKa(double _ka) {this._Ka = _ka;}
+	
 	public Color getIntensity(Point3D p){
         return new Color(
-        		(int)((this.get_color().getRed())*_Ka)
-        		,(int)((this.get_color().getGreen())*_Ka)
-        		,(int)((this.get_color().getBlue())*_Ka));
+        		(int)((_color.getRed()/255)*_Ka)
+        		,(int)((_color.getGreen()/255)*_Ka)
+        		,(int)((_color.getBlue()/255)*_Ka));
 	}
+	
 	public Color getIntensity()
 	{
         return new Color(
-        		(int)((this.get_color().getRed()/255)*_Ka),
-        		(int)((this.get_color().getGreen()/255)*_Ka),
-        		(int)((this.get_color().getBlue()/255)*_Ka));
+        		(int)((_color.getRed()/255)*_Ka),
+        		(int)((_color.getGreen()/255)*_Ka),
+        		(int)((_color.getBlue()/255)*_Ka));
 	}
 	
 	//*************************  Administration   *******************//

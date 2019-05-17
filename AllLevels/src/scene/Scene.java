@@ -19,15 +19,14 @@ public class Scene {
 	double _screenDistance;
 
 	/**
-	 * default constructor
+	 * default constructor setting background =black.  distance=100
 	 */
 	public Scene() {
-		this._sceneName = "";
 		this._background = Color.BLACK;
 		this._ambientLight = new AmbientLight();
 		this._geometries = new ArrayList<Geometry>();
 		this._camera = new Camera();
-		this._screenDistance = 100;
+		this._screenDistance = 150;
 	}
 	// ***************** Constructors ********************** //
 	public Scene(String sceneName, Color background, AmbientLight ambientLight, ArrayList<Geometry> geometries, Camera camera, double screenDistance) throws Exception 
@@ -51,136 +50,45 @@ public class Scene {
 		this._screenDistance =sce._screenDistance ;
 	}
 
-	
-//****************************** Getters / Setters *******************//
-	/**
-	 * get_sceneName
-	 * @return
-	 */
-	public String get_sceneName() {
-		return _sceneName;
+
+	//****************************** Getters / Setters *******************//
+
+	public Color getBackground() {
+		return new Color(this._background.getRed(),
+					   	 this._background.getGreen(),
+						 this._background.getBlue());
 	}
-	/**
-	 * set_sceneName
-	 * @param sceneName
-	 */
-	public void set_sceneName(String sceneName) {
-		this._sceneName = sceneName;
-	}
-	/**
-	 * get_background
-	 * @return
-	 */
-	public Color get_background() {
-		return new Color(this._background.getRGB());
-	}
-	/**
-	 * set_background
-	 * @param background
-	 */
-	public void set_background(Color background) {
-		this._background = background;
-	}
-	/**
-	 * get_ambientLight
-	 * @return
-	 */
-	public AmbientLight get_ambientLight() {
+	public AmbientLight getAmbientLight() {
 		return new AmbientLight(this._ambientLight);
 	}
-	/**
-	 * set_ambientLight
-	 * @param _ambientLight
-	 */
-	public void set_ambientLight(AmbientLight ambientLight) {
-		this._ambientLight = ambientLight;
-	}
-	/**
-	 * get_geometries
-	 * @return
-	 */
-	public ArrayList<Geometry> get_geometries() {
-		return new ArrayList<Geometry>(this._geometries);
-	}
-	/**
-	 * set_geometries
-	 * @param _geometries
-	 */
-	public void set_geometries(ArrayList<Geometry> geometries) {
-		this._geometries = new ArrayList<Geometry>(geometries);
-	}
-	/**
-	 * get_camera
-	 * @return
-	 * @throws Exception 
-	 */
-	public Camera get_camera() throws Exception {
-		return new Camera(_camera);
-	}
-	/**
-	 * set_camera
-	 * @param _camera
-	 * @throws Exception 
-	 */
-	public void set_camera(Camera camera) throws Exception {
-		this._camera = new Camera(camera);
-	}
-	/**
-	 * get_screenDistance
-	 * @return
-	 */
-	public double get_screenDistance() {
-		return _screenDistance;
-	}
-	/**
-	 * set_screenDistance
-	 * @param _screenDistance
-	 */
-	public void set_screenDistance(double _screenDistance) {
-		this._screenDistance = _screenDistance;
-	}
+	public Camera getCamera() {	return _camera; }
+	public String getSceneName() {	return _sceneName;	}
+	public double getScreenDistance() {	return _screenDistance; }
 	
+	public void setBackground(Color background){_background = background;}
+	public void setAmbientLight(AmbientLight ambientLight){_ambientLight = ambientLight;}
+	public void setCamera(Camera camera) {_camera= camera;	}
+	public void setSceneName(String sceneName) { _sceneName=sceneName; }
+	public void setScreenDistance(double screenDistance) {_screenDistance=screenDistance;}
+
+
 	// ***************** Administration ******************** //
-	/**
-	 * equals
-	 */
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (obj == null || !(obj instanceof Scene))
+				return false;
 		Scene other = (Scene) obj;
-		if (_ambientLight == null) {
-			if (other._ambientLight != null)
-				return false;
-		} else if (!_ambientLight.equals(other._ambientLight))
-			return false;
-		if (_background == null) {
-			if (other._background != null)
-				return false;
-		} else if (!_background.equals(other._background))
-			return false;
-		if (_camera == null) {
-			if (other._camera != null)
-				return false;
-		} else if (!_camera.equals(other._camera))
-			return false;
-		if (_geometries == null) {
-			if (other._geometries != null)
-				return false;
-		} else if (!_geometries.equals(other._geometries))
-			return false;
-		if (_sceneName == null) {
-			if (other._sceneName != null)
-				return false;
-		} else if (!_sceneName.equals(other._sceneName))
-			return false;
-		if (Double.doubleToLongBits(_screenDistance) != Double.doubleToLongBits(other._screenDistance))
-			return false;
-		return true;
+
+		return (Double.doubleToLongBits(_screenDistance) != Double.doubleToLongBits(other._screenDistance)
+				&& this._sceneName==other._sceneName && _background.equals(other._background)
+				&& this._ambientLight.equals(other._ambientLight) 
+				&& this._camera.equals(other._camera) 
+				&& this._geometries.equals(other._geometries)
+				&& this._lights.equals(other._lights));
+
 	}
 
 	/**
@@ -203,9 +111,16 @@ public class Scene {
 	 * getGeometriesIterator
 	 * @return
 	 */
-	public Iterator<Geometry>getGeometriesIterator()
+	public Iterator<Geometry> getGeometriesIterator()
 	{
 		return _geometries.iterator();
+	}
+	
+	public void addLight(LightSource light) {
+		// TODO not implemented
+	}
+	public Iterator<LightSource> getLightsIterator() {
+		return this._lights.iterator();
 	}
 
 }
