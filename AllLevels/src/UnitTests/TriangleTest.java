@@ -16,13 +16,11 @@ public class TriangleTest {
 	public void test() throws Exception {
 
 		// creating the expected values
-
 		List<Point3D> answerList = new ArrayList<Point3D>();		
 		Point3D answerPoint = new Point3D(0, 0, -200);		
 		answerList.add(answerPoint);
 
 		// building the triangle
-
 		Point3D p1 = new Point3D(0, 100, -200);
 		Point3D p2 = new Point3D(100, -100, -200);
 		Point3D p3 = new Point3D(-100, -100, -200);
@@ -31,13 +29,11 @@ public class TriangleTest {
 		Triangle t2 = new Triangle(t1);			
 
 		// building the ray that will intersect the triangle
-
 		Point3D centerPoint = new Point3D(0,0,0);		
 		Vector vector = new Vector(0, 0, -5);
 		Ray ray = new Ray(centerPoint, vector);
 
 		// testing the findIntersection function
-
 		List<Point3D> list = new ArrayList<Point3D>();
 		list = t2.findIntersections(ray);
 		assertEquals(answerList, list);	

@@ -46,7 +46,6 @@ public class SphereTest {
 		list1 = sphere1.findIntersections(ray1);
 		assertEquals(answerList1, list1);
 		
-		
 		List<Point3D> list2 = new ArrayList<Point3D>();
 		list2 = sphere2.findIntersections(ray2);
 		assertEquals(answerList2, list2);

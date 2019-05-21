@@ -19,7 +19,7 @@ public class Scene {
 	double _screenDistance;
 
 	/**
-	 * default constructor setting background =black.  distance=100
+	 * default constructor setting background =black.  distance=150
 	 */
 	public Scene() {
 		this._background = Color.BLACK;
@@ -118,6 +118,7 @@ public class Scene {
 	
 	public void addLight(LightSource light) {
 		// TODO not implemented
+		_lights.add(light);
 	}
 	public Iterator<LightSource> getLightsIterator() {
 		return this._lights.iterator();

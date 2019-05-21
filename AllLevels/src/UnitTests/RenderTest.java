@@ -1,20 +1,12 @@
 package UnitTests;
 
-import static org.junit.Assert.assertTrue;
-
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 
-import elements.Camera;
-import geometries.Plane;
 import geometries.Sphere;
 import geometries.Triangle;
 import primitives.Point3D;
-import primitives.Ray;
-import primitives.Vector;
 import renderer.ImageWriter;
 import renderer.Render;
 import scene.Scene;
@@ -51,12 +43,13 @@ public class RenderTest {
 			scene.addGeometry(triangle3);
 			scene.addGeometry(triangle4);
 			
-			ImageWriter imageWriter = new ImageWriter("Render test1", 500, 500, 500, 500);
+			ImageWriter imageWriter = new ImageWriter("Render test", 500, 500, 500, 500);
 			
 			Render render = new Render(imageWriter, scene);
 			render.renderImage();
 			render.printGrid(50);
-			imageWriter.writeToimage();
+			render.writeToImage();
+			//imageWriter.writeToimage();
 		}
 
 	}

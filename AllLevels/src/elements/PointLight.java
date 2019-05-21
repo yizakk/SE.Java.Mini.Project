@@ -1,7 +1,6 @@
 package elements;
 
 import java.awt.Color;
-
 import primitives.Point3D;
 import primitives.Vector;
 
@@ -10,8 +9,7 @@ public class PointLight extends Light {
 	Point3D _position;
 	double _Kc, _Kl, _Kq;
 	// ***************** Constructors ********************** //
-	
-	
+		
 	public PointLight(Color color, Point3D position, double kc, double kl, double kq) {
 		super(color);
 		setPosition(position);
@@ -48,18 +46,22 @@ public class PointLight extends Light {
 	 * SEE ALSO
 	 * elements.Light.getIntensity
 	 **************************************************/
+	
 	@Override
 	public Color getIntensity(Point3D point) {
 		double attenuation = getAttenuation(point);
 		
+		if(1/attenuation>1)
+			attenuation=1;
 		return new Color((int) (_color.getRed()/attenuation),
 						(int) (_color.getGreen()/attenuation),
-						(int) (_color.getBlue()/attenuation));
-				
+						(int) (_color.getBlue()/attenuation));		
 	}
+	
 	protected double getAttenuation(Point3D point) {
 		double distance = _position.distance(point);
-		distance = _Kc * _Kl* distance * _Kq*distance*distance; // iL = I0 / (kc*lc*d*kq*d^2)
+		distance = _Kc + _Kl* distance+ _Kq*distance*distance; // iL = I0 / (kc*lc*d*kq*d^2)
+		//System.out.println(distance);
 		return distance;
 	}
 
