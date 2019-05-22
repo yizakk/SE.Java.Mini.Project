@@ -149,7 +149,7 @@ public class Render {
             //return new java.awt.Color(0, 0, 0);
         }
 
-        Color ambientLight = _scene.getAmbientLight().getIntensity();
+        Color ambientLight = _scene.getAmbientLight().getIntensity(null);
         Color emissionLight = geometry.getEmmission();
 
         Color inherentColors = addColors(ambientLight, emissionLight);
@@ -173,7 +173,7 @@ public class Render {
                 									   lightIntensity);
 
                 Color lightSpecular = calcSpecularComp(geometry.getMaterial().getKs(),
-                							new Vector(point, _scene.getCamera().getP0()),
+                							new Vector(_scene.getCamera().getP0(),point),
                 							normal,
                 							L,
                 							geometry.getShininess(),
@@ -257,10 +257,10 @@ public class Render {
         //lightDirection.scale(-1);
         //lightDirection.normalize();
 
-        Point3D geometryPoint = new Point3D(point);
-        Vector epsVector = new Vector(geometry.getNormal(point)).scale(2);
+       // Point3D geometryPoint = new Point3D(point);
+        Vector epsVector = geometry.getNormal(point).scale(2);
         //epsVector.scale(2);
-        Point3D p = geometryPoint.add(epsVector);
+        Point3D p = point.add(epsVector);
 
         Ray lightRay = new Ray(p, lightDirection);
         Map<Geometry, List<Point3D>> intersectionPoints = getSceneRayIntersections(lightRay);
@@ -276,30 +276,7 @@ public class Render {
 
         return false;
     }
- /*
-//	private Color calcColor(Geometry geometry, Point3D p) throws Exception {
-//		Color ambientLight = _scene.getAmbientLight().getIntensity();
-//		Color emissionLight = geometry.getEmmission();
-//		Color color = addColors(ambientLight,emissionLight); //base = ambient+emission
-//		Iterator<LightSource> lights = _scene.getLightsIterator();
-//		
-//		while(lights.hasNext()) {
-//			
-//			LightSource light = lights.next();
-//			Vector normal = geometry.getNormal(p);
-//			Vector L = light.getL(p);
-//			Color Intensity = light.getIntensity(p);
-//			color = addColors(color, calcSpecularComp(geometry.getMaterial().getKs(),
-//					new Vector(_scene.getCamera().getP0(),p),
-//					normal,	L,	geometry.getShininess(), Intensity));
-//			
-//			color = addColors(color, calcDiffusiveComp(geometry.getMaterial().getKd(),
-//									 normal, L, Intensity ));
-//		}
-//		return new Color(color.getRed(),color.getGreen(),color.getBlue());
-//	}
-	*/
-
+    
     private Color calcSpecularComp(double ks, Vector v, Vector normal,Vector l, 
 			double shininess, Color lightIntensity) throws Exception {
         v.normalize();
@@ -307,8 +284,7 @@ public class Render {
         l.normalize();
 
         l=l.add(normal.scale(-2 * l.dotProduct(normal)));
-        Vector R = new Vector(l);
-        R.normalize();
+        Vector R = new Vector(l).normalize();
 
         double k = 0;
 
@@ -353,5 +329,4 @@ public class Render {
                 	_imagewriter.writePixel(j,i,Color.WHITE); 
             }   
 	}
-
 }

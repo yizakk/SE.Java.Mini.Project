@@ -12,7 +12,7 @@ public class Camera {
 	 */
 	public Camera() {
 		this._P0 = new Point3D(0,0,10);
-		_vUp = new Vector(0,1,0);
+		_vUp = new Vector(1,0,0);
 		_vTo = new Vector(0,0,-1);
 		_vRight = _vUp.crossProduct(_vTo);//(-1,0,0)
 	}
@@ -72,6 +72,7 @@ public class Camera {
 	 * @return Ray
 	 * @throws Exception 
 	 */
+
 	public Ray constructRayThroughPixel (int Nx, int Ny,
 			double x, double y,
 			double screenDist,

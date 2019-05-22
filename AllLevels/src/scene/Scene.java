@@ -13,20 +13,20 @@ public class Scene {
 	String _sceneName = "scene";
 	Color _background;
 	AmbientLight _ambientLight;
-	ArrayList<Geometry> _geometries = new ArrayList<Geometry>();
+	List<Geometry> _geometries = new ArrayList<Geometry>();
 	List<LightSource> _lights = new ArrayList<LightSource>();
 	Camera _camera;
 	double _screenDistance;
 
 	/**
-	 * default constructor setting background =black.  distance=150
+	 * default constructor setting background =black.  distance=100
 	 */
 	public Scene() {
 		this._background = Color.BLACK;
 		this._ambientLight = new AmbientLight();
-		this._geometries = new ArrayList<Geometry>();
+		//this._geometries = new ArrayList<Geometry>();
 		this._camera = new Camera();
-		this._screenDistance = 150;
+		this._screenDistance = 100;
 	}
 	// ***************** Constructors ********************** //
 	public Scene(String sceneName, Color background, AmbientLight ambientLight, ArrayList<Geometry> geometries, Camera camera, double screenDistance) throws Exception 
@@ -50,7 +50,6 @@ public class Scene {
 		this._screenDistance =sce._screenDistance ;
 	}
 
-
 	//****************************** Getters / Setters *******************//
 
 	public Color getBackground() {
@@ -66,11 +65,20 @@ public class Scene {
 	public double getScreenDistance() {	return _screenDistance; }
 	
 	public void setBackground(Color background){_background = background;}
-	public void setAmbientLight(AmbientLight ambientLight){_ambientLight = ambientLight;}
 	public void setCamera(Camera camera) {_camera= camera;	}
 	public void setSceneName(String sceneName) { _sceneName=sceneName; }
 	public void setScreenDistance(double screenDistance) {_screenDistance=screenDistance;}
 
+	public void setAmbientLight(AmbientLight ambientLight)
+	{_ambientLight = new AmbientLight(ambientLight);}
+	
+    public void setAmbientLight(Color color, double k) {
+        this._ambientLight = new AmbientLight(color.getRed(), color.getGreen(), color.getBlue(), k);
+    }
+    
+    public void setAmbientLight(Color color) {
+        this._ambientLight = new AmbientLight(color.getRed(), color.getGreen(), color.getBlue());
+    }
 
 	// ***************** Administration ******************** //
 
@@ -117,11 +125,9 @@ public class Scene {
 	}
 	
 	public void addLight(LightSource light) {
-		// TODO not implemented
 		_lights.add(light);
 	}
 	public Iterator<LightSource> getLightsIterator() {
 		return this._lights.iterator();
 	}
-
 }

@@ -15,7 +15,6 @@ import renderer.Render;
 import scene.Scene;
 
 public class LightingTest {
-
 	
 	@Test 
 	public void emmissionTest() throws Exception{
@@ -106,8 +105,7 @@ public class LightingTest {
 		Render render = new Render(imageWriter, scene);
 		
 		render.renderImage();
-		render.writeToImage();
-		
+		render.writeToImage();		
 	}
 
 	 
@@ -120,7 +118,7 @@ public class LightingTest {
 		sphere.setEmmission(new Color(0, 0, 100));
 		scene.addGeometry(sphere);
 		scene.addLight(new PointLight(new Color(255,100,100), new Point3D(-200, -200, -100), 
-					   0, 0.00001, 0.000005));
+					   0.0, 0.00001, 0.000005));
 	
 		ImageWriter imageWriter = new ImageWriter("Point test", 500, 500, 500, 500);
 		
@@ -128,8 +126,6 @@ public class LightingTest {
 		
 		render.renderImage();
 		render.writeToImage();
-		
-		
 	}
 	
 	@Test
@@ -183,14 +179,12 @@ public class LightingTest {
 		scene.addLight(new PointLight(new Color(255, 100, 100), new Point3D(200, 200, -100), 
 					   0, 0.000001, 0.0000005));
 	
-		
 		ImageWriter imageWriter = new ImageWriter("Point test 2", 500, 500, 500, 500);
 		
 		Render render = new Render(imageWriter, scene);
 		
 		render.renderImage();
-		render.writeToImage();
-		
+		render.writeToImage();	
 	}
 	
 	@Test
@@ -216,7 +210,6 @@ public class LightingTest {
 		
 		scene.addLight(new SpotLight(new Color(255, 100, 100), new Point3D(200, 200, -100), 
 				   new Vector(-2, -2, -3), 0, 0.000001, 0.0000005));
-	
 		
 		ImageWriter imageWriter = new ImageWriter("shadow test", 500, 500, 500, 500);
 		
@@ -226,7 +219,4 @@ public class LightingTest {
 		render.writeToImage();
 		
 	}
-		
-	
-
 }

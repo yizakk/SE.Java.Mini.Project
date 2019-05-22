@@ -1,11 +1,12 @@
 package elements;
 import java.awt.Color;
+import java.util.Map;
 import primitives.Point3D;
 import primitives.Vector;
+
 public class AmbientLight extends Light
 {
-
-	private double _Ka ; // the transparency of the color
+	private double _Ka=1.0 ; // the transparency of the color
 	
 	// ***************** Constructors ********************** //
 	/**
@@ -27,28 +28,34 @@ public class AmbientLight extends Light
 	public AmbientLight(int r,int g, int b) 
 	{
 		super(new Color(r,g,b)); 
-		this._Ka=1.0;
+		//this._Ka=1.0;
 	}
+	
+	public AmbientLight(int red, int green, int blue, double k) {
+		this(red,green,blue);
+		_Ka=k;
+	}
+	
 	//*******************GETTES & SETTERS *******************//
 	public Color getColor() {return _color;}
 	public void setColor(Color _color) {this._color = _color;}
 	public double getKa() {return _Ka;}
 	public void setKa(double _ka) {this._Ka = _ka;}
 	
+	@Override
 	public Color getIntensity(Point3D p){
-        return new Color(
-        		(int)((_color.getRed()/255)*_Ka)
-        		,(int)((_color.getGreen()/255)*_Ka)
-        		,(int)((_color.getBlue()/255)*_Ka));
+		return new Color( (int)((_color.getRed()/255)*_Ka),
+				 		  (int)((_color.getGreen()/255)*_Ka),
+				 		  (int)((_color.getBlue()/255)*_Ka));
 	}
 	
-	public Color getIntensity()
-	{
-        return new Color(
-        		(int)((_color.getRed()/255)*_Ka),
-        		(int)((_color.getGreen()/255)*_Ka),
-        		(int)((_color.getBlue()/255)*_Ka));
-	}
+    public AmbientLight(Map<String, String> attributes) {
+        String[] ambientLightColors = attributes
+                .get("color").split("\\s+");
+        _color = new Color((int) (255 * Double.valueOf(ambientLightColors[0])),
+                (int) (255 * Double.valueOf(ambientLightColors[1])),
+                (int) (255 * Double.valueOf(ambientLightColors[2])));
+    }
 	
 	//*************************  Administration   *******************//
 	@Override

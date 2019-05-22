@@ -14,18 +14,19 @@ public abstract class Geometry {
 	*/
 	private double _nShininess = 1;
 	private Color _emmission = new Color(0, 0, 0);
-	private Material _material = new Material();
+	private Material _material;
 
  //****************Constructor****************/
 
-	public Geometry() {	this._emmission= new Color(0, 0, 0); }
-	public Geometry(Color color) {	this._emmission = color; }
+	public Geometry() { _material=new Material();	}//this._emmission= new Color(0, 0, 0); }
+	public Geometry(Color color) {	this._emmission = new Color(color.getRed(),color.getGreen(),color.getBlue());
+	 								_material=new Material();}
 	
 	// ***************** Getters/Setters ********************** //
 	public double getShininess() { return _nShininess; }
 	public void setShininess(double n) { _nShininess = n; }
-	public Color getEmmission() {return _emmission;}
-	public void setEmmission(Color emmission) {this._emmission = emmission;}
+	public Color getEmmission() {return new Color(_emmission.getRed(),_emmission.getGreen(),_emmission.getBlue());}
+	public void setEmmission(Color emmission) {this._emmission = new Color(emmission.getRed(),emmission.getGreen(),emmission.getBlue());}
 	public Material getMaterial() { return new Material(_material); }
 	
 	// ***************** Administration ******************** //

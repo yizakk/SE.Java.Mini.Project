@@ -26,7 +26,7 @@ public class SpotLight extends PointLight {
         }
         catch(Exception a)
         {
-        	l=new Vector();
+        	l=new Vector(1,1,1);
         }
         double k = Math.abs(_direction.dotProduct(l));
 

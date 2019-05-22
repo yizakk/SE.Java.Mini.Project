@@ -13,6 +13,10 @@ public abstract class Light implements LightSource {
 	public Light() {
 		_color= Color.WHITE;
 	}
+	
+//	public Light(int r,int g, int b) {
+//		_color = 
+//	}
 	public Light (Color color) 
 	{
 		_color= color;
