@@ -56,37 +56,22 @@ public class PointLight extends Light {
 		if((1/attenuation)>1)
 			attenuation=1;
 		
-		int red = (int)(_color.getRed()/attenuation);
-		int green = (int)(_color.getGreen()/attenuation);
-		int blue = (int)(_color.getBlue()/attenuation);
-		
 		// validating numbers are in the RGB range 
-	    if(red>255)
-	    	red =255;
-	    else if(red<0)
-	    	red=0;
-	    if(green>255)
-	    	green =255;
-	    else if(blue<0)
-	    	blue=0;
-	    if(blue>255)
-	    	blue =255;
-	    else if(blue<0)
-	    	blue=0;
+		int red = Math.max(0, Math.min(255,(int)(_color.getRed()/attenuation)));
+		int green = Math.max(0, Math.min(255,(int)(_color.getGreen()/attenuation)));
+		int blue = Math.max(0, Math.min(255,(int)(_color.getBlue()/attenuation)));
 	    
 		return new Color(red,green,blue);
 	}
 	
 	protected double getAttenuation(Point3D point) {
 		double distance = _position.distance(point);
-		distance = _Kc + _Kl* distance+ _Kq*distance*distance; // iL = I0 / (kc+Kl*d+kq*d^2)
-		
-		return distance;
+		return _Kc + _Kl* distance+ _Kq*distance*distance; // iL = I0 / (kc+Kl*d+kq*d^2)	
 	}
 
 	@Override
 	public Vector getL(Point3D point) {
 		// P0-point
-		return new Vector (_position,point);
+		return new Vector (point,_position);
 	}
 }

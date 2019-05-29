@@ -63,6 +63,7 @@ public class Sphere extends RadialGeometry {
 		//Point3D center = P0.subtract(_center); 
 		Vector L = new Vector(_center,P0); // center = Q0 - P0
 		//direction vector of ray
+		double distance = P0.distance(_center); 
 		Vector V = ray.getDirection();
 		double tm =L.dotProduct(V);
 		//find D by pitagoras using Math library

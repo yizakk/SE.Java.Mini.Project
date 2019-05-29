@@ -21,7 +21,6 @@ public class DirectionalLight extends Light
 	
 	@Override
 	public Vector getL(Point3D point) {
-		
 		try {
 		return new Vector(_direction).normalize();
 		}

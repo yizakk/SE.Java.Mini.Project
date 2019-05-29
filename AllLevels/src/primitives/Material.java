@@ -14,7 +14,7 @@ public class Material {
 		_Ks = 1.0;
 		_Kr = 0;
 		_Kt = 0;
-		_n = 1;
+		_n = 19;
 	}
 	public Material(Material material) {
 		_Kd = material._Kd;

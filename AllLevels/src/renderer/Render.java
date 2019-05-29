@@ -1,4 +1,5 @@
 package renderer;
+import elements.MyColor;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import geometries.FlatGeometry;
 import geometries.Geometry;
 import primitives.Point3D;
 import primitives.Ray;
+import primitives.Util;
 import primitives.Vector;
 import scene.Scene;
 
@@ -154,7 +156,6 @@ public class Render {
 				}
 		return minDistancePoint.entrySet().iterator().next();
 	}
-	
 
 	/*************************************************
 	 * FUNCTION
@@ -185,7 +186,6 @@ public class Render {
     }
 
     /**
-
      * Inner function, only for calling the recursive calcColor function and start the
      * recursion level with '0'
      * @param geometry
@@ -195,7 +195,7 @@ public class Render {
      * @throws Exception
      */
     private Color calcColor(Geometry geometry, Point3D point, Ray ray) throws Exception {
-        return calcColor(geometry, point, ray, 0);
+        return calcColor(geometry, point, ray, 0, 1.0);
     }
 
 	/*************************************************
@@ -215,8 +215,7 @@ public class Render {
 	 * SEE ALSO
 	 * Render.getClosestPoint
 	 **************************************************/
-
-    private Color calcColor(Geometry geometry, Point3D point, Ray inRay, int level) throws Exception {
+    private Color calcColor(Geometry geometry, Point3D point, Ray inRay, int level, double k) throws Exception {
 
         if (level == RECURSION_LEVEL) {
             return Color.BLACK;
@@ -225,48 +224,54 @@ public class Render {
         Color ambientLight = _scene.getAmbientLight().getIntensity(null);
         Color emissionLight = geometry.getEmmission();
 
-        Color inherentColors = addColors(ambientLight, emissionLight);
+        Color inherentColors = MyColor.addColors(ambientLight, emissionLight);
 //        
         Iterator<LightSource> lights = _scene.getLightsIterator();
 
         Color lightReflected = new Color(0, 0, 0);
         Vector normal = geometry.getNormal(point).normalize();
-
+        Vector v = new Vector(point,_scene.getCamera().getP0());
+        
         while (lights.hasNext()) {
             LightSource light = lights.next();
+            Vector L = light.getL(point).normalize();
 
-            if (!occluded(light, point, geometry)) {
+            if(normal.dotProduct(L)*normal.dotProduct(v) > 0)
+            {
+            	double ktr = transparency(L, normal, point,geometry);
+            	
+            	if (!Util.isZero(ktr*k)) {
 
-                Color lightIntensity = light.getIntensity(point);
-                Vector L = light.getL(point).normalize();
-                Color lightDiffuse = calcDiffusiveComp(geometry.getMaterial().getKd(),
-                									   normal,
-                									   L,
-                									   lightIntensity);
+            		Color lightIntensity = MyColor.scaleColor(light.getIntensity(point),ktr);
 
-                Color lightSpecular = calcSpecularComp(geometry.getMaterial().getKs(),
-                							new Vector(_scene.getCamera().getP0(),point),
-                							normal,
-                							L,
-                							geometry.getShininess(),
-                							lightIntensity);
+            		// calculating the attenuation factor of the diffuse and the specular (double)
 
-                lightReflected = addColors(lightDiffuse, lightSpecular);
+            		double diff = calcDiffusiveComp(geometry.getMaterial().getKd(),
+            				normal, L);
+
+            		double spec = calcSpecularComp(geometry.getMaterial().getKs(), v,
+            				normal,L,geometry.getShininess());
+            		// summing them
+            		double difSpec = diff + spec;
+            		lightReflected = MyColor.scaleColor(lightIntensity, difSpec);
+            		//lightReflected = addColors(lightDiffuse, lightSpecular);
+            	}
             }
         }
         
-        Color I0 = addColors(inherentColors, lightReflected);
+        Color I0 = MyColor.addColors(inherentColors, lightReflected);
 
         // Recursive calls
         // Recursive call for a reflected ray
+        double kr = geometry.getMaterial().getKr();
         Ray reflectedRay = constructReflectedRay(normal, point, inRay);
         Entry<Geometry, Point3D> reflectedEntry = findClosestIntersection(reflectedRay);
         Color reflected = new Color(0, 0, 0);
 
         if (reflectedEntry != null) {
-            reflected = calcColor(reflectedEntry.getKey(), reflectedEntry.getValue(), reflectedRay, level + 1);
-            double kr = geometry.getMaterial().getKr();
-            reflected = new Color((int) (reflected.getRed() * kr), (int) (reflected.getGreen() * kr), (int) (reflected.getBlue() * kr));
+            reflected = MyColor.scaleColor( calcColor(reflectedEntry.getKey(), reflectedEntry.getValue(), reflectedRay, level + 1, k*kr),kr);
+           // double kr = geometry.getMaterial().getKr();
+           // reflected = new Color((int) (reflected.getRed() * kr), (int) (reflected.getGreen() * kr), (int) (reflected.getBlue() * kr));
         }
 
         // Recursive call for a refracted ray
@@ -275,15 +280,15 @@ public class Render {
         Color refracted = new Color(0, 0, 0);
 
         if (refractedEntry != null) {
-            refracted = calcColor(refractedEntry.getKey(), refractedEntry.getValue(), refractedRay, level + 1);
-            double kt = geometry.getMaterial().getKt();
-            refracted = new Color((int) (refracted.getRed() * kt), (int) (refracted.getGreen() * kt), (int) (refracted.getBlue() * kt));
+        	double kt = geometry.getMaterial().getKt();
+            refracted = MyColor.scaleColor(calcColor(refractedEntry.getKey(), refractedEntry.getValue(), refractedRay, level + 1, k*kt),kt);
+           // refracted = new Color((int) (refracted.getRed() * kt), (int) (refracted.getGreen() * kt), (int) (refracted.getBlue() * kt));
         }
 
         // end of recursive calls
 
-        Color envColors = addColors(reflected, refracted);
-        Color finalColor = addColors(envColors, I0);
+        Color envColors = MyColor.addColors(reflected, refracted);
+        Color finalColor = MyColor.addColors(envColors, I0);
 
         return finalColor;
     }
@@ -301,36 +306,36 @@ public class Render {
         else {
             // Here, Snell's law can be implemented.
             // The refraction index of both materials had to be derived
+        	
             return new Ray(p, inRay.getDirection());
         }
     }
 
     private Ray constructReflectedRay(Vector normal, Point3D point, Ray inRay) throws Exception {
 
-        Vector l = inRay.getDirection();
-        l.normalize();
+        Vector v = inRay.getDirection().normalize();
+        //l.normalize();
 
-        double angle = l.dotProduct(normal);
+        double angle = v.dotProduct(normal);
         Vector eps = normal.scale(-2 * angle);
-        l=l.add(eps);
+        v=v.add(eps);
 
-        Vector R = new Vector(l);
+        Vector R = new Vector(v);
         R.normalize();
         //double angle = normal.dotProduct(l);
-        eps = angle>0 ? normal.scale(2) : normal.scale(-2); 
-        Point3D p = point.add(eps);
+        //eps = angle>0 ? normal.scale(2) : normal.scale(-2); 
+        Point3D p = point.add(R.scale(2));
 
-        Ray reflectedRay = new Ray(p, R);
-
-        return reflectedRay;
+        return new Ray(p, R);
+        //return reflectedRay;
     }
 
-    private boolean occluded(LightSource light, Point3D point, Geometry geometry) throws Exception {
-
-        Vector lightDirection = light.getL(point).scale(-1).normalize();
-
+    private double transparency(Vector L, Vector n,Point3D point, Geometry geometry) throws Exception {
+    	
+        Vector lightDirection = L.scale(-1);
+       // Vector normal = geometry.getNormal(point);
        // Point3D geometryPoint = new Point3D(point);
-        Vector epsVector = geometry.getNormal(point).scale(2);
+        Vector epsVector = n.scale(n.dotProduct(lightDirection) > 0 ? 2 : -2);
         //epsVector.scale(2);
         Point3D p = point.add(epsVector);
 
@@ -342,53 +347,38 @@ public class Render {
             intersectionPoints.remove(geometry);
         }
 
+        double ktr = 1;
         for (Entry<Geometry, List<Point3D>> entry : intersectionPoints.entrySet())
-            if (entry.getKey().getMaterial().getKt() == 0)
-                return true;
+           ktr *= entry.getKey().getMaterial().getKt();
 
-        return false;
+        return ktr;
     }
     
-    private Color calcSpecularComp(double ks, Vector v, Vector normal,Vector l, 
-			double shininess, Color lightIntensity) throws Exception {
-        v= v.scale(-1).normalize();
-        normal.normalize();
-        l.normalize();
+    private double calcSpecularComp(double ks, Vector v, Vector normal,Vector l, 
+			double shininess) throws Exception {
+        v = v.scale(-1).normalize();
+        //normal.normalize();
+        //l.normalize();
 
-        l=l.add(normal.scale(-2 * l.dotProduct(normal)));
+        // R = L - 2(l*n) * n
+        l = l.add(normal.scale(-2 * l.dotProduct(normal)));
         Vector R = new Vector(l).normalize();
 
         double k = 0;
 
         if (v.dotProduct(R) > 0) // prevents glowing at edges
             k = ks * Math.pow(v.dotProduct(R), shininess);
-
-        return new Color((int) (lightIntensity.getRed() * k),
-        			 	 (int) (lightIntensity.getGreen() * k),
-        			 	 (int) (lightIntensity.getBlue() * k));
+        
+        return k;
 	}
 	
-	private Color calcDiffusiveComp(double kd, Vector normal, Vector l, Color lightIntensity) throws Exception {
+	private double calcDiffusiveComp(double kd, Vector normal, Vector l) throws Exception {
 		
-        normal.normalize();
-        l.normalize();
-
-        double kColor = Math.abs(kd*normal.dotProduct(l));
-		
-		return new Color ( (int)(lightIntensity.getRed()*kColor),
-						   (int)(lightIntensity.getGreen()*kColor),
-						   (int)(lightIntensity.getBlue()*kColor));
+       // normal.normalize();
+       // l.normalize();
+        return kd * Math.abs(normal.dotProduct(l.scale(-1)));
 	}
 
-	
-    private Color addColors( Color a, Color b) {
-		int red = Math.max(0, Math.min(255, a.getRed() + b.getRed()));
-		int green = Math.max(0, Math.min(255, a.getGreen() + b.getGreen()));
-		int blue = Math.max(0, Math.min(255, a.getBlue() + b.getBlue()));
-    
-		return new Color(red,green,blue);
-    }
-	
 	/**
 	 * printGrid
 	 * @param interval

@@ -22,6 +22,7 @@ public class LightingTest {
 		Scene scene = new Scene();
 		scene.setScreenDistance(50);
 		Sphere sphere = new Sphere(50, new Point3D(0.0, 0.0, -50));
+		sphere.setEmmission(Color.yellow);
 		scene.addGeometry(sphere);
 		
 		Triangle triangle = new Triangle(new Point3D( 100, 0, -49),

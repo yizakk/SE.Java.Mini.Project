@@ -15,12 +15,13 @@ public class Plane extends Geometry implements FlatGeometry
 		this._Q = new Point3D();
 		this._normal = new Vector();
 	}
-
+//copy con
 	public Plane(Plane plane) {
 		super(plane.getEmmission());
 		this._Q=new Point3D(plane._Q);
 		this._normal=new Vector(plane._normal);
 	}
+	
 	public Plane(Vector normal, Point3D q)
 	{
 		super();
@@ -39,7 +40,6 @@ public class Plane extends Geometry implements FlatGeometry
 	/************** Getters/Setters ***********/
 	@Override
 	public Vector getNormal(Point3D point){return new Vector(_normal);}
-	
 	public Point3D getQ() {return _Q;}
 	public void setNormal(Vector normal) {this._normal = new Vector(normal);}
 	public void setQ(Point3D _point3) {this._Q = new Point3D(_point3);}

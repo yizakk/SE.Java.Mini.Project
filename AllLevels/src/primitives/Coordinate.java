@@ -1,7 +1,6 @@
 package primitives;
 import static primitives.Util.*;
 
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 public final class Coordinate
 {

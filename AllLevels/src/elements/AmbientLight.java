@@ -13,7 +13,7 @@ public class AmbientLight extends Light
 	 * default constructor, setting color=white, _Ka=1.0
 	 */
 	public AmbientLight() {
-		super();
+		super(new Color(0,0,0));
 		this._Ka = 1.0; 
 	}	
 	public AmbientLight(Color color, double _ka) {
@@ -44,9 +44,10 @@ public class AmbientLight extends Light
 	
 	@Override
 	public Color getIntensity(Point3D p){
-		return new Color( (int)((_color.getRed()/255)*_Ka),
-				 		  (int)((_color.getGreen()/255)*_Ka),
-				 		  (int)((_color.getBlue()/255)*_Ka));
+		return MyColor.scaleColor(_color,_Ka);
+//		return new Color( (int)((_color.getRed()/255)*_Ka),
+//				 		  (int)((_color.getGreen()/255)*_Ka),
+//				 		  (int)((_color.getBlue()/255)*_Ka));
 	}
 	
     public AmbientLight(Map<String, String> attributes) {
@@ -79,9 +80,11 @@ public class AmbientLight extends Light
 		return Double.doubleToLongBits(_Ka) == Double.doubleToLongBits(other._Ka) 
 				&& this._color.equals(other._color);
 	}
+	// Ambient Light hasn't L vector, but it implements LghtSource Interface
+	// so return null
 	@Override
 	public Vector getL(Point3D point) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	

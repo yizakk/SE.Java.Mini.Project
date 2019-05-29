@@ -30,11 +30,11 @@ public class SpotLight extends PointLight {
         }
         double k = Math.abs(_direction.dotProduct(l));
         //k*= super.getAttenuation(point);
-        if (k > 1) k = 1; 
+        //if (k > 1) k = 1; 
 
         return new Color((int) (pointColor.getRed() * k),
-                (int) (pointColor.getGreen() * k),
-                (int) (pointColor.getBlue() * k));
+                 		 (int) (pointColor.getGreen() * k),
+                 		 (int) (pointColor.getBlue() * k));
 	}
 	
 	// function getL is implemented in the father - PointLight

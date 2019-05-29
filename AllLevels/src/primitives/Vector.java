@@ -69,7 +69,7 @@ public class Vector {
 
 	// ****************** Operations *************//
 	/**
-	 * Adding a vector to the instance, changing the origin vector
+	 * Adding a vector to the instance, without changing the origin vector
 	 * @param vec
 	 * @return new Vector, equal to the origin+the given vector
 	 */
