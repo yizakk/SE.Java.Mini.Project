@@ -23,6 +23,10 @@ public class Material {
 		_Kt = material._Kt;
 		_n = material._n;
 	}
+	public Material(int i, double d, double e, double f, double g) {
+	_n = i;
+	
+	}
 	// ***************** Getters/Setters ********************** //
 	public double getKd() { return _Kd;} 
 	public double getKs() { return _Ks;}
