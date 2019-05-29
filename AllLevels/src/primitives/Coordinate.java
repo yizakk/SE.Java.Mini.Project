@@ -1,5 +1,8 @@
 package primitives;
 import static primitives.Util.*;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 public final class Coordinate
 {
 	//private static final double EPSILON = 0.0000001;
@@ -8,33 +11,27 @@ public final class Coordinate
 	public static Coordinate ZERO = new Coordinate(0.0);
 
 	// ***************** Constructors ********************** //
-	//Default Constractor
-	public Coordinate() 
-	{
+	//Default Constructor
+	public Coordinate()  {
 		this._coordinate = 0.0;
 	}
-	//Constractor get double
-	public Coordinate(double coordinate) 
-	{
+	//Constructor gets double
+	public Coordinate(double coordinate)  {
 		// if it too close to zero make it zero
 		_coordinate = alignZero(coordinate);
 	}
-	//Copy Constractor
-	public Coordinate(Coordinate coordinate) 
-	{
+	//Copy Constructor
+	public Coordinate(Coordinate coordinate)  {
 		_coordinate = coordinate._coordinate;
 	}
 
 	// ***************** Getters/Setters ********************** //
-	public double getCoordinate()
-	{
+	public double getCoordinate() {
 		return _coordinate;
 	}
-	public void setCoordinate(double coordinate)
-	{
+	public void setCoordinate(double coordinate) {
 		this._coordinate = coordinate;
 	}
-
 
 	// ***************** Administration ******************** //
 	@Override
@@ -55,9 +52,8 @@ public final class Coordinate
 		if (getClass() != obj.getClass())
 			return false;
 		Coordinate other = (Coordinate) obj;
-		if (Double.doubleToLongBits(_coordinate) != Double.doubleToLongBits(other._coordinate))
-			return false;
-		return true;
+		return Double.doubleToLongBits(_coordinate) == 
+   			   Double.doubleToLongBits(other._coordinate);
 	}
 	//CompareTo - check if some coordinate equal to the another
 	public int compareTo(Coordinate coordinate)
@@ -66,13 +62,11 @@ public final class Coordinate
 	}
 	/************** Operations ***************/
 	//add coordinate one to another 
-	public Coordinate add(Coordinate coordinate)
-	{
+	public Coordinate add(Coordinate coordinate) {
 		return new Coordinate(uadd(_coordinate, coordinate._coordinate));
 	}
 	//subtract coordinate one to another 
-	public Coordinate subtract(Coordinate coordinate)
-	{
+	public Coordinate subtract(Coordinate coordinate) {
 		return new Coordinate(usubtract(_coordinate, coordinate._coordinate));
 	}
 	//multiply coordinate by number
@@ -80,15 +74,13 @@ public final class Coordinate
 		return new Coordinate(uscale(_coordinate, num));
 	}
 	//multiply coordinate by another
-	public Coordinate multiply(Coordinate other)
-	{
+	public Coordinate multiply(Coordinate other) {
 		return new Coordinate(uscale(_coordinate, other._coordinate));
 	}
-	//toString - print 
+	//toString - printing the coordinate 
 	@Override
-	public String toString()
-	{
-		return "" + _coordinate;
+	public String toString() {
+		//DecimalFormat df = new DecimalFormat ("0.0#");
+		return new DecimalFormat("0.0#").format(_coordinate);
 	}
-
 }

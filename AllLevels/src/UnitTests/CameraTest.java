@@ -132,10 +132,10 @@ public class CameraTest {
               switch(i)
               {
                   case 0:
-                    assertEquals("Bad Intersection! ","(0.0,6.0,-2.0)", iPoint.toString());
+                    assertEquals("Bad Intersection! ","(0.0, 6.0, -2.0)", iPoint.toString());
                     break;
                   case 1:
-                    assertEquals("Bad Intersection! ","(0.0,0.0,-2.0)", iPoint.toString());
+                    assertEquals("Bad Intersection! ","(0.0, 0.0, -2.0)", iPoint.toString());
                     break;
               }
             }
@@ -150,7 +150,7 @@ public class CameraTest {
                                          new Point3D(-1, -1, -2));
         Vector normal = triangle.getNormal(new Point3D());
         //System.out.println(normal);
-        assertEquals("Bad normal! ", normal.toString(),"(0.0,0.0,1.0)");
+        assertEquals("Bad normal! ", normal.toString(),"(0.0, 0.0, 1.0)");
     }
     /************************************** Sphere test 
      * @throws Exception ******************************************************/  
@@ -214,11 +214,11 @@ public class CameraTest {
     @Test
     public void Test17() throws Exception
     {
-       // System.out.print("Test17: Sphere getNormal test: ");
+        System.out.print("Test17: Sphere getNormal test: ");
         Sphere sphere = new Sphere(10, new Point3D(0.0, 0.0, -3.0));
         Vector normal = sphere.getNormal(new Point3D(5.0,5.0,-3.0));
-        //System.out.println(normal);
-//        assertEquals("Bad normal! ", normal.toString(),"(0.7, 0.7, 0.0)");
+        System.out.println(normal);
+        assertEquals("Bad normal! ", normal.toString(),"(0.71, 0.71, 0.0)");
     }
 /************************************ Plane test 
  * @throws Exception *****************************************************/

@@ -29,8 +29,11 @@ public abstract class Geometry {
 	public void setEmmission(Color emmission) {this._emmission = new Color(emmission.getRed(),emmission.getGreen(),emmission.getBlue());}
 	public Material getMaterial() { return new Material(_material); }
 	
-	public void setKt(double val) { this._material.setKt(val); }
-	public void setKr(double val) { this._material.setKr(val); }
+    public void setKs(double ks) {  _material.setKs(ks); }
+    public void setKd(double kd) {  _material.setKd(kd); }
+    public void setKr(double Kr) {  _material.setKr(Kr); }
+    public void setKt(double Kt) {  _material.setKt(Kt); }
+    
 	// ***************** Administration ******************** //
 	@Override
 	public int hashCode() {

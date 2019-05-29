@@ -5,27 +5,26 @@ public class Point2D
 	protected Coordinate _x;
 	protected Coordinate _y;
 	// ***************** Constructors ********************** //
-	//default Constractor
+	//default Constructor
 	Point2D()
 	{
 		this._x= new Coordinate();
 		this._y= new Coordinate();
 	}
-	//Constractor get 2 double
+	//Constructor get 2 double
 	Point2D(double x, double y)
 	{
 		_x=new Coordinate(x);
 		_y=new Coordinate(y);
 	}
-	//Constractor get 2 Coordinate
+	//Constructor get 2 Coordinate
 	Point2D(Coordinate x, Coordinate y)
 	{
 		_x=new Coordinate(x);
 		_y=new Coordinate(y);
 	}
 
-	public Point2D(Point2D point2D)
-	{
+	public Point2D(Point2D point2D) {
 		_x  = new Coordinate(point2D._x);
 		_y  = new Coordinate(point2D._y);
 	}
@@ -71,14 +70,12 @@ public class Point2D
 	}
 
 	//CompareTo - check if some Point2D equal to the another
-	public int compareTo(Point2D point2D)
-	{
+	public int compareTo(Point2D point2D) {
 		return this.equals(point2D)?0:1;
 	}
 	//toString - print 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "("+_x.toString()+","+_y.toString()+")";
 	}
 }

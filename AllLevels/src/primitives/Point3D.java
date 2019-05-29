@@ -63,62 +63,46 @@ public class Point3D extends Point2D
 		return true;
 	}
 	//Check if equals between 2 Points
-	public int compareTo(Point3D other)
-	{
+	public int compareTo(Point3D other) {
 		return this.equals(other) ? 0 : 1;
 	}
 	//toString - print 
 	@Override
-	public String toString()
-	{
-		return "("+_x.toString()+","+_y.toString()+","+_z.toString()+")";
+	public String toString() {
+		return "("+_x.toString()+", "+_y.toString()+", "+_z.toString()+")";
 	}
-	// ***************** Operations ******************** //
 	
+	// ***************** Operations ******************** //
 	/**
 	 * adding a vector to Point3D, without changing the origin point
 	 * @param vector
 	 * @return copy of the updated point3d
 	 */
-	public Point3D add(Vector vector)
-	{
+	public Point3D add(Vector vector) {
 		Point3D tempHead = vector.getHead();
 		return new Point3D( (_x.add(tempHead._x)),
 							(_y.add(tempHead._y)),
 							(_z.add(tempHead._z)));
-		
 	}
+	
 	/**
 	 * subtracting a vector from point, without changing the origin point
 	 * @param vector
 	 * @return copy of the updated point3d
 	 */
-	public Point3D subtract(Vector vector)
-	{
+	public Point3D subtract(Vector vector) {
 		return new Point3D(_x.subtract(vector.getHead().getX()),
 						   _y.subtract(vector.getHead().getY()),
 						   _z.subtract(vector.getHead().getZ()));			
 	}
 	
-	/*
-	 * //subtract point from Vector*********************************check if needed **************************
-	public Vector substract_(Vector vector)
-	{
-		this._x = _x.subtract(vector.getHead().getX());
-		this._y = _y.subtract(vector.getHead().getY());
-		this._z = _z.subtract(vector.getHead().getZ());
-		return new Vector(_x,_y,_z);
-	}
-	*/
-
 	/**
 	 * subtracting a point from another (left-right), without changing the origin point
 	 * 
 	 * @param point
-	 * @return copy of the updated point
+	 * @return updated point
 	 */
-	public Point3D subtract(Point3D point)
-	{
+	public Point3D subtract(Point3D point) {
 		return new Point3D( _x.subtract(point._x),
 						    _y.subtract(point._y),
 						    _z.subtract(point._z));
@@ -130,8 +114,7 @@ public class Point3D extends Point2D
 	 * @return double
 	 */
 
-	public double distance(Point3D point)
-	{
+	public double distance(Point3D point) {
 		double X=new Coordinate(_x).subtract(point._x).getCoordinate();
 		double Y=new Coordinate(_y).subtract(point._y).getCoordinate();
 		double Z=new Coordinate(_z).subtract(point._z).getCoordinate();
@@ -140,8 +123,7 @@ public class Point3D extends Point2D
 
 	//Calculate the squared Distance
 
-	public double poweredDistance(Point3D p)
-	{
+	public double poweredDistance(Point3D p) {
 		double distance= distance(p);
 		return distance*distance;
 	}
@@ -152,10 +134,9 @@ public class Point3D extends Point2D
 	 * @return new point equal to the origin point scaled by the given factor
 	 */
 
-	public Point3D scale(double num)
-	{
-		return new Point3D( new Coordinate(_x.getCoordinate()*num),
-							new Coordinate(_y.getCoordinate()*num),
-							new Coordinate(_z.getCoordinate()*num));
+	public Point3D scale(double num) {
+		return new Point3D(_x.scale(num),
+						   _y.scale(num),
+						   _z.scale(num));
 	}
 }

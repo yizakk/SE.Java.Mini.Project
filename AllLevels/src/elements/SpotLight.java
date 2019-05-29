@@ -29,7 +29,7 @@ public class SpotLight extends PointLight {
         	l=new Vector(1,1,1);
         }
         double k = Math.abs(_direction.dotProduct(l));
-
+        //k*= super.getAttenuation(point);
         if (k > 1) k = 1; 
 
         return new Color((int) (pointColor.getRed() * k),

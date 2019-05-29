@@ -19,14 +19,15 @@ public class DirectionalLight extends Light
 	public Vector getDirection() { return new Vector(_direction); }
 	public void setDirection(Vector direction) { _direction = new Vector(direction); }
 	
-	public Vector getL(Point3D point){
+	@Override
+	public Vector getL(Point3D point) {
 		
 		try {
 		return new Vector(_direction).normalize();
 		}
 		catch(Exception a)
 		{
-			return new Vector();
+			return new Vector(1,1,1);
 		}
 	}
 	@Override

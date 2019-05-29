@@ -51,6 +51,22 @@ public class Render {
 		this._imagewriter.writeToimage();
 	}
 	
+	/*************************************************
+	 * FUNCTION
+	 * render image
+	 * 
+	 * PARAMETERS
+	 * 
+	 * RETURN VALUE
+	 * 
+	 * MEANING
+	 * This functions renders the image by running in loop all over the height*width of
+	 * the image, constructing the rays from the camera, finding the intersections woth 
+	 * the view plane, and calculating the color in each pixel
+	 * 
+	 * SEE ALSO
+	 * 
+	 **************************************************/
 	public void renderImage() throws Exception
 	{
 		for (int i=0;i<_imagewriter.getHeight();i++){
@@ -73,12 +89,23 @@ public class Render {
 		}	
 	}
 	
-	/**
-	 * returning map of geometries and for each- it's intersections 
-	 * @param ray
-	 * @return
-	 * @throws Exception 
-	 */
+	/*************************************************
+	 * FUNCTION
+	 * get scene ray intersections
+	 * 
+	 * PARAMETERS
+	 * Ray 
+	 * RETURN VALUE
+	 * Map<Geometry,List<Point3D>>
+	 * MEANING
+	 * This functions iterating all the geometries in the scene, looking for intersections
+	 * with given ray (by calling each geometry's 'findIntersections' func. , and returning a map of all the geometries intersecting the
+	 * ray, with the points of intersections.
+	 * @throws
+	 * Exception
+	 * SEE ALSO
+	 * Geometry.findIntersection
+	 **************************************************/
 	private Map<Geometry, List<Point3D>> getSceneRayIntersections(Ray ray) throws Exception
 	{
 		Iterator<Geometry> geometries = _scene.getGeometriesIterator();
@@ -98,13 +125,16 @@ public class Render {
 	 * get Closest Point
 	 * 
 	 * PARAMETERS
-	 * Map of Geometry,List<Point3D>
+	 * Map<Geometry,List<Point3D>>
 	 * 
 	 * RETURN VALUE
-	 * An entry of Geometry,Point3D representing the closest point
+	 * An Entry<Geometry,Point3D> representing the closest point
 	 * 
 	 * MEANING
-	 * while looking for a point to paint, we want to find the nearest to the required
+	 * while looking for a point to paint (in the render image function), we want to 
+	 * find the nearest point to the required, so this function iterates all the map
+	 * given as parameter, and finding the nearest point of intersection to P0 of the
+	 * camera. 
 	 * 
 	 * SEE ALSO
 	 * 
@@ -125,28 +155,71 @@ public class Render {
 		return minDistancePoint.entrySet().iterator().next();
 	}
 	
-    private Entry<Geometry, Point3D> findClosesntIntersection(Ray ray) throws Exception {
+
+	/*************************************************
+	 * FUNCTION
+	 * findClosestIntersection
+	 * 
+	 * PARAMETERS
+	 * Ray
+	 * 
+	 * RETURN VALUE
+	 * Entry<Geometry,Point3D> representing the closest intersection point
+	 * 
+	 * MEANING
+	 * looking for the closest intersection between the ray and the scene, if there aren't
+	 * any- returning null, if exist- finding the closest point by calling getClosestPoint
+	 * function 
+	 * 
+	 * SEE ALSO
+	 * Render.getClosestPoint
+	 **************************************************/
+    private Entry<Geometry, Point3D> findClosestIntersection(Ray ray) throws Exception {
 
         Map<Geometry, List<Point3D>> intersectionPoints = getSceneRayIntersections(ray);
 
         if (intersectionPoints.size() == 0)
             return null;
-
-//        Map<Geometry, Point3D> closestPoint = getClosestPoint(intersectionPoints);
-//        Entry<Geometry, Point3D> entry = closestPoint.entrySet().iterator().next();
         return getClosestPoint(intersectionPoints);
 
     }
-    
+
+    /**
+
+     * Inner function, only for calling the recursive calcColor function and start the
+     * recursion level with '0'
+     * @param geometry
+     * @param point
+     * @param ray
+     * @return
+     * @throws Exception
+     */
     private Color calcColor(Geometry geometry, Point3D point, Ray ray) throws Exception {
         return calcColor(geometry, point, ray, 0);
     }
+
+	/*************************************************
+	 * FUNCTION
+	 * calcColor
+	 * 
+	 * PARAMETERS
+	 * Geometry, Point3D, Ray, int
+	 * 
+	 * RETURN VALUE
+	 * Color
+	 * 
+	 * MEANING
+	 * The function calculates the exact color of a specified pixel, according to phong
+	 * model- ambient+diffuse+specular 
+	 * 
+	 * SEE ALSO
+	 * Render.getClosestPoint
+	 **************************************************/
 
     private Color calcColor(Geometry geometry, Point3D point, Ray inRay, int level) throws Exception {
 
         if (level == RECURSION_LEVEL) {
             return Color.BLACK;
-            //return new java.awt.Color(0, 0, 0);
         }
 
         Color ambientLight = _scene.getAmbientLight().getIntensity(null);
@@ -159,8 +232,7 @@ public class Render {
         Color lightReflected = new Color(0, 0, 0);
         Vector normal = geometry.getNormal(point).normalize();
 
-        while (lights.hasNext()) 
-        {
+        while (lights.hasNext()) {
             LightSource light = lights.next();
 
             if (!occluded(light, point, geometry)) {
@@ -188,7 +260,7 @@ public class Render {
         // Recursive calls
         // Recursive call for a reflected ray
         Ray reflectedRay = constructReflectedRay(normal, point, inRay);
-        Entry<Geometry, Point3D> reflectedEntry = findClosesntIntersection(reflectedRay);
+        Entry<Geometry, Point3D> reflectedEntry = findClosestIntersection(reflectedRay);
         Color reflected = new Color(0, 0, 0);
 
         if (reflectedEntry != null) {
@@ -199,7 +271,7 @@ public class Render {
 
         // Recursive call for a refracted ray
         Ray refractedRay = constructRefractedRay(geometry, point, inRay);
-        Entry<Geometry, Point3D> refractedEntry = findClosesntIntersection(refractedRay);
+        Entry<Geometry, Point3D> refractedEntry = findClosestIntersection(refractedRay);
         Color refracted = new Color(0, 0, 0);
 
         if (refractedEntry != null) {
@@ -218,10 +290,10 @@ public class Render {
 
     private Ray constructRefractedRay(Geometry geometry, Point3D point, Ray inRay) throws Exception {
 
-        //Vector normal = geometry.getNormal(point);
-        //normal.scale(-2);
-    	Vector normal = geometry.getNormal(point).scale(-2);
-        Point3D p = point.add(normal);
+    	Vector eps = geometry.getNormal(point);
+    	double angle = eps.dotProduct(inRay.getDirection());
+    	eps = angle<0? eps.scale(-2) : eps.scale(2);
+        Point3D p = point.add(eps);
 
         if (geometry instanceof FlatGeometry) {
             return new Ray(p, inRay.getDirection());
@@ -238,13 +310,15 @@ public class Render {
         Vector l = inRay.getDirection();
         l.normalize();
 
-        normal = normal.scale(-2 * l.dotProduct(normal));
-        l=l.add(normal);
+        double angle = l.dotProduct(normal);
+        Vector eps = normal.scale(-2 * angle);
+        l=l.add(eps);
 
         Vector R = new Vector(l);
         R.normalize();
-
-        Point3D p = point.add(normal);
+        //double angle = normal.dotProduct(l);
+        eps = angle>0 ? normal.scale(2) : normal.scale(-2); 
+        Point3D p = point.add(eps);
 
         Ray reflectedRay = new Ray(p, R);
 
@@ -254,8 +328,6 @@ public class Render {
     private boolean occluded(LightSource light, Point3D point, Geometry geometry) throws Exception {
 
         Vector lightDirection = light.getL(point).scale(-1).normalize();
-        //lightDirection.scale(-1);
-        //lightDirection.normalize();
 
        // Point3D geometryPoint = new Point3D(point);
         Vector epsVector = geometry.getNormal(point).scale(2);
@@ -279,7 +351,7 @@ public class Render {
     
     private Color calcSpecularComp(double ks, Vector v, Vector normal,Vector l, 
 			double shininess, Color lightIntensity) throws Exception {
-        v.normalize();
+        v= v.scale(-1).normalize();
         normal.normalize();
         l.normalize();
 
