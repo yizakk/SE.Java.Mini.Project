@@ -1,9 +1,14 @@
-package elements;
+package primitives;
 import java.awt.Color;
 
+/**
+ * Sum colors operations. static methods
+ * @author נוסבאום
+ *
+ */
 public class MyColor {
 	/**
-	 * Scaling a Color instance by double factor. returning a new color = (red*k,green*k,blue*k)
+	 * Scaling a Color instance by double factor. returning a new color = (red*k, green*k, blue*k)
 	 * @param a - the Color instance to scale
 	 * @param k - scaling factor
 	 * @return Color
@@ -28,7 +33,7 @@ public class MyColor {
 	}
 	
 	/**
-	 * Copying a Color instance
+	 * Copying a Color instance. returning a cloned Color instance
 	 * @param a- the origin
 	 * @return Color
 	 */
@@ -38,7 +43,8 @@ public class MyColor {
 	}
 	
 	/**
-	 *  Adding two colors returning a new color = (a.red+b.red, a.green+b.green, a.blue+b.blue) 
+	 *  Adding two colors returning a new color = (a.red+b.red, a.green+b.green, a.blue+b.blue)
+	 *  validating colors are in range (0-255), by choosing the maximum(0, minimum(color,255)) 
 	 * @param a
 	 * @param b
 	 * @return Color

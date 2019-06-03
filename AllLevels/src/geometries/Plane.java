@@ -9,8 +9,7 @@ public class Plane extends Geometry implements FlatGeometry
 	private Point3D _Q;
 	
 	// ***************** Constructors ********************** //
-	public Plane()
-	{
+	public Plane() {
 		super();
 		this._Q = new Point3D();
 		this._normal = new Vector();
@@ -22,20 +21,17 @@ public class Plane extends Geometry implements FlatGeometry
 		this._normal=new Vector(plane._normal);
 	}
 	
-	public Plane(Vector normal, Point3D q)
-	{
+	public Plane(Vector normal, Point3D q) {
 		super();
 		_normal = new Vector(normal);
 		_Q = new Point3D(q);
 	}
 
-	public Plane(Color c, Vector normal, Point3D q)
-	{
+	public Plane(Color c, Vector normal, Point3D q) {
 		super(c);
 		_normal = new Vector(normal);
 		_Q = new Point3D(q);
 	}
-
 
 	/************** Getters/Setters ***********/
 	@Override
@@ -90,16 +86,13 @@ public class Plane extends Geometry implements FlatGeometry
 			intersectionPoint.add(P0);
 			return intersectionPoint;
 		}
-		else 
-			return intersectionPoint;
+		
+		return intersectionPoint;
 	}
 	
 
 	/************** To String - Print ***************/
 	@Override
 	public String toString() { return "Normal:"+_normal.toString()+" "+"Point:"+_Q.toString();}
-	public Vector get_normal() {
-		return _normal;
-	}
 
 }

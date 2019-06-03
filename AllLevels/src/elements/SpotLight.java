@@ -2,6 +2,7 @@ package elements;
 
 import java.awt.Color;
 
+import primitives.MyColor;
 import primitives.Point3D;
 import primitives.Vector;
 
@@ -15,6 +16,25 @@ public class SpotLight extends PointLight {
 		_direction = new Vector (direction).normalize();
 	}
 
+	/*************************************************
+	 * FUNCTION
+	 * getIntensity
+	 * 
+	 * PARAMETERS
+	 * Point3D - the point in which to calculate the exact intensity
+	 * 
+	 * RETURN VALUE
+	 * Color = (Kc+(Kj*d)+(Kq*d*d))
+	 * 
+	 * MEANING
+	 * This function calculates the intensity in a point according to the equalence-
+	 * (I0*|d*L|) / (Kc+Kl*d+Kq*d*d).
+	 * It calls the super(PointLight) getIntensity function that returns 
+	 * I0 / (Kc+Kl*d+Kq*d*d), than scaling it by D dotProduct L
+	 * 
+	 * SEE ALSO
+	 * elements.Light.getIntensity
+	 **************************************************/
 	@Override
 	public Color getIntensity(Point3D point) 
 	{
@@ -29,12 +49,8 @@ public class SpotLight extends PointLight {
         	l=new Vector(1,1,1);
         }
         double k = Math.abs(_direction.dotProduct(l));
-        //k*= super.getAttenuation(point);
-        //if (k > 1) k = 1; 
 
-        return new Color((int) (pointColor.getRed() * k),
-                 		 (int) (pointColor.getGreen() * k),
-                 		 (int) (pointColor.getBlue() * k));
+        return MyColor.scaleColor(pointColor, k);
 	}
 	
 	// function getL is implemented in the father - PointLight

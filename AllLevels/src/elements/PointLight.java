@@ -1,6 +1,8 @@
 package elements;
 
 import java.awt.Color;
+
+import primitives.MyColor;
 import primitives.Point3D;
 import primitives.Vector;
 
@@ -54,21 +56,35 @@ public class PointLight extends Light {
 		double attenuation = getAttenuation(point);
 		
 		if((1/attenuation)>1)
-			attenuation=1;
-		
-		// validating numbers are in the RGB range 
-		int red = Math.max(0, Math.min(255,(int)(_color.getRed()/attenuation)));
-		int green = Math.max(0, Math.min(255,(int)(_color.getGreen()/attenuation)));
-		int blue = Math.max(0, Math.min(255,(int)(_color.getBlue()/attenuation)));
-	    
-		return new Color(red,green,blue);
+			attenuation=1;		
+		return MyColor.scaleColor(_color, 1/attenuation);
 	}
 	
+	/*************************************************
+	 * FUNCTION
+	 * getAttenuation
+	 * 
+	 * PARAMETERS
+	 * Point3D - the point in which to calculate the exact attenuation
+	 * 
+	 * RETURN VALUE
+	 * double = (Kc+(Kj*d)+(Kq*d*d))
+	 * 
+	 * MEANING
+	 * This is an inner function, (protected for SpotLight would be able to use it to)
+	 * that calculates the attenuation factor for the light in a specified point,
+	 * according to the Phong model - (Kc+(Kj*d)+(Kq*d*d)) (while d is the distance from 
+	 * the light to the point)
+	 * 
+	 * SEE ALSO
+	 * elements.Light.getIntensity
+	 **************************************************/
 	protected double getAttenuation(Point3D point) {
 		double distance = _position.distance(point);
 		return _Kc + _Kl* distance+ _Kq*distance*distance; // iL = I0 / (kc+Kl*d+kq*d^2)	
 	}
 
+	// L for spot and point is a vector from the point to the position of the light
 	@Override
 	public Vector getL(Point3D point) {
 		// P0-point

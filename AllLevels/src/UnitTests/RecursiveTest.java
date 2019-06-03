@@ -23,7 +23,7 @@ public class RecursiveTest
 		Sphere sphere = new Sphere(500, new Point3D(0.0, 0.0, -1000));
 		sphere.setShininess(20);
 		sphere.setEmmission(new Color(0, 0, 100));
-              sphere.setKt(0.5);
+        sphere.setKt(0.8);
 		scene.addGeometry(sphere);
 		
 		Sphere sphere2 = new Sphere(250, new Point3D(0.0, 0.0, -1000));
@@ -47,7 +47,7 @@ public class RecursiveTest
 	public void recursiveTest2() throws Exception{
 		
 		Scene scene = new Scene();
-		scene.setScreenDistance(300);
+		scene.setScreenDistance(250);
 		
 		Sphere sphere = new Sphere(300, new Point3D(-550, -500, -1000));
 		sphere.setShininess(20);
@@ -61,10 +61,11 @@ public class RecursiveTest
 		sphere2.setKt(0);
 		scene.addGeometry(sphere2);
 		
+		// mirror triangle
 		Triangle triangle = new Triangle(new Point3D(  1500, -1500, -1500),
 				 						 new Point3D( -1500,  1500, -1500),
 				 						 new Point3D(  200,  200, -375));
-		
+		// base triangle
 		Triangle triangle2 = new Triangle(new Point3D(  1500, -1500, -1500),
 										  new Point3D( -1500,  1500, -1500),
 										  new Point3D( -1500, -1500, -1500));
@@ -76,7 +77,7 @@ public class RecursiveTest
 		scene.addGeometry(triangle);
 		scene.addGeometry(triangle2);
 
-		scene.addLight(new SpotLight(new Color(255, 100, 100),  new Point3D(200, 200, -150), 
+		scene.addLight(new SpotLight(new Color(255, 200, 200),  new Point3D(50, 50, -50), 
 				   new Vector(-2, -2, -3), 0, 0.00001, 0.000005));
 	
 		ImageWriter imageWriter = new ImageWriter("Recursive Test 2", 500, 500, 500, 500);

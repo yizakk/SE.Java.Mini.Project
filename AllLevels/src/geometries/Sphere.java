@@ -8,26 +8,43 @@ public class Sphere extends RadialGeometry {
 	Point3D _center;
 	
 	//**************** Constructors *****************
-	//Default Constructor
+	/**
+	 * Default C-Tor, center=(0,0,0), Radial={radius=0, Geometry={shininess=1, emmission=black,Material= {Kd=1, Ks=1, Kr=0, Kt=0 index=19} } }
+	 */
 	public Sphere() {
 		super();
 		this._center = new Point3D();	
 	}
-	//Copy constructor
+	/**
+	 * Copy C-Tor
+	 * @param sphere
+	 */
 	public Sphere(Sphere sphere) {
 		super(sphere);
 		this._center=sphere.getCenter();
 	}
+	/**
+	 * radius=_radius 
+	 * Radial={Geometry={shininess=1, emmission=black,Material= {Ks=1, Ks=1, Kr=0, Kt=0 index=19} } }
+	 * @param _raduis
+	 * @param center
+	 */
 	public Sphere(double _raduis,Point3D center)
 	{
 		super(_raduis);
 		this._center=new Point3D(center);
 	}
-
+/**
+ * 
+ * @param c - Color
+ * @param _radius
+ * @param center
+ */
 	public Sphere(Color c,double _radius, Point3D center) {
 		super(c,_radius);
 		this._center = new Point3D(center);
 	}
+	
 	/**********************Get/Set******************************/
 	public Point3D getCenter() {return new Point3D( _center);}
 	public void setCenter(Point3D center) {this._center = center;}
@@ -63,7 +80,7 @@ public class Sphere extends RadialGeometry {
 		//Point3D center = P0.subtract(_center); 
 		Vector L = new Vector(_center,P0); // center = Q0 - P0
 		//direction vector of ray
-		double distance = P0.distance(_center); 
+		//double distance = P0.distance(_center); 
 		Vector V = ray.getDirection();
 		double tm =L.dotProduct(V);
 		//find D by pitagoras using Math library

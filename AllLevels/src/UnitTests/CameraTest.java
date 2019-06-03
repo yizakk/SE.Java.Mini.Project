@@ -8,8 +8,10 @@ import geometries.*;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
-import java.util.*;
+import renderer.ImageWriter;
 
+import java.awt.Color;
+import java.util.*;
 
 public class CameraTest {
     @Test
@@ -276,5 +278,39 @@ public class CameraTest {
           //  for (Point3D iPoint: intersectionPointsPlane2)
                  //   System.out.println(iPoint);
     }
+    
+//*********************************** Some Flag  **********************************//    
+//    @Test
+    public void flagTest(){
+	 
+        ImageWriter imageWriter = new ImageWriter("Madagaskar", 900, 500, 1, 1);
+
+        for (int i = 0; i <imageWriter.getHeight(); i++)
+        {
+        	 for (int j = 0; j < 300; j++)
+        	 {
+        		  imageWriter.writePixel(j, i, 0,0,0); // white
+        	 }
+        }
+        
+        for (int i = 300; i < imageWriter.getWidth(); i++)
+        {
+        	 for (int j = 0; j < 250; j++)
+        	 {
+        		  imageWriter.writePixel(i, j, 247, 12, 28); //red
+        	 }
+        }
+        
+       for (int i = 300; i < imageWriter.getWidth(); i++)
+        {
+        	 for (int j = 250; j < imageWriter.getHeight(); j++)
+        	 {
+        		  imageWriter.writePixel(i, j, 5, 168, 54); //green
+        	 }
+        }
+        
+        imageWriter.writeToimage();
+    }
+
 
 }

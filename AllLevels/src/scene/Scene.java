@@ -130,4 +130,8 @@ public class Scene {
 	public Iterator<LightSource> getLightsIterator() {
 		return this._lights.iterator();
 	}
+	public void clearAllGeometry() {
+		_geometries.clear();
+		
+	}
 }

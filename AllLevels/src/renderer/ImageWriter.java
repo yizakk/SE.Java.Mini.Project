@@ -15,7 +15,7 @@ public class ImageWriter {
 	
 	private int _Ny, _Nx;
 	
-	final String PROJECT_PATH = System.getProperty("user.dir");
+	final String PROJECT_PATH = System.getProperty("user.dir") + "\\Try";
 	
 	private BufferedImage _image;
 	
@@ -58,14 +58,16 @@ public class ImageWriter {
 	public int getNy() { return _Ny; }
 	public int getNx() { return _Nx; }
 
+	public String getRenderingDirectory() { return PROJECT_PATH; }
 	public void setNy(int _Ny) { this._Ny = _Ny; }
 	public void setNx(int _Nx) { this._Nx = _Nx; }
+	public BufferedImage getImage() { return _image;}
 		
 	// ***************** Operations ******************** // 
 	
 	public void writeToimage(){
 		
-		File ouFile = new File(PROJECT_PATH + "/" + _imageName + ".jpg");
+		File ouFile = new File(PROJECT_PATH + "/"+ _imageName + ".jpg");
 
 		try {
 			ImageIO.write(_image, "jpg", ouFile);

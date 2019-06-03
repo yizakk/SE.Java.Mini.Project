@@ -92,11 +92,25 @@ public class Cylinder extends RadialGeometry {
 	public ArrayList<Point3D> findIntersections(Ray ray) {
 		return null;
 	}
+	
 	/**************GetNormal**********************/
 	@Override
-	public Vector getNormal(Point3D point) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public Vector getNormal(Point3D p) throws Exception {
+		double x = p.getX().getCoordinate();
+		double y = p.getY().getCoordinate();
+		double z = p.getZ().getCoordinate();
+		
+		double a = _axisPoint.getX().getCoordinate();
+		double b = _axisPoint.getY().getCoordinate();
+		double c = _axisPoint.getZ().getCoordinate();
+		
+		double vX = _axisDirection.getHead().getX().getCoordinate();
+		double vY = _axisDirection.getHead().getY().getCoordinate();
+		double vZ = _axisDirection.getHead().getZ().getCoordinate();
+		
+		double t = (x* vX - a* vX + y *vY - b * vY + z*vZ - c* vZ)/ (vX * vX + vY * vY + vZ * vZ);
+		
+		return new Vector((x- a -t *vX), (y- b - t * vY), (z- c -t*vZ));
 	}
 
 /***************toString - print****************/
@@ -104,6 +118,4 @@ public class Cylinder extends RadialGeometry {
 	public String toString() {
 		return "Cylinder [_axisPoint=" + _axisPoint + ", _axisDirection=" + _axisDirection + "]";
 	}
-
-
 }

@@ -1,5 +1,4 @@
 package renderer;
-import elements.MyColor;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,9 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import elements.LightSource;
 import geometries.FlatGeometry;
 import geometries.Geometry;
+import primitives.MyColor;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Util;
@@ -225,7 +226,7 @@ public class Render {
         Color emissionLight = geometry.getEmmission();
 
         Color inherentColors = MyColor.addColors(ambientLight, emissionLight);
-//        
+       
         Iterator<LightSource> lights = _scene.getLightsIterator();
 
         Color lightReflected = new Color(0, 0, 0);
@@ -293,6 +294,23 @@ public class Render {
         return finalColor;
     }
 
+	/*************************************************
+	 * FUNCTION
+	 * constructRefractedRay
+	 * 
+	 * PARAMETERS
+	 * Geometry, Point3D, Ray
+	 * 
+	 * RETURN VALUE
+	 * Ray
+	 * 
+	 * MEANING
+	 * The function calculates the ray created from the refracted light ray sended from 
+	 * light source. (normal to the geometry * Ray direction), than adding epsilon vector.
+	 * 
+	 * SEE ALSO
+	 * Render.calcColor
+	 **************************************************/
     private Ray constructRefractedRay(Geometry geometry, Point3D point, Ray inRay) throws Exception {
 
     	Vector eps = geometry.getNormal(point);
@@ -300,17 +318,28 @@ public class Render {
     	eps = angle<0? eps.scale(-2) : eps.scale(2);
         Point3D p = point.add(eps);
 
-        if (geometry instanceof FlatGeometry) {
+        //if (geometry instanceof FlatGeometry) {
             return new Ray(p, inRay.getDirection());
-        } 
-        else {
-            // Here, Snell's law can be implemented.
-            // The refraction index of both materials had to be derived
-        	
-            return new Ray(p, inRay.getDirection());
-        }
+        //}
     }
 
+	/*************************************************
+	 * FUNCTION
+	 * constructReflectedRay
+	 * 
+	 * PARAMETERS
+	 * Geometry, Point3D, Ray
+	 * 
+	 * RETURN VALUE
+	 * Ray
+	 * 
+	 * MEANING
+	 * The function calculates the ray created from the reflected light ray sended from 
+	 * light source. (normal to the geometry * Ray direction), than adding epsilon vector.
+	 * 
+	 * SEE ALSO
+	 * Render.calcColor
+	 **************************************************/
     private Ray constructReflectedRay(Vector normal, Point3D point, Ray inRay) throws Exception {
 
         Vector v = inRay.getDirection().normalize();
@@ -330,13 +359,31 @@ public class Render {
         //return reflectedRay;
     }
 
+	/*************************************************
+	 * FUNCTION
+	 * transparency
+	 * 
+	 * PARAMETERS
+	 * Vector, Vector, point3D, geometry
+	 * 
+	 * RETURN VALUE
+	 * Double
+	 * 
+	 * MEANING
+	 * The function calculates the transparency of the specified light in given point.
+	 * it reverses the direction of the ray (to get the dire. from the geometry
+	 * back), adding an epsilon vector to the given point (scalen by +-2 according to 
+	 * the sign of the angle between the light and the normal), than finding a
+	 * map of all the geometries intersecting the ray (and in which points), 
+	 * if the geometry is flat- removing its points from the map,
+	 * than scaling all the points' Kt factor. 
+	 * SEE ALSO
+	 * Render.calcColor
+	 **************************************************/  
     private double transparency(Vector L, Vector n,Point3D point, Geometry geometry) throws Exception {
     	
         Vector lightDirection = L.scale(-1);
-       // Vector normal = geometry.getNormal(point);
-       // Point3D geometryPoint = new Point3D(point);
         Vector epsVector = n.scale(n.dotProduct(lightDirection) > 0 ? 2 : -2);
-        //epsVector.scale(2);
         Point3D p = point.add(epsVector);
 
         Ray lightRay = new Ray(p, lightDirection);
@@ -354,11 +401,26 @@ public class Render {
         return ktr;
     }
     
+	/*************************************************
+	 * FUNCTION
+	 * calcSpecularComp
+	 * 
+	 * PARAMETERS
+	 * double, Vector, Vector, Vector , double
+	 * 
+	 * RETURN VALUE
+	 * Double
+	 * 
+	 * MEANING
+	 * The function calculates the specular factor of a point, finding the reversed vector,
+	 * finding R (L-2*(L*n)*n ), than if the angle is possitive, returning ks*(v*R)^S
+	 * else - return 0
+	 * SEE ALSO
+	 * Render.calcColor
+	 **************************************************/  
     private double calcSpecularComp(double ks, Vector v, Vector normal,Vector l, 
 			double shininess) throws Exception {
         v = v.scale(-1).normalize();
-        //normal.normalize();
-        //l.normalize();
 
         // R = L - 2(l*n) * n
         l = l.add(normal.scale(-2 * l.dotProduct(normal)));
@@ -372,10 +434,23 @@ public class Render {
         return k;
 	}
 	
+	/*************************************************
+	 * FUNCTION
+	 * calcSpecularComp
+	 * 
+	 * PARAMETERS
+	 * double, Vector, Vector
+	 * 
+	 * RETURN VALUE
+	 * Double
+	 * 
+	 * MEANING
+	 * The function calculates the diffusive factor in a point.
+	 * kd*(|normal*-L|)
+	 * SEE ALSO
+	 * Render.calcColor
+	 **************************************************/ 
 	private double calcDiffusiveComp(double kd, Vector normal, Vector l) throws Exception {
-		
-       // normal.normalize();
-       // l.normalize();
         return kd * Math.abs(normal.dotProduct(l.scale(-1)));
 	}
 

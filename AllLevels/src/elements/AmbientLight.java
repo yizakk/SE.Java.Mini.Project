@@ -1,6 +1,8 @@
 package elements;
 import java.awt.Color;
 import java.util.Map;
+
+import primitives.MyColor;
 import primitives.Point3D;
 import primitives.Vector;
 
@@ -10,7 +12,7 @@ public class AmbientLight extends Light
 	
 	// ***************** Constructors ********************** //
 	/**
-	 * default constructor, setting color=white, _Ka=1.0
+	 * default constructor, setting color=black, _Ka=1.0
 	 */
 	public AmbientLight() {
 		super(new Color(0,0,0));
@@ -45,9 +47,7 @@ public class AmbientLight extends Light
 	@Override
 	public Color getIntensity(Point3D p){
 		return MyColor.scaleColor(_color,_Ka);
-//		return new Color( (int)((_color.getRed()/255)*_Ka),
-//				 		  (int)((_color.getGreen()/255)*_Ka),
-//				 		  (int)((_color.getBlue()/255)*_Ka));
+
 	}
 	
     public AmbientLight(Map<String, String> attributes) {

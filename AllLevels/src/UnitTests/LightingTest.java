@@ -173,11 +173,13 @@ public class LightingTest {
 		Triangle triangle2 = new Triangle(new Point3D(  3500,  3500, -2000),
 				  						  new Point3D( -3500,  3500, -1000),
 				  						  new Point3D( -3500, -3500, -1000));
-		
+//		triangle.setEmmission(new Color(255,255,255));
+//		triangle.setKt(0);
+//		triangle.setKr(0);
 		scene.addGeometry(triangle);
 		scene.addGeometry(triangle2);
 		
-		scene.addLight(new PointLight(new Color(255, 100, 100), new Point3D(200, 200, -100), 
+		scene.addLight(new PointLight(new Color(200, 130, 160), new Point3D(200, 200, -100), 
 					   0, 0.000001, 0.0000005));
 	
 		ImageWriter imageWriter = new ImageWriter("Point test 2", 500, 500, 500, 500);

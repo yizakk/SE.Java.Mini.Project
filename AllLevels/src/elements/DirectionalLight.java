@@ -2,6 +2,7 @@ package elements;
 
 import java.awt.Color;
 
+import primitives.MyColor;
 import primitives.Point3D;
 import primitives.Vector;
 
@@ -29,9 +30,10 @@ public class DirectionalLight extends Light
 			return new Vector(1,1,1);
 		}
 	}
+	
+	// Intensity of directional light - always the same
 	@Override
 	public Color getIntensity(Point3D point) {
-		return new Color(_color.getRed(),_color.getGreen(),_color.getBlue());
+		return MyColor.copyColor(this._color);
 	}
-
 }

@@ -1,7 +1,9 @@
 package UnitTests;
 
-import elements.AmbientLight;
-import elements.Camera;
+import java.awt.Color;
+
+import org.junit.Test;
+
 import elements.PointLight;
 import elements.SpotLight;
 import geometries.Plane;
@@ -11,26 +13,18 @@ import geometries.Triangle;
 import junit.framework.TestCase;
 import primitives.Material;
 import primitives.Point3D;
-import primitives.Ray;
 import primitives.Vector;
 import renderer.ImageWriter;
 import renderer.Render;
 import scene.Scene;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import org.junit.Test;
-
-
-public class NeriaTest {
-	@Test 
-    public void testPart3_01() {
+public class NeriaTest extends TestCase {
+	
+    public void testPart3_01() throws Exception {
         Scene scene = new Scene();
         scene.getCamera().setP0(new Point3D(0, 0, 0));
-        scene.setScreenDistance(150);
+        scene.setScreenDistance(200);
 
         Material material = new Material(20, 0.55, 0.1, 0.6,0.4);
         Point3D pSphere = new Point3D(-50, -100, -150);
@@ -54,13 +48,13 @@ public class NeriaTest {
 
         Plane plane = new Plane(new Vector(1,0,0), new Point3D(-100, 0 , 0));
         plane.setMaterial(15, 0.1, 0.4, 0.2,1);
+        
         plane.setEmmission(new Color(133, 133, 133));
         scene.addGeometry(plane);
 
         scene.addLight(new PointLight(new Color(130, 100, 130), new Point3D(150, 150, -50), 0, 0.00001, 0.000005));
         scene.addLight(new PointLight(new Color(110, 130, 30), new Point3D(150, 150, -50), 0, 0.00001, 0.000005));
-//        scene.addLight(new PointLight(new Color(90, 30, 130), new Point3D(150, -150, -50), 0, 0.00001, 0.000005));
-
+        scene.addLight(new PointLight(new Color(90, 30, 130), new Point3D(150, -150, -50), 0, 0.00001, 0.000005));
 
         ImageWriter imageWriter = new ImageWriter("testPart3_01", 500, 500, 500, 500);
 
@@ -70,12 +64,13 @@ public class NeriaTest {
         render.writeToImage();
     }
 
-    public void testPart3_02() {
+	@Test
+    public void testPart3_02() throws Exception {
         Scene scene = new Scene();
         scene.getCamera().setP0(new Point3D(0, 0, 0));
         scene.setScreenDistance(150);
 
-        Material material = new Material(20, 0.35, 0.1, 0.6,0.4);
+        Material material = new Material(20, 0.5, 0.1, 0.4, 0.3);
 
         Point3D pSphere = new Point3D(-50, -100, -150);
         Sphere sphere = new Sphere(50, pSphere);
@@ -95,8 +90,8 @@ public class NeriaTest {
         sphere2.setMaterial(material);
         scene.addGeometry(sphere2);
 
-        Plane plane = new Plane(new Vector(1,0,0), new Point3D(-100, 0 , 0));
-        plane.setMaterial(15, 0.1, 0.4, 0.2,1);
+        Plane plane = new Plane(new Vector(1,0,0), new Point3D(-140, 0 , 0));
+        plane.setMaterial(15, 0.1, 0.4, 0.7,1);
         plane.setEmmission(new Color(133, 133, 133));
         scene.addGeometry(plane);
 
@@ -113,9 +108,9 @@ public class NeriaTest {
 
         render.renderImage();
         render.writeToImage();
-    }
+    }  
 
-    public void testPart3_03() {
+    public void testPart3_03() throws Exception {
         Scene scene = new Scene();
         scene.getCamera().setP0(new Point3D(0, 0, 0));
         scene.setScreenDistance(200);
@@ -157,15 +152,16 @@ public class NeriaTest {
         render.writeToImage();
     }
     
-    public void testQuadrangle(){
+   
+    public void testQuadrangle() throws Exception{
 
         // regular table
 
         Scene scene = new Scene();
-        scene.setScreenDistance(300);
-        Camera cam = scene.getCamera();
-        cam.setP0(new Point3D(0,0,0));
-        scene.setCamera(cam);
+        scene.setScreenDistance(400);
+//        Camera cam = scene.getCamera();
+//        cam.setP0(new Point3D(0,0,0));
+//        scene.setCamera(cam);
 
         Plane plane = new Plane(new Vector(new Point3D(0,1,0)), new Point3D(0,-300,0));
 
@@ -179,28 +175,23 @@ public class NeriaTest {
         Point3D d = new Point3D(-125,50,-800);
 
         // A
-        Vector u = a.vector(b).normalize();
-        Vector v = a.vector(d).normalize();
-        u = u.add(v);
-        u = u.normalize();
+        Vector u = new Vector(a,b).normalize();
+        Vector v = new Vector(a,d).normalize();
+        u = u.add(v).normalize();
         u = u.scale(tableLegRadius +25);
-        Point3D A = new Point3D(a);
-        A = A.add(u);
-
+        Point3D A = a.add(u);
 
         // B
-        u = b.vector(a).normalize();
-        v = b.vector(c).normalize();
-        u = u.add(v);
-        u = u.normalize();
-        u = u.scale(tableLegRadius +25);
-        Point3D B = new Point3D(b);
-        B = B.add(u);
+        u = new Vector(b,a).normalize();
+        v = new Vector(b,c).normalize();
+        u = u.add(v).normalize();
 
+        u = u.scale(tableLegRadius +25);
+        Point3D B = b.add(u);
 
         // C
-        u = c.vector(d).normalize();
-        v = c.vector(b).normalize();
+        u = new Vector(c,d).normalize();
+        v = new Vector(c,b).normalize();
         u = u.add(v);
         u = u.normalize();
         u = u.scale(tableLegRadius +25);
@@ -209,8 +200,8 @@ public class NeriaTest {
 
 
         // D
-        u = d.vector(c).normalize();
-        v = d.vector(a).normalize();
+        u = new Vector(d,c).normalize();
+        v = new Vector(d,a).normalize();
         u = u.add(v);
         u = u.normalize();
         u = u.scale(tableLegRadius +25);
@@ -222,8 +213,6 @@ public class NeriaTest {
         Point3D C1 = new Point3D(C.getX().getCoordinate(),C.getY().getCoordinate()+tableThickness,C.getZ().getCoordinate());
         Point3D D1 = new Point3D(D.getX().getCoordinate(),D.getY().getCoordinate()+tableThickness,D.getZ().getCoordinate());
 
-
-
         Quadrangle q1 = new Quadrangle(A,B,C,D);
         Quadrangle q2 = new Quadrangle(A1,B1,C1,D1);
         Quadrangle q3 = new Quadrangle(A,B,B1,A1);
@@ -232,7 +221,6 @@ public class NeriaTest {
         Quadrangle q6 = new Quadrangle(D,A,A1,D1);
         Sphere sphere = new Sphere(100, new Point3D(600,800,-750));
         sphere.setEmmission(new Color(169, 164, 166));
-
 
         plane.setEmmission(new Color(0,60,110));
         q1.setEmmission(new Color(3, 120, 0));
