@@ -14,7 +14,7 @@ public class Camera {
 		this._P0 = new Point3D(0,0,10);
 		_vUp = new Vector(1,0,0);
 		_vTo = new Vector(0,0,-1);
-		_vRight = _vUp.crossProduct(_vTo);//(-1,0,0)
+		_vRight = _vUp.crossProduct(_vTo);//(0,1,0)
 	}
 	//Copy Constructor
 	public Camera(Camera camera) throws Exception

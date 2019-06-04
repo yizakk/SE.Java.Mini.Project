@@ -1,17 +1,22 @@
 package UnitTests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 
 import elements.Camera;
-import geometries.*;
+import geometries.Plane;
+import geometries.Sphere;
+import geometries.Triangle;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 import renderer.ImageWriter;
-
-import java.awt.Color;
-import java.util.*;
 
 public class CameraTest {
     @Test

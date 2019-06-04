@@ -8,6 +8,7 @@ import elements.AmbientLight;
 import elements.Camera;
 import elements.LightSource;
 import geometries.Geometry;
+import primitives.MyColor;
 public class Scene {
 
 	String _sceneName = "scene";
@@ -53,9 +54,7 @@ public class Scene {
 	//****************************** Getters / Setters *******************//
 
 	public Color getBackground() {
-		return new Color(this._background.getRed(),
-					   	 this._background.getGreen(),
-						 this._background.getBlue());
+		return MyColor.copyColor(this._background);
 	}
 	public AmbientLight getAmbientLight() {
 		return new AmbientLight(this._ambientLight);

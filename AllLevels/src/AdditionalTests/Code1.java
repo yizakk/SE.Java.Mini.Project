@@ -168,24 +168,7 @@ public class Code1 {
 //		scene.addGeometry(mirror2);
 //		scene.addGeometry(mirror3);
 		scene.addGeometry(mirror1);
-		
-		
-//*********************************** Not in use  ********************************** //       	
 
-     	Color [] colors = {
-                new Color(32,178,170),
-                new Color(60,179,119),
-                new Color(70,130,180),
-                new Color(70,130,180),
-                new Color(34,140,34),
-                new Color(0,255,0),
-                new Color(255,255,0),
-                new Color(107,142,35),
-                new Color(0,0,128),
-                new Color(100,144,237),
-                new Color(0,191,255),
-                new Color(32,178,170)
-                };
      	
 //**************************** Rendering  ********************************** //     	
  

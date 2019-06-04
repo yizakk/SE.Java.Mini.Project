@@ -29,7 +29,7 @@ public abstract class Geometry {
 	public Material getMaterial() { return new Material(_material); }
 	
 	public void setEmmission(Color emmission) 
-	{this._emmission = MyColor.copyColor(emmission);}
+	{ this._emmission = MyColor.copyColor(emmission); }
 	
 	/**
 	 * 

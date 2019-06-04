@@ -1,4 +1,4 @@
-package UnitTests;
+package AdditionalTests;
 
 import java.awt.Color;
 import org.junit.Test;
@@ -18,37 +18,63 @@ import renderer.Render;
 import scene.Scene;
 
 
-public class IzakTest {
+public class OtherCameraSettings {
 	@Test
 	public void test() throws Exception {
 
+		
+		String FileName = "DiffCameraTest1";
 		Scene scene = new Scene();
 		scene.setCamera(new Camera(new Point3D(0,0,0),
 								   new Vector(0,1,0),
 								   new Vector(0,0,1)));
      	scene.setScreenDistance(250);
 
-//	**************************** Background  **********************************   	
+//	**************************** Background  **********************************   	//
      	
-     	Quadrangle q1 = new Quadrangle(new Point3D(-1200,-1200, 700), // left-down corner
-     								   new Point3D( 800, -1200, 700),//right-down corner 
-     					 			   new Point3D( 200, 100, 600), // right-up corner
-     					 			   new Point3D( -200, 100, 600));// left-up corner
-     	q1.setEmmission(new Color(200,20,20));
-     	q1.setShininess(10);
-     	q1.setKr(0.9);
-     	q1.setKt(0);
-     	scene.addGeometry(q1);
+     	Quadrangle qFloor = new Quadrangle(new Point3D(-600,-600, 200), // left-down corner
+     								   new Point3D( 600, -600, 200),//right-down corner 
+     					 			   new Point3D( 200, 100, 500), // right-up corner
+     					 			   new Point3D( -200, 100, 500));// left-up corner
+     	qFloor.setEmmission(new Color(200,20,20));
+     	qFloor.setShininess(10);
+     	qFloor.setKr(0);
+     	qFloor.setKt(0);
      	
-     	Quadrangle q11 = new Quadrangle(new Point3D(  900, -900, -700), // left-down corner
-     									new Point3D( -900, -900, -700),//right-down corner 
-     									new Point3D( -200,  100, -600), // right-up corner
-     									new Point3D(  200,  100, -600));// left-up corner
-     	q11.setEmmission(new Color(120,20,20));
-     	q11.setShininess(10);
-     	q11.setKr(0.9);
-     	q11.setKt(0);
-     	scene.addGeometry(q11);
+     	Quadrangle qLeftWall = new Quadrangle(new Point3D( -600, 600, 200), // left-up corner
+     									new Point3D( -600, -600, 200),//right-down corner 
+     									new Point3D( -200,  90, 500), // right-up corner
+     									new Point3D(  -200,  200, 500));// left-up corner
+     	qLeftWall.setEmmission(new Color(60,20,60));
+     	qLeftWall.setShininess(10);
+     	qLeftWall.setKr(1);
+     	qLeftWall.setKt(0.2);
+     	
+     	
+     	
+     	Quadrangle qOppWall=new Quadrangle(new Point3D( -200, 200, 500), // left-up corner
+     									   new Point3D( -200, -200, 500),//right-down corner 
+     									   new Point3D( 200,  -200, 500), // right-up corner
+     									   new Point3D(  200,  200, 500));// left-up corner
+     	qOppWall.setEmmission(new Color(255,255,255));
+     	qOppWall.setShininess(30);
+     	qOppWall.setKr(0.2);
+     	qOppWall.setKt(0.2);
+
+     	Quadrangle qRoof=new Quadrangle(new Point3D( -600, 600, 200), // left-up corner
+     									new Point3D(  600,  600, 200),// left-up corner
+     									new Point3D(  200, -200, 500),//right-down corner 
+     									new Point3D(  200,  200, 500)); // right-up corner
+     	qRoof.setEmmission(new Color(60,20,60));
+     	qRoof.setShininess(10);
+     	qRoof.setKr(1);
+     	qRoof.setKt(0.2);
+
+//     	scene.addGeometry(qRoof);
+     	scene.addGeometry(qOppWall);
+     	scene.addGeometry(qFloor);
+     	scene.addGeometry(qLeftWall);
+     	
      	
 //**************************** Spheres  ********************************** //
      	
@@ -74,36 +100,37 @@ public class IzakTest {
      	s41.setKt(0.1);
      
      	// main blue circle
-		Sphere blueBig = new Sphere(140, new Point3D(-80, -80, -500));
+		Sphere blueBig = new Sphere(70, new Point3D(0, 0, 450));
 		blueBig.setShininess(20);
-		blueBig.setEmmission(new Color(0, 0, 100));
-        blueBig.setKt(1);
+		blueBig.setEmmission(new Color(0, 0, 150));
+        blueBig.setKt(0);
+        blueBig.setKr(0);
 		
         // Inner little sphere 
-		Sphere purpleLittle = new Sphere(50, new Point3D(-70.0, -70.0, -550));
+		Sphere purpleLittle = new Sphere(50, new Point3D(0, 0, 450));
 		purpleLittle.setShininess(10);
 		purpleLittle.setEmmission(new Color(100, 20, 20));
 		purpleLittle.setKt(0.3);
 
 		
 		scene.addGeometry(purpleLittle);
-		scene.addGeometry(s1);
-     	scene.addGeometry(s41);
-     	scene.addGeometry(s4);
+//		scene.addGeometry(s1);
+//     	scene.addGeometry(s41);
+//    	scene.addGeometry(s4);
 		scene.addGeometry(blueBig);
 	
 //*********************************** Lights  ********************************** //  
 		
 // Adding the light at the left down side of the picture
 		LightSource spotLeftLeft = new SpotLight(new Color(255, 100, 100), 
-												new Point3D(-200, -200, -700), 
+												new Point3D(-200, -200, -100), 
 												new Vector(1, 1, 1), 0.1, 
 												0.00001, 0.000005);
 		
 //  left down side of the picture
-		LightSource spotLeftDownCorner = new SpotLight(new Color(255, 0, 00), 
-													   new Point3D(-1500, -1500, -700), 
-													   new Vector(2 , 2, 1), 0.1, 
+		LightSource spotRightDownCorner = new SpotLight(new Color(255, 0, 00), 
+													   new Point3D(600, -300, 00), 
+													   new Vector(-2 , 1 , 1), 0.1, 
 													   0.00001, 0.000005);
 		
 //  right down side of the picture
@@ -118,8 +145,8 @@ public class IzakTest {
 												  new Vector(1, -1.5, 1.5), 0.1, 
 												  0.00001, 0.000005);
 // down Point Light	
-		LightSource pointLeftCenter = new PointLight(new Color(255, 100, 100),
-													 new Point3D(-1000, 00,-700), 
+		LightSource pointCenterUp = new PointLight(new Color(255, 100, 100),
+													 new Point3D(00, 300 , 350), 
 													 0, 0.00001, 0.000005);
 
 // down Point Light	
@@ -130,21 +157,21 @@ public class IzakTest {
 		LightSource dir = new DirectionalLight(new Color(255,0,120), new Vector(1,1,1));
 		
 		
+		scene.addLight(pointCenterUp);
+//		scene.addLight(spotRightDownCorner);
 //		scene.addLight(spotLeftLeft);
-		scene.addLight(spotLeftDownCorner);
-		//scene.addLight(spotRightDown);
-//		scene.addLight(pointLeftCenter);
-		scene.addLight(dir);
-		scene.addLight(spotMidCenter);
+//		scene.addLight(dir);
+//		//scene.addLight(spotRightDown);
+//		scene.addLight(spotMidCenter);
 //		scene.addLight(pointLeftUP);
 		
 		
 //************************************* Triangles  ********************************** //   		
   	
 		// mirror triangle
-		Triangle mirror1 = new Triangle(new Point3D(  1500, -1500, -1500),
-				 						 new Point3D( -1500,  1500, -1500),
-				 						 new Point3D(  200,  200, -375));
+		Triangle mirror1 = new Triangle(new Point3D(  1500, -1500, 300),
+				 						 new Point3D( -1500,  1500, 300),
+				 						 new Point3D(  200,  200, 375));
 		mirror1.setEmmission(new Color(20, 20, 20));
 		mirror1.setKr(1);
 		mirror1.setKt(0.5);
@@ -166,13 +193,14 @@ public class IzakTest {
 		mirror3.setKt(0);
 		
 		// base triangle
-		Triangle baseTriangle = new Triangle(new Point3D(  1500, -1500, -1500),
-										  new Point3D( -1500,  1500, -1500),
-										  new Point3D( -1500, -1500, -1500));
-		baseTriangle.setEmmission(new Color(60, 60, 60));
-		baseTriangle.setKr(0);
+		Triangle upPointLightBlockTriangle = new Triangle(new Point3D(  00,  200, 500),
+										  			      new Point3D( -100,200, 300),
+										  			      new Point3D( 100,200, 400));
+		upPointLightBlockTriangle.setEmmission(new Color(60, 60, 60));
+		//upPointLightBlockTriangle.setKr(0);
+		upPointLightBlockTriangle.setKt(0.5);
 
-//		scene.addGeometry(baseTriangle);
+//		scene.addGeometry(upPointLightBlockTriangle);
 //		scene.addGeometry(mirror2);
 //		scene.addGeometry(mirror3);
 //		scene.addGeometry(mirror1);
@@ -180,29 +208,16 @@ public class IzakTest {
 		
 //*********************************** Not in use  ********************************** //       	
 
-//     	Color [] colors = {
-//                new Color(32,178,170),
-//                new Color(60,179,119),
-//                new Color(70,130,180),
-//                new Color(70,130,180),
-//                new Color(34,140,34),
-//                new Color(0,255,0),
-//                new Color(255,255,0),
-//                new Color(107,142,35),
-//                new Color(0,0,128),
-//                new Color(100,144,237),
-//                new Color(0,191,255),
-//                new Color(32,178,170)
-//                };
      	
 //**************************** Rendering  ********************************** //     	
  
-     	ImageWriter imageWriter = new ImageWriter("AddTest1", 500, 500, 500, 500);
+     	ImageWriter imageWriter = new ImageWriter(FileName, 500, 500, 500, 500);
 		Render render = new Render(imageWriter,scene);
 		
 		render.renderImage();
-//		render.printGrid(50);
-		render.writeToImage();
-     	
+		render.writeToImage(); 
+
+		String path = render.getImageWriter().getRenderingDirectory();
+		Runtime.getRuntime().exec("explorer.exe /open, " + path+"\\" + FileName +".jpg");
 	}
 }
