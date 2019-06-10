@@ -106,7 +106,7 @@ public class Triangle extends Geometry implements FlatGeometry {
 		double n3=N3.dotProduct(p_P0);
 		//if it is the same sign then return the array intersection**/
 
-		if(n1>0&&n2>0&&n3>0||n1<0&&n2<0&&n3<0)
+		if(n1 >= 0&& n2>=0&&n3>=0||n1<=0&&n2<=0&&n3<=0)
 			//System.out.println(" all have same sign - print from findintersection triangle");
 			return array;
 		
@@ -121,4 +121,3 @@ public class Triangle extends Geometry implements FlatGeometry {
 		return "Triangle [_p1=" + _p1 + ", _p2=" + _p2 + ", _p3=" + _p3 + "]";
 	}
 }
-

@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import elements.LightSource;
 import geometries.FlatGeometry;
@@ -276,14 +277,15 @@ public class Render {
         }
 
         // Recursive call for a refracted ray
-        Ray refractedRay = constructRefractedRay(geometry, point, inRay);
-        Entry<Geometry, Point3D> refractedEntry = findClosestIntersection(refractedRay);
         Color refracted = new Color(0, 0, 0);
-
-        if (refractedEntry != null) {
-        	double kt = geometry.getMaterial().getKt();
-            refracted = MyColor.scaleColor(calcColor(refractedEntry.getKey(), refractedEntry.getValue(), refractedRay, level + 1, k*kt),kt);
-           // refracted = new Color((int) (refracted.getRed() * kt), (int) (refracted.getGreen() * kt), (int) (refracted.getBlue() * kt));
+        List<Ray> refractedRays = constructRefractedRayList(geometry, point, inRay);
+        for(Ray refractedRay: refractedRays) {
+        	Entry<Geometry, Point3D> refractedEntry = findClosestIntersection(refractedRay);
+	
+	        if (refractedEntry != null) {
+	        	double kt = geometry.getMaterial().getKt();
+	        	refracted=MyColor.addColors(refracted,MyColor.scaleColor(calcColor(refractedEntry.getKey(), refractedEntry.getValue(), refractedRay, level + 1, k*kt),kt));
+	        }
         }
 
         // end of recursive calls
@@ -318,11 +320,32 @@ public class Render {
     	eps = angle<0? eps.scale(-2) : eps.scale(2);
         Point3D p = point.add(eps);
 
-        //if (geometry instanceof FlatGeometry) {
+        //if (geometry instanceof FlatGeometry) 
             return new Ray(p, inRay.getDirection());
         //}
     }
-
+    private List<Ray> constructRefractedRayList(Geometry geometry, Point3D point, Ray inRay) throws Exception{
+    	List<Ray> rays = new ArrayList<Ray>();
+//    	Iterator<Ray> itRay = rays.iterator();    	
+    	Vector eps = geometry.getNormal(point);
+    	double angle = eps.dotProduct(inRay.getDirection());
+    	eps = angle<0? eps.scale(-2) : eps.scale(2);
+        Point3D p = point.add(eps);
+        Ray mainRay = new Ray(p, inRay.getDirection());
+        rays.add(mainRay);
+        rays.add(new Ray (p, inRay.getDirection().add(new Vector (getRandomOffset(),getRandomOffset(),0))));
+        rays.add(new Ray (p, inRay.getDirection().add(new Vector (getRandomOffset(),getRandomOffset(),0))));
+        rays.add(new Ray (p, inRay.getDirection().add(new Vector (getRandomOffset(),getRandomOffset(),0))));
+        rays.add(new Ray (p, inRay.getDirection().add(new Vector (getRandomOffset(),getRandomOffset(),0))));
+        return rays;
+    	
+    }
+    private static Double getRandomOffset() {
+    	Double offset = 0.025;
+    	Random rand = new Random();
+  	
+    	return (Double) ((rand.nextDouble()*(offset*2))-offset);
+    }
 	/*************************************************
 	 * FUNCTION
 	 * constructReflectedRay
@@ -343,7 +366,6 @@ public class Render {
     private Ray constructReflectedRay(Vector normal, Point3D point, Ray inRay) throws Exception {
 
         Vector v = inRay.getDirection().normalize();
-        //l.normalize();
 
         double angle = v.dotProduct(normal);
         Vector eps = normal.scale(-2 * angle);
@@ -351,12 +373,9 @@ public class Render {
 
         Vector R = new Vector(v);
         R.normalize();
-        //double angle = normal.dotProduct(l);
-        //eps = angle>0 ? normal.scale(2) : normal.scale(-2); 
         Point3D p = point.add(R.scale(2));
 
         return new Ray(p, R);
-        //return reflectedRay;
     }
 
 	/*************************************************

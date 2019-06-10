@@ -1,4 +1,3 @@
-/AdditionalTests/
 /Gui/
 /UnitTests/
 /elements/
@@ -6,3 +5,4 @@
 /primitives/
 /renderer/
 /scene/
+/AdditionalTests/

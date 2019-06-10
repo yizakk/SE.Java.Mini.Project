@@ -90,9 +90,9 @@ public class Plane extends Geometry implements FlatGeometry
 		return intersectionPoint;
 	}
 	
-
 	/************** To String - Print ***************/
 	@Override
-	public String toString() { return "Normal:"+_normal.toString()+" "+"Point:"+_Q.toString();}
-
+	public String toString() {
+		return "Normal:"+_normal.toString()+" "+"Point:"+_Q.toString();
+		}
 }

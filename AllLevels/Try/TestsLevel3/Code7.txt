@@ -20,7 +20,7 @@ import scene.Scene;
 
 
 public class OtherCameraSettings {
-	@Test
+//	@Test
 	public void test() throws Exception {
 
 		
@@ -349,17 +349,16 @@ public class OtherCameraSettings {
 													 0, 0.00001, 0.000005);
 
 // down Point Light	
-		LightSource pointLeftUP = new PointLight(new Color(30, 0, 00), // RED
-													 new Point3D(00, 00, 00), 
+		LightSource pointLeftUP = new PointLight(new Color(120, 0, 00), // RED
+													 new Point3D(500, 200, 00), 
 													 0, 0.00001, 0.000005);
-
 		
 		LightSource dir = new DirectionalLight(new Color(155,60,120), new Vector(1,1,1));
 		
 		
 		scene.addLight(pointCenterUp);
 //		scene.addLight(pointLeftUP);
-		scene.addLight(dir);
+//		scene.addLight(dir);
 	
 		
 //************************************* Triangles  ********************************** //   		
@@ -373,15 +372,7 @@ public class OtherCameraSettings {
 		upPointLightBlockTriangle.setKr(1);
 		upPointLightBlockTriangle.setKt(0);
 
-		Triangle mirrorLeft = new Triangle (new Color(20,20,20),
-											new Point3D(00,  00, 250),
-											new Point3D( -300, -200, 500),
-											new Point3D( 300, -200, 500));
-		mirrorLeft.setKr(1);
-		
-//		scene.addGeometry(mirrorLeft);
-		
-//		scene.addGeometry(upPointLightBlockTriangle);
+		scene.addGeometry(upPointLightBlockTriangle);
 		
 //*********************************** Not in use  ********************************** //       	
 
