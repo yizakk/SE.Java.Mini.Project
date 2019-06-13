@@ -3,7 +3,7 @@ import java.util.List;
 import java.awt.Color;
 import java.util.ArrayList;
 import primitives.*;
-public class Sphere extends RadialGeometry {
+public class Sphere extends RadialGeometry implements Boxable {
 	
 	Point3D _center;
 	
@@ -44,6 +44,12 @@ public class Sphere extends RadialGeometry {
 		super(c,_radius);
 		this._center = new Point3D(center);
 	}
+	
+	public Sphere(double _radius, Point3D center,Color c) {
+		super(c,_radius);
+		this._center = new Point3D(center);
+	}
+	
 	
 	/**********************Get/Set******************************/
 	public Point3D getCenter() {return new Point3D( _center);}
@@ -105,6 +111,13 @@ public class Sphere extends RadialGeometry {
 		return array;
 	}
 	
+	public Box insertIntoBox() {
+		Point3D loc = new Point3D(_center.getX().getCoordinate() - _radius - 1, _center.getY().getCoordinate() - _radius - 1, _center.getZ().getCoordinate() - _radius - 1);
+		Box box = new Box(loc, _radius*2+2,_radius*2+2,_radius*2+2);
+		box.addGeometry(this);
+		return box;
+		
+	}
 	@Override
 	public String toString() {
 		return "Point:"+_center.toString()+" Radius:"+this._radius+". ";

@@ -22,6 +22,11 @@ public abstract class Geometry {
 	public Geometry(Color color) 
 	{ _emmission = MyColor.copyColor(color); _material=new Material();}
 	
+	public Geometry(Color color, Material m) {
+		_emmission = MyColor.copyColor(color); 
+		_material=new Material(m);
+		}
+	
 	// ***************** Getters/Setters ********************** //
 	public double getShininess() { return _nShininess; }
 	public void setShininess(double n) { _nShininess = n; }

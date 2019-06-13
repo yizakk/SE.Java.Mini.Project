@@ -103,9 +103,13 @@ public class Point3D extends Point2D
 	 * @return updated point
 	 */
 	public Point3D subtract(Point3D point) {
-		return new Point3D( _x.subtract(point._x),
-						    _y.subtract(point._y),
-						    _z.subtract(point._z));
+		if(point!=null) {
+			return new Point3D( _x.subtract(point._x),
+					_y.subtract(point._y),
+					_z.subtract(point._z));
+		}
+		else
+			return new Point3D(0,0,0);
 	}
 
 	/**

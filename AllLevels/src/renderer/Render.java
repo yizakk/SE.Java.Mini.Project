@@ -8,7 +8,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import elements.Camera;
 import elements.LightSource;
+import elements.PointLight;
+import geometries.Box;
+import geometries.Boxable;
 import geometries.FlatGeometry;
 import geometries.Geometry;
 import primitives.MyColor;
@@ -22,7 +26,8 @@ public class Render {
 	
 	private Scene _scene;
 	private ImageWriter _imagewriter;
-	private final int RECURSION_LEVEL = 3;
+	private final int RECURSION_LEVEL = 4;
+	public boolean multipleRaysOn = true;
 	
 	// ***************** Constructors ********************** //
 	/**
@@ -65,7 +70,7 @@ public class Render {
 	 * 
 	 * MEANING
 	 * This functions renders the image by running in loop all over the height*width of
-	 * the image, constructing the rays from the camera, finding the intersections woth 
+	 * the image, constructing the rays from the camera, finding the intersections with 
 	 * the view plane, and calculating the color in each pixel
 	 * 
 	 * SEE ALSO
@@ -86,8 +91,11 @@ public class Render {
 					_imagewriter.writePixel(i, j, _scene.getBackground());
 				else
 				{
-					Entry<Geometry, Point3D> closestPoint = getClosestPoint(intersectionPoints);
-					_imagewriter.writePixel(i, j, calcColor(closestPoint.getKey(),closestPoint.getValue(),ray));
+					Entry<Geometry, Point3D> closestPoint = getClosestPoint(intersectionPoints, ray);
+					if (closestPoint == null)
+						_imagewriter.writePixel(i, j, _scene.getBackground());
+					else
+						_imagewriter.writePixel(i, j, calcColor(closestPoint.getKey(),closestPoint.getValue(),ray));
 				}
 			}
 		}	
@@ -143,10 +151,10 @@ public class Render {
 	 * SEE ALSO
 	 * 
 	 **************************************************/
-	private Entry<Geometry, Point3D> getClosestPoint(Map<Geometry,List<Point3D>> intersectionPoints) throws Exception
+	private Entry<Geometry, Point3D> getClosestPoint(Map<Geometry,List<Point3D>> intersectionPoints, Ray ray) throws Exception
 	{
 		double distance = Double.MAX_VALUE;
-		Point3D P0 = _scene.getCamera().getP0();
+		Point3D P0 = ray.getPOO(); // of ray instead
 		Map<Geometry, Point3D> minDistancePoint = new HashMap<Geometry, Point3D>();
 		for (Entry<Geometry, List<Point3D>> entry:intersectionPoints.entrySet())
 			for (Point3D point: entry.getValue())
@@ -156,7 +164,21 @@ public class Render {
 					minDistancePoint.put(entry.getKey(), new Point3D(point));
 					distance = P0.distance(point);
 				}
-		return minDistancePoint.entrySet().iterator().next();
+		
+		Entry<Geometry, Point3D> closestEntry = minDistancePoint.entrySet().iterator().next();
+		
+		// checking 
+		if (closestEntry.getKey() instanceof Box)
+			{
+				Map<Geometry,List<Point3D>> boxIntersections = ((Box)closestEntry.getKey()).getBoxRayIntersections(ray);
+				if (!boxIntersections.isEmpty())
+				{
+					return getClosestPoint(boxIntersections, ray);
+				}
+				else
+					return null;
+			}
+		return closestEntry;
 	}
 
 	/*************************************************
@@ -183,7 +205,7 @@ public class Render {
 
         if (intersectionPoints.size() == 0)
             return null;
-        return getClosestPoint(intersectionPoints);
+        return getClosestPoint(intersectionPoints,ray);
 
     }
 
@@ -240,7 +262,7 @@ public class Render {
 
             if(normal.dotProduct(L)*normal.dotProduct(v) > 0)
             {
-            	double ktr = transparency(L, normal, point,geometry);
+            	double ktr = transparency(light, normal, point,geometry);
             	
             	if (!Util.isZero(ktr*k)) {
 
@@ -272,25 +294,42 @@ public class Render {
 
         if (reflectedEntry != null) {
             reflected = MyColor.scaleColor( calcColor(reflectedEntry.getKey(), reflectedEntry.getValue(), reflectedRay, level + 1, k*kr),kr);
-           // double kr = geometry.getMaterial().getKr();
-           // reflected = new Color((int) (reflected.getRed() * kr), (int) (reflected.getGreen() * kr), (int) (reflected.getBlue() * kr));
         }
 
-        // Recursive call for a refracted ray
-        Color refracted = new Color(0, 0, 0);
-        List<Ray> refractedRays = constructRefractedRayList(geometry, point, inRay);
-        for(Ray refractedRay: refractedRays) {
+        // Recursive call for refracted ray/rays
+        Color refractedColor = new Color(0, 0, 0);
+        double kt = geometry.getMaterial().getKt();
+        
+        if(multipleRaysOn)
+        {
+        	// Getting a List of Rays created by constructRefractedRayList function
+        	List<Ray> refractedRays = constructRefractedRayList(geometry, point, inRay);
+        	// iterating the list, adding the color of each ray's intersections points
+        	for(Ray refractedRay: refractedRays) {
+        		Entry<Geometry, Point3D> refractedEntry = findClosestIntersection(refractedRay);
+
+        		if (refractedEntry != null) {
+        			Color temp = calcColor(refractedEntry.getKey(), refractedEntry.getValue(), refractedRay, level + 1, k*kt);
+        			temp = MyColor.scaleColor(temp,kt);
+        			double numOfRaysFraction = ((double)1/refractedRays.size());
+        			temp = MyColor.scaleColor(temp, numOfRaysFraction );
+        			refractedColor=MyColor.addColors(refractedColor,temp);
+        		}
+        	}
+        }
+        else
+        {
+        	Ray refractedRay = constructRefractedRay(geometry, point, inRay);
         	Entry<Geometry, Point3D> refractedEntry = findClosestIntersection(refractedRay);
-	
-	        if (refractedEntry != null) {
-	        	double kt = geometry.getMaterial().getKt();
-	        	refracted=MyColor.addColors(refracted,MyColor.scaleColor(calcColor(refractedEntry.getKey(), refractedEntry.getValue(), refractedRay, level + 1, k*kt),kt));
-	        }
+    		if (refractedEntry != null) {
+//    			double kt = geometry.getMaterial().getKt();
+    			refractedColor= MyColor.scaleColor(calcColor(refractedEntry.getKey(), refractedEntry.getValue(), refractedRay, level + 1, k*kt),kt);
+    		}
         }
-
+        
         // end of recursive calls
 
-        Color envColors = MyColor.addColors(reflected, refracted);
+        Color envColors = MyColor.addColors(reflected, refractedColor);
         Color finalColor = MyColor.addColors(envColors, I0);
 
         return finalColor;
@@ -324,9 +363,28 @@ public class Render {
             return new Ray(p, inRay.getDirection());
         //}
     }
+    
+	/*************************************************
+	 * FUNCTION
+	 * constructRefractedRayList
+	 * 
+	 * PARAMETERS
+	 * Geometry, Point3D, Ray
+	 * 
+	 * RETURN VALUE
+	 * List<Ray>
+	 * 
+	 * MEANING
+	 * The function calculates the refracted ray from the light ray sended from 
+	 * light source. (normal to the geometry * Ray direction), than adding epsilon vector.
+	 * because we want multiple rays to solve glossy surfaces - we add 4 more rays, adding
+	 * to each random offset ( 
+	 * 
+	 * SEE ALSO
+	 * Render.calcColor
+	 **************************************************/ 
     private List<Ray> constructRefractedRayList(Geometry geometry, Point3D point, Ray inRay) throws Exception{
     	List<Ray> rays = new ArrayList<Ray>();
-//    	Iterator<Ray> itRay = rays.iterator();    	
     	Vector eps = geometry.getNormal(point);
     	double angle = eps.dotProduct(inRay.getDirection());
     	eps = angle<0? eps.scale(-2) : eps.scale(2);
@@ -338,14 +396,14 @@ public class Render {
         rays.add(new Ray (p, inRay.getDirection().add(new Vector (getRandomOffset(),getRandomOffset(),0))));
         rays.add(new Ray (p, inRay.getDirection().add(new Vector (getRandomOffset(),getRandomOffset(),0))));
         return rays;
-    	
     }
-    private static Double getRandomOffset() {
+    
+    private Double getRandomOffset() {
     	Double offset = 0.025;
     	Random rand = new Random();
-  	
     	return (Double) ((rand.nextDouble()*(offset*2))-offset);
     }
+    
 	/*************************************************
 	 * FUNCTION
 	 * constructReflectedRay
@@ -369,7 +427,7 @@ public class Render {
 
         double angle = v.dotProduct(normal);
         Vector eps = normal.scale(-2 * angle);
-        v=v.add(eps);
+        v = v.add(eps);
 
         Vector R = new Vector(v);
         R.normalize();
@@ -399,9 +457,9 @@ public class Render {
 	 * SEE ALSO
 	 * Render.calcColor
 	 **************************************************/  
-    private double transparency(Vector L, Vector n,Point3D point, Geometry geometry) throws Exception {
+    private double transparency(LightSource L, Vector n,Point3D point, Geometry geometry) throws Exception {
     	
-        Vector lightDirection = L.scale(-1);
+        Vector lightDirection = L.getL(point).scale(-1);
         Vector epsVector = n.scale(n.dotProduct(lightDirection) > 0 ? 2 : -2);
         Point3D p = point.add(epsVector);
 
@@ -412,11 +470,23 @@ public class Render {
         if (geometry instanceof FlatGeometry) {
             intersectionPoints.remove(geometry);
         }
+        
+        Map<Geometry, List<Point3D>> temp = new HashMap<Geometry, List<Point3D>>();
+        if (L instanceof PointLight)
+        {
+        	PointLight light = (PointLight)L;
+        	double distance = light.getPosition().distance(point);
+        	for(Entry<Geometry, List<Point3D>> entryPerGeo : intersectionPoints.entrySet())
+        		if (entryPerGeo.getValue().get(0).distance(point) <= distance)
+        			 temp.put(entryPerGeo.getKey(), entryPerGeo.getValue());       	
+        	
+        }
 
         double ktr = 1;
-        for (Entry<Geometry, List<Point3D>> entry : intersectionPoints.entrySet())
+        for (Entry<Geometry, List<Point3D>> entry : temp.entrySet())
            ktr *= entry.getKey().getMaterial().getKt();
 
+        //return 1;
         return ktr;
     }
     
@@ -473,10 +543,42 @@ public class Render {
         return kd * Math.abs(normal.dotProduct(l.scale(-1)));
 	}
 
-	/**
-	 * printGrid
-	 * @param interval
-	 */
+	/*************************************************
+	 * FUNCTION
+	 * boxItems
+	 * 
+	 * PARAMETERS
+	 * 
+	 * RETURN VALUE
+	 * 
+	 * MEANING
+	 * in ray acceleration we want to insert any geometry into a box, than box close boxes into
+	 *  same bigger box, and repeat until
+	 *  
+	 * 
+	 * SEE ALSO
+	 * 
+	 **************************************************/
+	public void boxGeometries() {
+		if(_scene != null)
+		{
+			Iterator<Geometry> it = _scene.getGeometriesIterator();
+			while(it.hasNext())
+			{
+				Geometry geo = it.next();
+				if(geo instanceof Boxable)
+				{
+					
+				}
+			}
+		}
+	}
+	
+	private void findClosestBox() {
+		
+	}
+	
+
 	public void printGrid(int interval){
 		for (int i=0;i<_imagewriter.getHeight();i++)
             for (int j=0;j<_imagewriter.getWidth();j++)
@@ -484,5 +586,13 @@ public class Render {
                 if(i%interval==0 || j%interval==0 )
                 	_imagewriter.writePixel(j,i,Color.WHITE); 
             }   
+	}
+
+	public Scene getScene() {
+		return _scene;	
+	}
+	public void setImageWriter(ImageWriter imageWriter) {
+		this._imagewriter = imageWriter;
+		
 	}
 }

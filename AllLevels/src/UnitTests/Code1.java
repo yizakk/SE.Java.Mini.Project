@@ -1,4 +1,4 @@
-package AdditionalTests;
+package UnitTests;
 
 import java.awt.Color;
 

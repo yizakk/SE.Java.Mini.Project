@@ -33,6 +33,15 @@ public class Camera {
 		_vRight = _vUp.crossProduct(_vTo).normalize();
 		
 	}
+	
+	public Camera(Point3D P0, Vector vTo, Vector vUp,int notInUse) throws Exception {
+		this._P0 = new Point3D(P0);
+		_vUp = new Vector(vUp).normalize();
+		_vTo = new Vector(vTo).normalize();
+		_vRight = _vUp.crossProduct(_vTo).normalize();
+		
+	}
+	
 	//Not required in file
 	public Camera(Vector vec1, Vector vec2) throws Exception
 	{
@@ -88,6 +97,6 @@ public class Camera {
 		double Tup = (y-Ny/2.0)*Ry +Ry/2.0;
 
 		Point3D P = Pc.add(this._vRight.scale(Tright).subtract(this._vUp.scale(Tup)));
-		return new Ray(P,new Vector(P,_P0).normalize());
+		return new Ray(_P0,new Vector(P,_P0).normalize());
 	}
 }

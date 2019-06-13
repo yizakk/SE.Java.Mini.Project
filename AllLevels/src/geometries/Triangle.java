@@ -2,10 +2,12 @@ package geometries;
 import java.util.List;
 import java.awt.Color;
 import java.util.ArrayList;
+
+import primitives.Material;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
-public class Triangle extends Geometry implements FlatGeometry {
+public class Triangle extends Geometry implements FlatGeometry, Boxable {
 	
 	Point3D _p1;
 	Point3D _p2;
@@ -44,6 +46,12 @@ public class Triangle extends Geometry implements FlatGeometry {
 	}
 	// ***************** Getters/Setters ********************** //
 
+	public Triangle(Point3D p1, Point3D p2, Point3D p3, Color color, Material material) {
+		super(color, material);
+		_p1=new Point3D(p1);
+		_p2=new Point3D(p2);
+		_p3=new Point3D(p3);
+	}
 	public Point3D getP1() {return new Point3D(_p1);}
 	public Point3D getP2() {return new Point3D(_p2);}
 	public Point3D getP3() {return new Point3D(_p3);}
@@ -107,7 +115,6 @@ public class Triangle extends Geometry implements FlatGeometry {
 		//if it is the same sign then return the array intersection**/
 
 		if(n1 >= 0&& n2>=0&&n3>=0||n1<=0&&n2<=0&&n3<=0)
-			//System.out.println(" all have same sign - print from findintersection triangle");
 			return array;
 		
 		else {
@@ -115,6 +122,38 @@ public class Triangle extends Geometry implements FlatGeometry {
 		}
 	}
 
+	// find min and max for x,y,z than 
+	//ואז מיקום הנקודה של הבוקס יהיה מינימום של כל אחד פחות 1 , 
+	//אורך רוחב וגובה יהיו עבור כל אחד - מקס פחות מינ ועוד 1
+	@Override
+	public Box insertIntoBox() {
+		// Finding the Min of each from x,y,z
+		double minX = Math.min(_p1.getX().getCoordinate(), _p2.getX().getCoordinate());
+		minX = Math.min(minX, _p3.getX().getCoordinate());
+		
+		double minY = Math.min(_p1.getY().getCoordinate(), _p2.getY().getCoordinate());
+		minY = Math.min(minY, _p3.getY().getCoordinate());
+		
+		double minZ = Math.min(_p1.getZ().getCoordinate(), _p2.getZ().getCoordinate());
+		minZ = Math.min(minZ, _p3.getZ().getCoordinate());
+		
+		// Finding the Max of each from x,y,z
+		double maxX = Math.max(_p1.getX().getCoordinate(), _p2.getX().getCoordinate());
+		maxX = Math.max(maxX, _p3.getX().getCoordinate());
+		
+		double maxY = Math.max(_p1.getY().getCoordinate(), _p2.getY().getCoordinate());
+		maxY = Math.max(maxY, _p3.getY().getCoordinate());
+		
+		double maxZ = Math.max(_p1.getZ().getCoordinate(), _p2.getZ().getCoordinate());
+		maxZ = Math.max(maxZ, _p3.getZ().getCoordinate());
+		
+		
+		Box box = new Box(new Point3D(minX-1,minY-1,minZ-1), maxY-minY+1,maxZ-minZ+1,maxX-minX+1);
+		box.addGeometry(this);
+		return box;
+		
+	}
+	
 	//toString - print
 	@Override
 	public String toString() {

@@ -7,6 +7,7 @@ import java.util.List;
 import elements.AmbientLight;
 import elements.Camera;
 import elements.LightSource;
+import geometries.Boxable;
 import geometries.Geometry;
 import primitives.MyColor;
 public class Scene {
@@ -18,6 +19,7 @@ public class Scene {
 	List<LightSource> _lights = new ArrayList<LightSource>();
 	Camera _camera;
 	double _screenDistance;
+	public boolean boxing = false;
 
 	/**
 	 * default constructor setting background =black.  distance=100
@@ -25,7 +27,6 @@ public class Scene {
 	public Scene() {
 		this._background = Color.BLACK;
 		this._ambientLight = new AmbientLight();
-		//this._geometries = new ArrayList<Geometry>();
 		this._camera = new Camera();
 		this._screenDistance = 100;
 	}
@@ -112,7 +113,15 @@ public class Scene {
 	 */
 	public void addGeometry(Geometry geometry)
 	{
-		this._geometries.add(geometry);
+		if(boxing) {
+			// remove from here...
+			if (geometry instanceof Boxable)
+				this._geometries.add(((Boxable)geometry).insertIntoBox());
+		}
+		else
+			
+		// ...to here to revert all boxing
+			this._geometries.add(geometry);
 	}
 	/**
 	 * getGeometriesIterator

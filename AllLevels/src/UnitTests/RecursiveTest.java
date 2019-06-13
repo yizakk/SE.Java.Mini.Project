@@ -33,17 +33,21 @@ public class RecursiveTest
 		scene.addGeometry(sphere2);
 		
 		scene.addLight(new SpotLight(new Color(255, 100, 100), new Point3D(-200, -200, -150), 
-					   new Vector(2, 2, -3), 0.1, 0.00001, 0.000005));
+					   new Vector(2, 2, -3), 0.01, 0.00001, 0.000005));
 	
-		ImageWriter imageWriter = new ImageWriter("Recursive Test 11", 500, 500, 500, 500);
+		String FileName = "RecursiveTest111";
+		ImageWriter imageWriter = new ImageWriter(FileName, 500, 500, 500, 500);
 		
 		Render render = new Render(imageWriter, scene);
-		
+		//render.multipleRaysOn=false;
 		render.renderImage();
 		render.writeToImage();
+		
+		String path = render.getImageWriter().getRenderingDirectory();
+		Runtime.getRuntime().exec("explorer.exe /open, " + path+"\\" + FileName +".jpg");
 	}
 	
-	@Test
+//	@Test
 	public void recursiveTest2() throws Exception{
 		
 		Scene scene = new Scene();
@@ -89,7 +93,7 @@ public class RecursiveTest
 		
 	}
 	
-	@Test
+//	@Test
 	public void recursiveTest3() throws Exception{
 		
 		Scene scene = new Scene();

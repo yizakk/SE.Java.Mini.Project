@@ -29,18 +29,27 @@ public class Material {
 	/**
 	 * 
 	 * @param i  Refraction index
-	 * @param d Diffusion attenuation coefficient
-	 * @param e Specular attenuation coefficient
-	 * @param f Reflection coefficient (1 for mirror)
-	 * @param g Refraction coefficient (1 for transparent)
+	 * @param diffuse Diffusion attenuation coefficient
+	 * @param specular Specular attenuation coefficient
+	 * @param reflection Reflection coefficient (1 for mirror)
+	 * @param refraction Refraction coefficient (1 for transparent)
 	 */
-	public Material(int i, double d, double e, double f, double g) {
+	public Material(int i, double diffuse, double specular, double reflection, double refraction) {
 	_n = i;
-	_Kd = d;
-	_Ks = e;
-	_Kr = f;
-	_Kt = g;
+	_Kd = diffuse;
+	_Ks = specular;
+	_Kr = reflection;
+	_Kt = refraction;
 	}
+	
+	public Material(double kd, double ks, double Kr, double kt, int n) {
+		_n = n;
+		_Kd = kd;
+		_Ks = ks;
+		_Kr = Kr;
+		_Kt = kt;
+	}
+	
 	// ***************** Getters/Setters ********************** //
 	public double getKd() { return _Kd;} 
 	public double getKs() { return _Ks;}
