@@ -63,6 +63,7 @@ public class ImageWriter {
 	public void setNx(int _Nx) { this._Nx = _Nx; }
 	public BufferedImage getImage() { return _image;}
 		
+	public void setName(String string) { this._imageName = string; }
 	// ***************** Operations ******************** // 
 	
 	public void writeToimage(){

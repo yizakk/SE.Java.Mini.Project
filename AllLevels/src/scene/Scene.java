@@ -7,9 +7,13 @@ import java.util.List;
 import elements.AmbientLight;
 import elements.Camera;
 import elements.LightSource;
+import geometries.Box;
 import geometries.Boxable;
 import geometries.Geometry;
+import primitives.Coordinate;
 import primitives.MyColor;
+import primitives.Point3D;
+import primitives.Vector;
 public class Scene {
 
 	String _sceneName = "scene";
@@ -113,16 +117,110 @@ public class Scene {
 	 */
 	public void addGeometry(Geometry geometry)
 	{
+		// to revert all boxing - remove from here...
 		if(boxing) {
-			// remove from here...
-			if (geometry instanceof Boxable)
+			if (geometry instanceof Boxable) // if boxable - adding to scene to boxed geo
 				this._geometries.add(((Boxable)geometry).insertIntoBox());
+			else // otherwise - (plane) inserting the geo as is
+				this._geometries.add(geometry);
 		}
-		else
-			
-		// ...to here to revert all boxing
-			this._geometries.add(geometry);
+		// ...to here 
+		this._geometries.add(geometry); // if boxing option is disabled - inserting any geo as is
 	}
+	
+
+	/*************************************************
+	 * FUNCTION
+	 * boxgeometries1
+	 * 
+	 * PARAMETERS
+	 * 
+	 * RETURN VALUE
+	 * 
+	 * MEANING
+	 * in ray acceleration we want to insert any geometry into a box, than box close boxes into
+	 * bigger box, and repeat until there isn't close box.
+	 *  
+	 * 
+	 * SEE ALSO
+	 * 
+	 **************************************************/
+	public void boxGeometries1() {
+		
+		if(boxing)
+		{
+			boolean changedAnything = true;
+			while (changedAnything ) 
+			{
+				changedAnything = false;
+				for (Geometry _box : this._geometries) 
+				{
+					if (_box instanceof Box) 
+					{
+						List<Box> boxesToPutTogether = new ArrayList<Box>();
+						Box box =(Box)_box;
+						for (Geometry _anotherBox : _geometries) 
+						{
+							if (_anotherBox instanceof Box && _anotherBox != _box) 
+							{            
+								Box anotherBox =(Box)_anotherBox;
+								Vector boxMidVec = new Vector(new Point3D(new Coordinate(box.getDepth()/2),new Coordinate(box.getHeight()/2),new Coordinate(box.getWidth()/2)));
+								Vector anotherBoxMidVec = new Vector(new Point3D(anotherBox.getDepth()/2,anotherBox.getHeight()/2,anotherBox.getWidth()/2));
+								Point3D center = box.getLocation().add(boxMidVec);
+								Point3D anotherCenter = anotherBox.getLocation().add(anotherBoxMidVec);
+								if (new Vector (anotherCenter.subtract(center)).length() < 5*Math./*max*/min(boxMidVec.length(), anotherBoxMidVec.length())
+										/*|| (box.getLocation().getX().getCoordinate() > anotherBox.getLocation().getX().getCoordinate() &&
+	                      box.getLocation().getY().getCoordinate() > anotherBox.getLocation().getY().getCoordinate() &&
+	                      box.getLocation().getZ().getCoordinate() > anotherBox.getLocation().getZ().getCoordinate() &&
+	                      box.getDepth() < anotherBox.getDepth() && box.getHeight() < anotherBox.getHeight() && box.getWidth() < anotherBox.getWidth())
+	                  || (box.getLocation().getX().getCoordinate() < anotherBox.getLocation().getX().getCoordinate() &&
+	                      box.getLocation().getY().getCoordinate() < anotherBox.getLocation().getY().getCoordinate() &&
+	                      box.getLocation().getZ().getCoordinate() < anotherBox.getLocation().getZ().getCoordinate() &&
+	                      box.getDepth() > anotherBox.getDepth() && box.getHeight() > anotherBox.getHeight() && box.getWidth() > anotherBox.getWidth())*/)
+									boxesToPutTogether.add(anotherBox);
+							}
+						}
+						// box together all boxes and remove them all from the geometry to put the bigger box instead
+						if (!boxesToPutTogether.isEmpty()) 
+						{
+							changedAnything = true;
+							boxesToPutTogether.add(box);
+							double minX=Double.MAX_VALUE, 
+									maxX=-Double.MAX_VALUE, 
+									minY=Double.MAX_VALUE, 
+									maxY=-Double.MAX_VALUE, 
+									minZ=Double.MAX_VALUE, 
+									maxZ=-Double.MAX_VALUE;
+							for (Box b : boxesToPutTogether) 
+							{
+								double bX = b.getLocation().getX().getCoordinate(),
+										bY = b.getLocation().getY().getCoordinate(),
+										bZ = b.getLocation().getZ().getCoordinate();
+								minX = Math.min(minX, bX);
+								maxX = Math.max(maxX, bX +b.getDepth());
+								minY = Math.min(minY, bY);
+								maxY = Math.max(maxY, bY +b.getHeight());
+								minZ = Math.min(minZ, bZ);
+								maxZ = Math.max(maxZ, bZ +b.getWidth());
+							}
+							Box bigBox = new Box(new Point3D (minX, minY, minZ),
+									maxX - minX, maxY - minY, maxZ - minZ);
+							for (Box b : boxesToPutTogether) 
+							{
+								bigBox.addGeometry(b);
+								_geometries.remove(b);
+							}
+							_geometries.add(bigBox);
+							break;
+						}          
+					}
+				}
+			}
+		} // end of if(boxing)
+	}
+	
+	
+	
 	/**
 	 * getGeometriesIterator
 	 * @return

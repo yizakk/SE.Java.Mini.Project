@@ -36,8 +36,8 @@ public class Camera {
 	
 	public Camera(Point3D P0, Vector vTo, Vector vUp,int notInUse) throws Exception {
 		this._P0 = new Point3D(P0);
-		_vUp = new Vector(vUp).normalize();
 		_vTo = new Vector(vTo).normalize();
+		_vUp = new Vector(vUp).normalize();
 		_vRight = _vUp.crossProduct(_vTo).normalize();
 		
 	}
@@ -82,11 +82,8 @@ public class Camera {
 	 * @throws Exception 
 	 */
 
-	public Ray constructRayThroughPixel (int Nx, int Ny,
-			double x, double y,
-			double screenDist,
-			double screenWidth,
-			double screenHeight) throws Exception
+	public Ray constructRayThroughPixel (int Nx, int Ny, double x, double y,
+			double screenDist, double screenWidth, double screenHeight) throws Exception
 	{
 		Point3D Pc = this._P0.add(this._vTo.scale(screenDist));
 

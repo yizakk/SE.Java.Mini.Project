@@ -143,6 +143,14 @@ public class IzakTest {
 	
 //*****************************************************     End Of Point Light ******************** // 
 
+	/**
+	 * The scene shows floor (the walls in right and left are disabled), and a mirror in the 
+	 * front of it, with 3 spheres, 2 spots, one pointLight, and a triangle between the
+	 * camera and other geometries, which differ the refracted multiple rays from normal 
+	 * rays (because it ,akes you view the scene through a glass)
+	 * to add accelerating - change the scene.boxing field to true
+	 * @throws Exception
+	 */
 	@Test
 	public void HighResolutionWithTriangle() throws Exception {
 		
@@ -152,6 +160,7 @@ public class IzakTest {
 								   new Vector(0,0,1)));
      	scene.setScreenDistance(400);
 
+     	scene.boxing = true;
 //	**************************** Background  **********************************   	//
      	
      	Quadrangle qFloor = new Quadrangle(new Point3D(-600,-600, 200), // left-down corner
@@ -281,11 +290,11 @@ public class IzakTest {
 
      	
 //**************************** Rendering  ********************************** //     	
-		String FileName = "WithMultipleRays";
+		String FileName = "WithOutMultipleRays";
      	ImageWriter imageWriter = new ImageWriter(FileName, 1000, 1000, 1000, 1000);
 		Render render = new Render(imageWriter,scene);
 		
-		//render.multipleRaysOn = false;
+		render.multipleRaysOn = false;
 		render.renderImage();
 		render.writeToImage(); 
 
@@ -293,56 +302,44 @@ public class IzakTest {
 		Runtime.getRuntime().exec("explorer.exe /open, " + path+"\\" + FileName +".jpg");
 	}
 	//************************************************** End Of Test *********************************** //	
-	//************************************************************************************************** //
-	//************************************************************************************************** //
-	//************************************************************************************************** //	
-	//************************************************************************************************** //	
-	//************************************************** End Of Test *********************************** //	
-	//************************************************************************************************** //
-	//************************************************************************************************** //
-	//************************************************************************************************** //	
-	//************************************************************************************************** //	
-	//************************************************** End Of Test *********************************** //	
-	//************************************************************************************************** //
-	//************************************************************************************************** //
-	//************************************************************************************************** //	
-	//************************************************************************************************** //	
 
 //@Test
 	  public void bigImageTest() throws Exception {    
 	    Scene scene = new Scene();
 	    
+//	    scene.boxing = true;
+
 	    scene.setCamera((new Camera(new Point3D(-5000,0,0), new Vector(1,0,0), new Vector(0,1,0),1))); //NOTE: in this test, vTo is NOT the usual 0,0,-1. It is 1,0,0!!
 	    scene.setScreenDistance(5300);
 	    scene.addLight(new PointLight(new Color(200,200,200), new Point3D(-30,50,60), 1, 0.00005, 0.000003));
 	    scene.addLight(new PointLight(new Color(00,00,200), new Point3D(80,80,120), 1, 0.00005, 0.000003));
-	    scene.addLight(new SpotLight(new Color(200,00,000), new Point3D(30,0,-60), new Vector(1,0,2), 1, 0.00005, 0.00003));
+	    scene.addLight(new SpotLight(new Color(200,00,000), new Point3D(30,0,-60), new Vector(2,0,1), 1, 0.00005, 0.00003));
 	    
-	    scene.addLight(new DirectionalLight(new Color(10, 100, 10), new Vector(0,0,-0.5)));
+	    scene.addLight(new DirectionalLight(new Color(10, 100, 10), new Vector(-0.5,0,0)));
 	    
 	    Sphere s;
 	    
 
 	    // Remove this loop and all it's contents if you wish the rendering to take less than 30 minutes!!
-//	    for (double x = -50; x<=50; x+=5)
-//	    	for (double y = -(50-Math.abs(x)); y<=50-Math.abs(x); y+=5) {
-//	    		double z = Math.sqrt(2500 - x*x - y*y);
-//	    		s = new Sphere(5, new Point3D(x + 60, y, z),new Color((int)Math.abs(x+y+z)%25,
-//	    				(int)Math.abs(x+y+z+10)%25,
-//	    				(int)Math.abs(x+y+z+20)%25));
-//	    		s.setMaterial(new Material(1.0,0.1,0,0.6,99));
-//	    		//s.setShininess(99);
-//	    		scene.addGeometry(s);
-//	    		if (z != 0 ) {
-//	    			s = new Sphere(5, new Point3D(x + 60, y,-z),new Color((int)Math.abs(x+y+z)%25,
-//	    					(int)Math.abs(x+y+z+10)%25,
-//	    					(int)Math.abs(x+y+z+20)%25));
-//	    			s.setMaterial(new Material(1.0,0.1,0,0.6,99));
-//	    		//	s.setShininess(99);
-//	    			scene.addGeometry(s);
-//	    		}
-//	        
-//	      }
+	    for (double x = -50; x<=50; x+=5)
+	    	for (double y = -(50-Math.abs(x)); y<=50-Math.abs(x); y+=5) {
+	    		double z = Math.sqrt(2500 - x*x - y*y);
+	    		s = new Sphere(5, new Point3D(x + 60, y, z),new Color((int)Math.abs(x+y+z)%25,
+	    				(int)Math.abs(x+y+z+10)%25,
+	    				(int)Math.abs(x+y+z+20)%25));
+	    		s.setMaterial(new Material(1.0,0.1,0,0.6,99));
+	    		//s.setShininess(99);
+	    		scene.addGeometry(s);
+	    		if (z != 0 ) {
+	    			s = new Sphere(5, new Point3D(x + 60, y,-z),new Color((int)Math.abs(x+y+z)%25,
+	    					(int)Math.abs(x+y+z+10)%25,
+	    					(int)Math.abs(x+y+z+20)%25));
+	    			s.setMaterial(new Material(1.0,0.1,0,0.6,99));
+	    		//	s.setShininess(99);
+	    			scene.addGeometry(s);
+	    		}
+	        
+	      }
 
 	    s = new Sphere(70, new Point3D(80, 0,120),new Color(0,0,0));
 	    s.setMaterial(new Material(0.05,1,1,0,15));
@@ -380,17 +377,14 @@ public class IzakTest {
 
 	    scene.setAmbientLight(new AmbientLight(new Color(0,0,0), 0));
 	    
-	    String FileName= "RRRtest";
-     	ImageWriter imageWriter = new ImageWriter(FileName, 500, 500, 500, 500);
+  
+	    String FileName= "RRRNoBoxing";
+	    ImageWriter imageWriter = new ImageWriter(FileName, 500, 500, 500, 500);
 	    Render render = new Render(imageWriter,scene);
-     	
-	    
 	    render.multipleRaysOn = false;
 	    render.renderImage();
-     	render.writeToImage();
-     	
+	    render.writeToImage();
 		String path = render.getImageWriter().getRenderingDirectory();
 		Runtime.getRuntime().exec("explorer.exe /open, " + path+"\\" + FileName +".jpg");	  
-
 	}
 }

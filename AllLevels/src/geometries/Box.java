@@ -29,6 +29,10 @@ public class Box extends Geometry {
 	}
 //************************************************ Get/Set **********************************//	
 	
+	public Point3D getLocation() { return new Point3D(this.location);}
+	public double getHeight() { return height ;}
+	public double getWidth() { return width ;}
+	public double getDepth() { return depth ;}
 	public void addGeometry(Geometry geo) {
 		geometries.add(geo);
 	}
@@ -44,71 +48,92 @@ public class Box extends Geometry {
 
 		List<Point3D> pts = new ArrayList<Point3D>();
 		//frontal hit
-		double t = (location.getX().getCoordinate() - r.getPOO().getX().getCoordinate())/ r.getDirection().getHead().getX().getCoordinate();
+		double rayXPoint =  r.getPOO().getX().getCoordinate();
+		double rayYPoint =  r.getPOO().getY().getCoordinate();
+		double rayZPoint =  r.getPOO().getZ().getCoordinate();
+		
+		double locationY = location.getY().getCoordinate();
+		double locationX = location.getX().getCoordinate();
+		double locationZ = location.getZ().getCoordinate();
+		
+		double rayDirectionX = r.getDirection().getHead().getX().getCoordinate();
+		double rayDirectionY = r.getDirection().getHead().getY().getCoordinate();
+		double rayDirectionZ = r.getDirection().getHead().getZ().getCoordinate();
+		
+		
+		double t = (locationX - rayXPoint)/ rayDirectionX;
 		Vector rayVector = r.getDirection().scale(t);
 
 		// match to refael test ( otherwise- switch x with z everywhere)
 		
-		if (location.getY().getCoordinate() < r.getPOO().getY().getCoordinate() + rayVector.getHead().getY().getCoordinate() &&
-			location.getY().getCoordinate() + height > r.getPOO().getY().getCoordinate() + rayVector.getHead().getY().getCoordinate() &&
-			location.getZ().getCoordinate() < r.getPOO().getZ().getCoordinate() + rayVector.getHead().getZ().getCoordinate() &&
-			location.getZ().getCoordinate() + width > r.getPOO().getZ().getCoordinate() + rayVector.getHead().getZ().getCoordinate())
+				
+		if (locationY < (rayYPoint + rayVector.getHead().getY().getCoordinate() ) &&
+			(locationY + height) > (rayYPoint + rayVector.getHead().getY().getCoordinate()) &&
+			locationZ < rayZPoint + rayVector.getHead().getZ().getCoordinate() &&
+			locationZ + width > rayZPoint + rayVector.getHead().getZ().getCoordinate())
 		{
-			pts.add(new Point3D(new Coordinate(r.getPOO().getX().getCoordinate() + rayVector.getHead().getX().getCoordinate()),
-								new Coordinate(r.getPOO().getY().getCoordinate() + rayVector.getHead().getY().getCoordinate()),
-								new Coordinate(r.getPOO().getZ().getCoordinate() + rayVector.getHead().getZ().getCoordinate())));
+			pts.add(new Point3D(new Coordinate(rayXPoint + rayVector.getHead().getX().getCoordinate()),
+								new Coordinate(rayYPoint + rayVector.getHead().getY().getCoordinate()),
+								new Coordinate(rayZPoint + rayVector.getHead().getZ().getCoordinate())));
 			//mpts.put(this, pts);
 			//return pts;
 		}
+		
+		
 		// downward hit
-		t = (location.getY().getCoordinate() - r.getPOO().getY().getCoordinate())/ r.getDirection().getHead().getY().getCoordinate();  
+		t = (locationY - rayYPoint)/ rayDirectionY;  
 		rayVector = r.getDirection().scale(t);
-		if (location.getX().getCoordinate() < r.getPOO().getX().getCoordinate() + rayVector.getHead().getX().getCoordinate() &&
-				location.getX().getCoordinate() + depth > r.getPOO().getX().getCoordinate() + rayVector.getHead().getX().getCoordinate() &&
-				location.getZ().getCoordinate() < r.getPOO().getZ().getCoordinate() + rayVector.getHead().getZ().getCoordinate() &&
-				location.getZ().getCoordinate() + width > r.getPOO().getZ().getCoordinate() + rayVector.getHead().getZ().getCoordinate()) {
-			pts.add(new Point3D(new Coordinate(r.getPOO().getX().getCoordinate() + rayVector.getHead().getX().getCoordinate()),
-					new Coordinate(r.getPOO().getY().getCoordinate() + rayVector.getHead().getY().getCoordinate()),
-					new Coordinate(r.getPOO().getZ().getCoordinate() + rayVector.getHead().getZ().getCoordinate())));
+		if (locationX < rayXPoint + rayVector.getHead().getX().getCoordinate() &&
+				locationX + depth > rayXPoint + rayVector.getHead().getX().getCoordinate() &&
+				locationZ < rayZPoint + rayVector.getHead().getZ().getCoordinate() &&
+				locationZ + width > rayZPoint + rayVector.getHead().getZ().getCoordinate()) {
+			pts.add(new Point3D(new Coordinate(rayXPoint + rayVector.getHead().getX().getCoordinate()),
+					new Coordinate(rayYPoint + rayVector.getHead().getY().getCoordinate()),
+					new Coordinate(rayZPoint + rayVector.getHead().getZ().getCoordinate())));
 			//mpts.put(this, pts);
 			return pts;
 		}
+		
+		
 		//upward hit
-		t = (location.getY().getCoordinate() + height - r.getPOO().getY().getCoordinate())/ r.getDirection().getHead().getY().getCoordinate();
+		t = (locationY + height - rayYPoint)/ rayDirectionY;
 		rayVector = r.getDirection().scale(t);
-		if (location.getX().getCoordinate() < r.getPOO().getX().getCoordinate() + rayVector.getHead().getX().getCoordinate() &&
-				location.getX().getCoordinate() + depth > r.getPOO().getX().getCoordinate() + rayVector.getHead().getX().getCoordinate() &&
-				location.getZ().getCoordinate() < r.getPOO().getZ().getCoordinate() + rayVector.getHead().getZ().getCoordinate() &&
-				location.getZ().getCoordinate() + width > r.getPOO().getZ().getCoordinate() + rayVector.getHead().getZ().getCoordinate()) {
-			pts.add(new Point3D(new Coordinate(r.getPOO().getX().getCoordinate() + rayVector.getHead().getX().getCoordinate()),
-					new Coordinate(r.getPOO().getY().getCoordinate() + rayVector.getHead().getY().getCoordinate()),
-					new Coordinate(r.getPOO().getZ().getCoordinate() + rayVector.getHead().getZ().getCoordinate())));
+		
+		if (locationX < rayXPoint + rayVector.getHead().getX().getCoordinate() &&
+				locationX + depth > rayXPoint + rayVector.getHead().getX().getCoordinate() &&
+				locationZ < rayZPoint + rayVector.getHead().getZ().getCoordinate() &&
+				locationZ + width > rayZPoint + rayVector.getHead().getZ().getCoordinate()) {
+			pts.add(new Point3D(new Coordinate(rayXPoint + rayVector.getHead().getX().getCoordinate()),
+					new Coordinate(rayYPoint + rayVector.getHead().getY().getCoordinate()),
+					new Coordinate(rayZPoint + rayVector.getHead().getZ().getCoordinate())));
 			//mpts.put(this, pts);
 			//return pts;
 		}
 		//left hit
-		t = (location.getZ().getCoordinate() - r.getPOO().getZ().getCoordinate())/ r.getDirection().getHead().getZ().getCoordinate();
+		t = (locationZ - rayZPoint)/ rayDirectionZ;
 		rayVector = r.getDirection().scale(t);
-		if (location.getX().getCoordinate() < r.getPOO().getX().getCoordinate() + rayVector.getHead().getX().getCoordinate() &&
-				location.getX().getCoordinate() + depth > r.getPOO().getX().getCoordinate() + rayVector.getHead().getX().getCoordinate() &&
-				location.getY().getCoordinate() < r.getPOO().getY().getCoordinate() + rayVector.getHead().getY().getCoordinate() &&
-				location.getY().getCoordinate() + height > r.getPOO().getY().getCoordinate() + rayVector.getHead().getY().getCoordinate()) {
-			pts.add(new Point3D(new Coordinate(r.getPOO().getX().getCoordinate() + rayVector.getHead().getX().getCoordinate()),
-					new Coordinate(r.getPOO().getY().getCoordinate() + rayVector.getHead().getY().getCoordinate()),
-					new Coordinate(r.getPOO().getZ().getCoordinate() + rayVector.getHead().getZ().getCoordinate())));
+		if (locationX < rayXPoint + rayVector.getHead().getX().getCoordinate() &&
+				locationX + depth > rayXPoint + rayVector.getHead().getX().getCoordinate() &&
+				locationY < rayYPoint + rayVector.getHead().getY().getCoordinate() &&
+				locationY + height > rayYPoint + rayVector.getHead().getY().getCoordinate()) {
+			pts.add(new Point3D(new Coordinate(rayXPoint + rayVector.getHead().getX().getCoordinate()),
+					new Coordinate(rayYPoint + rayVector.getHead().getY().getCoordinate()),
+					new Coordinate(rayZPoint + rayVector.getHead().getZ().getCoordinate())));
 		//	mpts.put(this, pts);
 		//	return pts;
 		}
+		
+		
 		//right hit
-		t = (location.getZ().getCoordinate() + width - r.getPOO().getZ().getCoordinate())/ r.getDirection().getHead().getZ().getCoordinate();
+		t = (locationZ + width - rayZPoint)/ rayDirectionZ;
 		rayVector = r.getDirection().scale(t);
-		if (location.getX().getCoordinate() < r.getPOO().getX().getCoordinate() + rayVector.getHead().getX().getCoordinate() &&
-				location.getX().getCoordinate() + depth > r.getPOO().getX().getCoordinate() + rayVector.getHead().getX().getCoordinate() &&
-				location.getY().getCoordinate() < r.getPOO().getY().getCoordinate() + rayVector.getHead().getY().getCoordinate() &&
-				location.getY().getCoordinate() + height > r.getPOO().getY().getCoordinate() + rayVector.getHead().getY().getCoordinate()) {
-			pts.add(new Point3D(new Coordinate(r.getPOO().getX().getCoordinate() + rayVector.getHead().getX().getCoordinate()),
-					new Coordinate(r.getPOO().getY().getCoordinate() + rayVector.getHead().getY().getCoordinate()),
-					new Coordinate(r.getPOO().getZ().getCoordinate() + rayVector.getHead().getZ().getCoordinate())));
+		if (locationX < rayXPoint + rayVector.getHead().getX().getCoordinate() &&
+				locationX + depth > rayXPoint + rayVector.getHead().getX().getCoordinate() &&
+				locationY < rayYPoint + rayVector.getHead().getY().getCoordinate() &&
+				locationY + height > rayYPoint + rayVector.getHead().getY().getCoordinate()) {
+			pts.add(new Point3D(new Coordinate(rayXPoint + rayVector.getHead().getX().getCoordinate()),
+					new Coordinate(rayYPoint + rayVector.getHead().getY().getCoordinate()),
+					new Coordinate(rayZPoint + rayVector.getHead().getZ().getCoordinate())));
 			//mpts.put(this, pts);
 			//return pts;
 		}

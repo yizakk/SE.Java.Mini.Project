@@ -50,7 +50,6 @@ public class Render {
 		return "Render [_scene=" + _scene + ", _imagewriter=" + _imagewriter + "]";
 	}
 
-	// ***************** Operations ******************** //
 
 	public ImageWriter getImageWriter() {
 		return this._imagewriter;
@@ -59,6 +58,20 @@ public class Render {
 	public void writeToImage() {
 		this._imagewriter.writeToimage();
 	}
+	
+
+	public Scene getScene() {
+		return _scene;	
+	}
+	public void setImageWriter(ImageWriter imageWriter) {
+		this._imagewriter = imageWriter;
+		
+	}
+	public void setImageWriterName(String string) {
+		this._imagewriter.setName(string);
+	}
+	
+	// ***************** Operations ******************** //
 	
 	/*************************************************
 	 * FUNCTION
@@ -154,7 +167,7 @@ public class Render {
 	private Entry<Geometry, Point3D> getClosestPoint(Map<Geometry,List<Point3D>> intersectionPoints, Ray ray) throws Exception
 	{
 		double distance = Double.MAX_VALUE;
-		Point3D P0 = ray.getPOO(); // of ray instead
+		Point3D P0 = ray.getPOO(); 
 		Map<Geometry, Point3D> minDistancePoint = new HashMap<Geometry, Point3D>();
 		for (Entry<Geometry, List<Point3D>> entry:intersectionPoints.entrySet())
 			for (Point3D point: entry.getValue())
@@ -167,7 +180,8 @@ public class Render {
 		
 		Entry<Geometry, Point3D> closestEntry = minDistancePoint.entrySet().iterator().next();
 		
-		// checking 
+		// checking if the ray intersect a box. if it does- recursively calling this function
+		// with the box to find inner intersections
 		if (closestEntry.getKey() instanceof Box)
 			{
 				Map<Geometry,List<Point3D>> boxIntersections = ((Box)closestEntry.getKey()).getBoxRayIntersections(ray);
@@ -543,42 +557,7 @@ public class Render {
         return kd * Math.abs(normal.dotProduct(l.scale(-1)));
 	}
 
-	/*************************************************
-	 * FUNCTION
-	 * boxItems
-	 * 
-	 * PARAMETERS
-	 * 
-	 * RETURN VALUE
-	 * 
-	 * MEANING
-	 * in ray acceleration we want to insert any geometry into a box, than box close boxes into
-	 *  same bigger box, and repeat until
-	 *  
-	 * 
-	 * SEE ALSO
-	 * 
-	 **************************************************/
-	public void boxGeometries() {
-		if(_scene != null)
-		{
-			Iterator<Geometry> it = _scene.getGeometriesIterator();
-			while(it.hasNext())
-			{
-				Geometry geo = it.next();
-				if(geo instanceof Boxable)
-				{
-					
-				}
-			}
-		}
-	}
 	
-	private void findClosestBox() {
-		
-	}
-	
-
 	public void printGrid(int interval){
 		for (int i=0;i<_imagewriter.getHeight();i++)
             for (int j=0;j<_imagewriter.getWidth();j++)
@@ -588,11 +567,4 @@ public class Render {
             }   
 	}
 
-	public Scene getScene() {
-		return _scene;	
-	}
-	public void setImageWriter(ImageWriter imageWriter) {
-		this._imagewriter = imageWriter;
-		
-	}
 }
