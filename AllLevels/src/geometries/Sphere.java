@@ -114,13 +114,14 @@ public class Sphere extends RadialGeometry implements Boxable {
 	public Box insertIntoBox() {
 		Point3D loc = new Point3D(_center.getX().getCoordinate() - _radius - 1, _center.getY().getCoordinate() - _radius - 1, _center.getZ().getCoordinate() - _radius - 1);
 		Box box = new Box(loc, _radius*2+2,_radius*2+2,_radius*2+2);
+		//box.setKt(1);
 		box.addGeometry(this);
 		return box;
 		
 	}
+	
 	@Override
 	public String toString() {
 		return "Point:"+_center.toString()+" Radius:"+this._radius+". ";
 	}
-
 }

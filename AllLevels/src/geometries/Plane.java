@@ -37,7 +37,6 @@ public class Plane extends Geometry implements FlatGeometry
 		super(color,material);
 		_Q = p1;
 		_normal = new Vector(p1,p2).crossProduct(new Vector(p1,p3));
-		
 	}
 	/************** Getters/Setters ***********/
 	@Override

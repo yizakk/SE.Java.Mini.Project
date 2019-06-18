@@ -26,6 +26,7 @@ public class Box extends Geometry {
 		width = _width;
 		depth = _depth;
 		
+	//	this.setKt(0);
 	}
 //************************************************ Get/Set **********************************//	
 	
@@ -63,33 +64,39 @@ public class Box extends Geometry {
 		
 		double t = (locationX - rayXPoint)/ rayDirectionX;
 		Vector rayVector = r.getDirection().scale(t);
-
-		// match to refael test ( otherwise- switch x with z everywhere)
 		
+		double scaledRayY = rayVector.getHead().getY().getCoordinate();
+		double scaledRayX = rayVector.getHead().getX().getCoordinate();
+		double scaledRayZ = rayVector.getHead().getZ().getCoordinate();
 				
-		if (locationY < (rayYPoint + rayVector.getHead().getY().getCoordinate() ) &&
-			(locationY + height) > (rayYPoint + rayVector.getHead().getY().getCoordinate()) &&
-			locationZ < rayZPoint + rayVector.getHead().getZ().getCoordinate() &&
-			locationZ + width > rayZPoint + rayVector.getHead().getZ().getCoordinate())
+		// match to refael test ( otherwise- switch x with z everywhere (depth and width)
+		
+		
+		if (locationY < (rayYPoint + scaledRayY ) &&
+			(locationY + height) > (rayYPoint +scaledRayY ) &&
+			locationZ < rayZPoint + scaledRayZ &&
+			locationZ + width > rayZPoint +scaledRayZ)
 		{
-			pts.add(new Point3D(new Coordinate(rayXPoint + rayVector.getHead().getX().getCoordinate()),
-								new Coordinate(rayYPoint + rayVector.getHead().getY().getCoordinate()),
-								new Coordinate(rayZPoint + rayVector.getHead().getZ().getCoordinate())));
-			//mpts.put(this, pts);
-			//return pts;
+			pts.add(new Point3D(rayXPoint + scaledRayX,
+								rayYPoint + scaledRayY,
+								rayZPoint + scaledRayZ));
+			return pts;
 		}
 		
 		
 		// downward hit
 		t = (locationY - rayYPoint)/ rayDirectionY;  
 		rayVector = r.getDirection().scale(t);
-		if (locationX < rayXPoint + rayVector.getHead().getX().getCoordinate() &&
-				locationX + depth > rayXPoint + rayVector.getHead().getX().getCoordinate() &&
-				locationZ < rayZPoint + rayVector.getHead().getZ().getCoordinate() &&
-				locationZ + width > rayZPoint + rayVector.getHead().getZ().getCoordinate()) {
-			pts.add(new Point3D(new Coordinate(rayXPoint + rayVector.getHead().getX().getCoordinate()),
-					new Coordinate(rayYPoint + rayVector.getHead().getY().getCoordinate()),
-					new Coordinate(rayZPoint + rayVector.getHead().getZ().getCoordinate())));
+		scaledRayY = rayVector.getHead().getY().getCoordinate();
+		scaledRayX = rayVector.getHead().getX().getCoordinate();
+		scaledRayZ = rayVector.getHead().getZ().getCoordinate();
+		if (locationX < rayXPoint + scaledRayX &&
+				locationX + depth > rayXPoint + scaledRayX &&
+				locationZ < rayZPoint + scaledRayZ &&
+				locationZ + width > rayZPoint + scaledRayZ) {
+			pts.add(new Point3D(rayXPoint + scaledRayX,
+								rayYPoint + scaledRayY,
+								rayZPoint + scaledRayZ));
 			//mpts.put(this, pts);
 			return pts;
 		}
@@ -98,61 +105,90 @@ public class Box extends Geometry {
 		//upward hit
 		t = (locationY + height - rayYPoint)/ rayDirectionY;
 		rayVector = r.getDirection().scale(t);
+		scaledRayY = rayVector.getHead().getY().getCoordinate();
+		scaledRayX = rayVector.getHead().getX().getCoordinate();
+		scaledRayZ = rayVector.getHead().getZ().getCoordinate();
 		
-		if (locationX < rayXPoint + rayVector.getHead().getX().getCoordinate() &&
-				locationX + depth > rayXPoint + rayVector.getHead().getX().getCoordinate() &&
-				locationZ < rayZPoint + rayVector.getHead().getZ().getCoordinate() &&
-				locationZ + width > rayZPoint + rayVector.getHead().getZ().getCoordinate()) {
-			pts.add(new Point3D(new Coordinate(rayXPoint + rayVector.getHead().getX().getCoordinate()),
-					new Coordinate(rayYPoint + rayVector.getHead().getY().getCoordinate()),
-					new Coordinate(rayZPoint + rayVector.getHead().getZ().getCoordinate())));
-			//mpts.put(this, pts);
-			//return pts;
+		if (locationX < rayXPoint + scaledRayX &&
+				locationX + depth > rayXPoint + scaledRayX &&
+				locationZ < rayZPoint + scaledRayZ &&
+				locationZ + width > rayZPoint + scaledRayZ) {
+			pts.add(new Point3D(rayXPoint + scaledRayX,
+								rayYPoint + scaledRayY,
+								rayZPoint + scaledRayZ));
+			return pts;
 		}
 		//left hit
 		t = (locationZ - rayZPoint)/ rayDirectionZ;
 		rayVector = r.getDirection().scale(t);
-		if (locationX < rayXPoint + rayVector.getHead().getX().getCoordinate() &&
-				locationX + depth > rayXPoint + rayVector.getHead().getX().getCoordinate() &&
-				locationY < rayYPoint + rayVector.getHead().getY().getCoordinate() &&
-				locationY + height > rayYPoint + rayVector.getHead().getY().getCoordinate()) {
-			pts.add(new Point3D(new Coordinate(rayXPoint + rayVector.getHead().getX().getCoordinate()),
-					new Coordinate(rayYPoint + rayVector.getHead().getY().getCoordinate()),
-					new Coordinate(rayZPoint + rayVector.getHead().getZ().getCoordinate())));
-		//	mpts.put(this, pts);
-		//	return pts;
+		scaledRayY = rayVector.getHead().getY().getCoordinate();
+		scaledRayX = rayVector.getHead().getX().getCoordinate();
+		scaledRayZ = rayVector.getHead().getZ().getCoordinate();
+		if (locationX < rayXPoint + scaledRayX &&
+				locationX + depth > rayXPoint + scaledRayX &&
+				locationY < rayYPoint + scaledRayY &&
+				locationY + height > rayYPoint + scaledRayY) {
+			pts.add(new Point3D(rayXPoint + scaledRayX,
+								rayYPoint + scaledRayY,
+								rayZPoint + scaledRayZ));
+			return pts;
 		}
 		
 		
 		//right hit
 		t = (locationZ + width - rayZPoint)/ rayDirectionZ;
 		rayVector = r.getDirection().scale(t);
-		if (locationX < rayXPoint + rayVector.getHead().getX().getCoordinate() &&
-				locationX + depth > rayXPoint + rayVector.getHead().getX().getCoordinate() &&
-				locationY < rayYPoint + rayVector.getHead().getY().getCoordinate() &&
-				locationY + height > rayYPoint + rayVector.getHead().getY().getCoordinate()) {
-			pts.add(new Point3D(new Coordinate(rayXPoint + rayVector.getHead().getX().getCoordinate()),
-					new Coordinate(rayYPoint + rayVector.getHead().getY().getCoordinate()),
-					new Coordinate(rayZPoint + rayVector.getHead().getZ().getCoordinate())));
-			//mpts.put(this, pts);
-			//return pts;
+		scaledRayY = rayVector.getHead().getY().getCoordinate();
+		scaledRayX = rayVector.getHead().getX().getCoordinate();
+		scaledRayZ = rayVector.getHead().getZ().getCoordinate();
+		if (locationX < rayXPoint + scaledRayX &&
+				locationX + depth > rayXPoint + scaledRayX &&
+				locationY < rayYPoint + scaledRayY &&
+				locationY + height > rayYPoint + scaledRayY) {
+			pts.add(new Point3D(rayXPoint + scaledRayX,
+								rayYPoint + scaledRayY,
+								rayZPoint + scaledRayZ));
+			return pts;
 		}
 
 		return pts;
 	}
 	
 	
-	public Map<Geometry, List<Point3D>> getBoxRayIntersections(Ray ray) throws Exception
+	public Map<Geometry, List<Point3D>> getInBoxRayIntersections(Ray ray) throws Exception
 	{
 		Iterator<Geometry> geos = geometries.iterator();
 		Map<Geometry, List<Point3D>> intersectionPoints = new HashMap<Geometry, List<Point3D>>();
 		
 		while (geos.hasNext()){
 			Geometry geometry = geos.next();
-			ArrayList<Point3D> geometryIntersectionPoints = (ArrayList<Point3D>) geometry.findIntersections(ray);
-			if(!(geometryIntersectionPoints.isEmpty()))
-				intersectionPoints.put(geometry, geometryIntersectionPoints);
+			if(geometry instanceof Box) // if we meet another box- open it
+			{
+				if(!((Box)geometry).findIntersections(ray).isEmpty()) {
+					Map<Geometry,List<Point3D>> /*List<Point3D>*/ geometryIntersectionPoints = ((Box)geometry).getInBoxRayIntersections(ray);
+					if(!(geometryIntersectionPoints.isEmpty()))
+						intersectionPoints.putAll(geometryIntersectionPoints);
+				}
+				else
+				{
+					
+				}
+			}
+			else // find the intersections (in the last call for recursion, or geo is a plane)
+			{
+				ArrayList<Point3D> geometryIntersectionPoints = (ArrayList<Point3D>) geometry.findIntersections(ray);
+				if(!(geometryIntersectionPoints.isEmpty()))
+					intersectionPoints.put(geometry, geometryIntersectionPoints);
+			}
+			
 		}
 		return intersectionPoints;
 	}
+
+	@Override
+	public String toString()
+	{
+		return this.location.toString() + "\nd:"+this.depth +" height:"+height+" width"+width;
+	}
+
 }

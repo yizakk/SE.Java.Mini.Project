@@ -149,6 +149,7 @@ public class Triangle extends Geometry implements FlatGeometry, Boxable {
 		double maxZ = maxOf3Points(z1, z2, z3);
 		
 		Box box = new Box(new Point3D(minX-1,minY-1,minZ-1), maxY-minY+1,maxZ-minZ+1,maxX-minX+1);
+		//box.setKt(1);
 		box.addGeometry(this);
 		return box;
 	}
@@ -166,6 +167,6 @@ public class Triangle extends Geometry implements FlatGeometry, Boxable {
 	//toString - print
 	@Override
 	public String toString() {
-		return "Triangle [_p1=" + _p1 + ", _p2=" + _p2 + ", _p3=" + _p3 + "]";
+		return "Triangle [p1" + _p1 + "\np2=" + _p2 + "\np3=" + _p3 + "]";
 	}
 }

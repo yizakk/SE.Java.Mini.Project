@@ -100,7 +100,6 @@ public class Scene {
 				&& this._camera.equals(other._camera) 
 				&& this._geometries.equals(other._geometries)
 				&& this._lights.equals(other._lights));
-
 	}
 
 	/**
@@ -119,12 +118,13 @@ public class Scene {
 	{
 		// to revert all boxing - remove from here...
 		if(boxing) {
-			if (geometry instanceof Boxable) // if boxable - adding to scene to boxed geo
+			if (geometry instanceof Boxable) // if boxable - adding to scene the "boxed" geo
 				this._geometries.add(((Boxable)geometry).insertIntoBox());
 			else // otherwise - (plane) inserting the geo as is
 				this._geometries.add(geometry);
 		}
-		// ...to here 
+		else
+			// ...to here 
 		this._geometries.add(geometry); // if boxing option is disabled - inserting any geo as is
 	}
 	
@@ -143,9 +143,11 @@ public class Scene {
 	 *  
 	 * 
 	 * SEE ALSO
+	 * @return boolean
 	 * 
 	 **************************************************/
-	public void boxGeometries1() {
+	
+	public boolean boxCloseBoxes() {
 		
 		if(boxing)
 		{
@@ -159,24 +161,16 @@ public class Scene {
 					{
 						List<Box> boxesToPutTogether = new ArrayList<Box>();
 						Box box =(Box)_box;
+						Vector boxMidVec = new Vector(new Point3D(box.getDepth()/2, box.getHeight()/2, box.getWidth()/2));
+						Point3D center = box.getLocation().add(boxMidVec);
 						for (Geometry _anotherBox : _geometries) 
 						{
 							if (_anotherBox instanceof Box && _anotherBox != _box) 
 							{            
 								Box anotherBox =(Box)_anotherBox;
-								Vector boxMidVec = new Vector(new Point3D(new Coordinate(box.getDepth()/2),new Coordinate(box.getHeight()/2),new Coordinate(box.getWidth()/2)));
 								Vector anotherBoxMidVec = new Vector(new Point3D(anotherBox.getDepth()/2,anotherBox.getHeight()/2,anotherBox.getWidth()/2));
-								Point3D center = box.getLocation().add(boxMidVec);
 								Point3D anotherCenter = anotherBox.getLocation().add(anotherBoxMidVec);
-								if (new Vector (anotherCenter.subtract(center)).length() < 5*Math./*max*/min(boxMidVec.length(), anotherBoxMidVec.length())
-										/*|| (box.getLocation().getX().getCoordinate() > anotherBox.getLocation().getX().getCoordinate() &&
-	                      box.getLocation().getY().getCoordinate() > anotherBox.getLocation().getY().getCoordinate() &&
-	                      box.getLocation().getZ().getCoordinate() > anotherBox.getLocation().getZ().getCoordinate() &&
-	                      box.getDepth() < anotherBox.getDepth() && box.getHeight() < anotherBox.getHeight() && box.getWidth() < anotherBox.getWidth())
-	                  || (box.getLocation().getX().getCoordinate() < anotherBox.getLocation().getX().getCoordinate() &&
-	                      box.getLocation().getY().getCoordinate() < anotherBox.getLocation().getY().getCoordinate() &&
-	                      box.getLocation().getZ().getCoordinate() < anotherBox.getLocation().getZ().getCoordinate() &&
-	                      box.getDepth() > anotherBox.getDepth() && box.getHeight() > anotherBox.getHeight() && box.getWidth() > anotherBox.getWidth())*/)
+								if (new Vector (anotherCenter.subtract(center)).length() < 5*Math.min(boxMidVec.length(), anotherBoxMidVec.length()))
 									boxesToPutTogether.add(anotherBox);
 							}
 						}
@@ -185,15 +179,18 @@ public class Scene {
 						{
 							changedAnything = true;
 							boxesToPutTogether.add(box);
-							double minX=Double.MAX_VALUE, 
-									maxX=-Double.MAX_VALUE, 
+							double  minX=Double.MAX_VALUE, 
 									minY=Double.MAX_VALUE, 
-									maxY=-Double.MAX_VALUE, 
 									minZ=Double.MAX_VALUE, 
-									maxZ=-Double.MAX_VALUE;
+									
+									maxX=Double.MIN_VALUE, 
+									maxY=Double.MIN_VALUE, 
+									maxZ=Double.MIN_VALUE;
+							
+							//Iterator<Geometry> it = boxesToPutTogether;
 							for (Box b : boxesToPutTogether) 
 							{
-								double bX = b.getLocation().getX().getCoordinate(),
+								double  bX = b.getLocation().getX().getCoordinate(),
 										bY = b.getLocation().getY().getCoordinate(),
 										bZ = b.getLocation().getZ().getCoordinate();
 								minX = Math.min(minX, bX);
@@ -216,7 +213,10 @@ public class Scene {
 					}
 				}
 			}
+			
+			return true;
 		} // end of if(boxing)
+	return false;
 	}
 	
 	

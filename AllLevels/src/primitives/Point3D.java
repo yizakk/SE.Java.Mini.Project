@@ -144,6 +144,6 @@ public class Point3D extends Point2D
 						   _z.scale(num));
 	}
 	public Vector vector(Point3D point3d) {
-		return new Vector (this , point3d);
+		return new Vector (this, point3d);
 	}
 }

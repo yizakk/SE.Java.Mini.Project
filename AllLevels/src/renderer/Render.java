@@ -26,7 +26,7 @@ public class Render {
 	
 	private Scene _scene;
 	private ImageWriter _imagewriter;
-	private final int RECURSION_LEVEL = 4;
+	private final int RECURSION_LEVEL = 3;
 	public boolean multipleRaysOn = true;
 	
 	// ***************** Constructors ********************** //
@@ -136,11 +136,21 @@ public class Render {
 		Iterator<Geometry> geometries = _scene.getGeometriesIterator();
 		Map<Geometry, List<Point3D>> intersectionPoints = new HashMap<Geometry, List<Point3D>>();
 		
-		while (geometries.hasNext()){
+		while (geometries.hasNext())
+		{
 			Geometry geometry = geometries.next();
-			ArrayList<Point3D> geometryIntersectionPoints = (ArrayList<Point3D>) geometry.findIntersections(ray);
-			if(!(geometryIntersectionPoints.isEmpty()))
-				intersectionPoints.put(geometry, geometryIntersectionPoints);
+			if(_scene.boxing && geometry instanceof Box) 
+			{
+				if(!((Box)geometry).findIntersections(ray).isEmpty()) {
+					Map<Geometry, List<Point3D>> boxIntersectionPoints = ((Box)geometry).getInBoxRayIntersections(ray);
+					intersectionPoints.putAll(boxIntersectionPoints);
+				}
+			}
+			else {
+				ArrayList<Point3D> geometryIntersectionPoints = (ArrayList<Point3D>) geometry.findIntersections(ray);
+				if(!(geometryIntersectionPoints.isEmpty()))
+					intersectionPoints.put(geometry, geometryIntersectionPoints);
+			}
 		}
 		return intersectionPoints;
 	}
@@ -181,10 +191,10 @@ public class Render {
 		Entry<Geometry, Point3D> closestEntry = minDistancePoint.entrySet().iterator().next();
 		
 		// checking if the ray intersect a box. if it does- recursively calling this function
-		// with the box to find inner intersections
+		// with the box intersections to find inner intersections
 		if (closestEntry.getKey() instanceof Box)
 			{
-				Map<Geometry,List<Point3D>> boxIntersections = ((Box)closestEntry.getKey()).getBoxRayIntersections(ray);
+				Map<Geometry,List<Point3D>> boxIntersections = ((Box)closestEntry.getKey()).getInBoxRayIntersections(ray);
 				if (!boxIntersections.isEmpty())
 				{
 					return getClosestPoint(boxIntersections, ray);
@@ -225,7 +235,7 @@ public class Render {
 
     /**
      * Inner function, only for calling the recursive calcColor function and start the
-     * recursion level with '0'
+     * recursion level with '0', and the "attenuation" factor with 1.0
      * @param geometry
      * @param point
      * @param ray
@@ -292,7 +302,6 @@ public class Render {
             		// summing them
             		double difSpec = diff + spec;
             		lightReflected = MyColor.scaleColor(lightIntensity, difSpec);
-            		//lightReflected = addColors(lightDiffuse, lightSpecular);
             	}
             }
         }
@@ -307,7 +316,7 @@ public class Render {
         Color reflected = new Color(0, 0, 0);
 
         if (reflectedEntry != null) {
-            reflected = MyColor.scaleColor( calcColor(reflectedEntry.getKey(), reflectedEntry.getValue(), reflectedRay, level + 1, k*kr),kr);
+            reflected = MyColor.scaleColor(calcColor(reflectedEntry.getKey(), reflectedEntry.getValue(), reflectedRay, level + 1, k*kr),kr);
         }
 
         // Recursive call for refracted ray/rays
@@ -319,7 +328,8 @@ public class Render {
         	// Getting a List of Rays created by constructRefractedRayList function
         	List<Ray> refractedRays = constructRefractedRayList(geometry, point, inRay);
         	// iterating the list, adding the color of each ray's intersections points
-        	for(Ray refractedRay: refractedRays) {
+        	for(Ray refractedRay: refractedRays) 
+        	{
         		Entry<Geometry, Point3D> refractedEntry = findClosestIntersection(refractedRay);
 
         		if (refractedEntry != null) {
@@ -493,14 +503,17 @@ public class Render {
         	for(Entry<Geometry, List<Point3D>> entryPerGeo : intersectionPoints.entrySet())
         		if (entryPerGeo.getValue().get(0).distance(point) <= distance)
         			 temp.put(entryPerGeo.getKey(), entryPerGeo.getValue());       	
-        	
         }
 
         double ktr = 1;
         for (Entry<Geometry, List<Point3D>> entry : temp.entrySet())
            ktr *= entry.getKey().getMaterial().getKt();
-
+ 
+//        double ktr = 1;
+//      for (Entry<Geometry, List<Point3D>> entry : intersectionPoints.entrySet())
+//         ktr *= entry.getKey().getMaterial().getKt();
         //return 1;
+      
         return ktr;
     }
     

@@ -81,7 +81,6 @@ public class Camera {
 	 * @return Ray
 	 * @throws Exception 
 	 */
-
 	public Ray constructRayThroughPixel (int Nx, int Ny, double x, double y,
 			double screenDist, double screenWidth, double screenHeight) throws Exception
 	{
