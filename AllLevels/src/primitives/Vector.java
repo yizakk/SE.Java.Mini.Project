@@ -33,7 +33,7 @@ public class Vector {
 	 */
 	public Vector(Point3D p1, Point3D p2)
 	{
-		_head = new Point3D(p1).subtract(p2);
+		_head = p1.subtract(p2);
 	}
 
 	// ***************** Getters/Setters ********************** //
@@ -92,7 +92,7 @@ public class Vector {
 	 */
 	public Vector scale(double scalingFactor)
 	{		
-		return new Vector(new Point3D(this._head.scale(scalingFactor)));
+		return new Vector(this._head.scale(scalingFactor));
 	}
 	/**
 	 * returning a new vector, equal to the crossProduct of the origin vector and the @param vector
@@ -140,7 +140,7 @@ public class Vector {
 		double x = _head.getX().getCoordinate();
 		double y = _head.getY().getCoordinate();
 		double z = _head.getZ().getCoordinate();
-		_head = new Point3D(new Coordinate(x / length), new Coordinate(y / length), new Coordinate(z / length));
+		_head = new Point3D(x / length, y / length, z / length);
 		return new Vector(_head);
 	}
 	
@@ -150,9 +150,13 @@ public class Vector {
 	 * @return double
 	 */
 	public double dotProduct(Vector vec) {
+		
 		double x = this._head.getX().getCoordinate() * vec._head.getX().getCoordinate();
 		double y = this._head.getY().getCoordinate() * vec._head.getY().getCoordinate();
 		double z = this._head.getZ().getCoordinate() * vec._head.getZ().getCoordinate();
 		return x + y + z;
+	}
+	public Vector add(Point3D point3d) {
+		return new Vector (_head.add(point3d));
 	}
 }

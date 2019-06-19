@@ -57,7 +57,7 @@ public class Sphere extends RadialGeometry implements Boxable {
 	
 	@Override
 	public Vector getNormal(Point3D point) throws Exception {
-		return new Vector(point,_center).normalize();
+		return new Vector(_center,point).normalize();
 	}
 
 	/**********************Equals******************************/
@@ -90,7 +90,8 @@ public class Sphere extends RadialGeometry implements Boxable {
 		Vector V = ray.getDirection();
 		double tm =L.dotProduct(V);
 		//find D by pitagoras using Math library
-		double d = Math.sqrt(L.length()*L.length() - tm*tm);
+		double length = L.length();
+		double d = Math.sqrt(length*length - tm*tm);
 		//find th by pitagoras using Math library
 		double th = Math.sqrt(_radius*_radius- d*d);
 		double t1 = tm-th;

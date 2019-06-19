@@ -26,7 +26,7 @@ import renderer.Render;
 import scene.Scene;
 
 
-public class IzakTest {
+public class MultipleRefractionRaysTest {
 	/**
 	 * The scene shows floor (the walls in right and left are disabled), and a mirror in the 
 	 * front of it, with 3 spheres, 2 spots, one pointLight, and a triangle between the
@@ -35,7 +35,147 @@ public class IzakTest {
 	 * to add accelerating - change the scene.boxing field to true
 	 * @throws Exception
 	 */
+
 	@Test
+	public void HighResolution() throws Exception {
+		
+		Scene scene = new Scene();
+		scene.setCamera(new Camera(new Point3D(0,0,0),
+								   new Vector(0,1,0),
+								   new Vector(0,0,1)));
+     	scene.setScreenDistance(400);
+ //    	scene.setAmbientLight(new Color(255,255,255), 0);
+ //    	scene.setBackground(Color.WHITE);
+//	**************************** Background  **********************************   	//
+     	
+     	Quadrangle qFloor = new Quadrangle(new Point3D(-600,-200, 200), // left-down corner
+     								   new Point3D( 600, -200, 200),//right-down corner 
+     					 			   new Point3D( 200, -300, 500), // right-up corner
+     					 			   new Point3D( -200, -300, 500));// left-up corner
+     	qFloor.setEmmission(new Color(100,60,20));
+     	qFloor.setShininess(80);
+     	qFloor.setKr(1);
+     	qFloor.setKt(0);
+
+     	Quadrangle qGlass = new Quadrangle(new Point3D(-400,-200, 200), // left-down corner
+				   						   new Point3D( 400, -200, 200),//right-down corner 
+				   						   new Point3D( 200, -115, 320), // right-up-Opp corner
+				   						   new Point3D( -200, -115, 320));// left-up-Opp corner
+     	qGlass.setEmmission(new Color(40,40,40));
+     	qGlass.setShininess(80);
+     	qGlass.setKr(0.7);
+     	qGlass.setKt(0.5);
+     	qGlass.setKd(0);
+     	qGlass.setKs(0);
+     	
+  	
+     	// ממול קיר wall
+     	Quadrangle qOppWall=new Quadrangle(new Point3D( -200, 200, 500), // left-up corner
+     									   new Point3D( -240, -300, 600),// Left-down-Far corner 
+     									   new Point3D( 240,  -300, 600), // right-down-Far corner
+     									   new Point3D(  200,  200, 500));// left-up corner
+     	qOppWall.setEmmission(new Color(30,30,30));
+     	qOppWall.setShininess(10);
+     	qOppWall.setKr(1);
+     	qOppWall.setKt(0.6);
+     	
+     	scene.addGeometry(qGlass);
+//     	scene.addGeometry(qFloor);
+ //    	scene.addGeometry(qOppWall);
+     	
+//**************************** Spheres  ********************************** //
+     	
+
+     	// mirror sphere 2 - left up
+     	Sphere rightRightBack = new Sphere(new Color (140,30,180), 60, new Point3D(130,-110,350));
+     	rightRightBack.setShininess(10);
+     	rightRightBack.setKr(0.2);
+     	rightRightBack.setKt(0.2);
+    
+
+     	// main blue circle
+		Sphere blueBig = new Sphere(new Color(0, 0, 150), 60, new Point3D(0, -110, 350));
+		blueBig.setShininess(20);
+		blueBig.setKr(0.8);
+        blueBig.setKt(0.2);
+		
+        // Inner little sphere 
+		Sphere leftLittleBlue = new Sphere(new Color(30, 60, 160), 60, new Point3D(-130, -110, 350));
+		leftLittleBlue.setShininess(40);
+		leftLittleBlue.setKr(0.2);
+		leftLittleBlue.setKt(0.2);
+		
+		scene.addGeometry(leftLittleBlue);
+		scene.addGeometry(blueBig);
+     	scene.addGeometry(rightRightBack);
+	
+//*********************************** Lights  ********************************** //  
+
+		LightSource dir = new DirectionalLight(new Color(40,20,20), new Vector(1,1.5,1));
+		
+		SpotLight spotLeftMiddle = new SpotLight(new Color(90,20,20), new Point3D(-200,100,450), 
+												 new Vector(1,-1,-1), 0, 0.00001, 0.000005);
+		
+		SpotLight spotRightBack = new SpotLight(new Color(40,40,20), new Point3D(200,100,250), 
+												new Vector(-1,-1,1), 0, 0.00001, 0.000005);
+			
+		scene.addLight(spotRightBack);
+		scene.addLight(spotLeftMiddle);
+//		scene.addLight(pointLeftUP);
+		scene.addLight(dir);
+				
+//************************************* Triangles  ********************************** //   		
+		
+		Triangle tGlass = new Triangle( new Point3D(-100,-100,75),
+				new Point3D(100,-100,125),
+				new Point3D(-100,-100,125),
+				new Color(198,198,220),
+				new Material(0.1,1,0.5,0.0,99));
+//     	scene.addGeometry(tGlass);
+  	
+		// base triangle
+		Triangle tBetweenCameraAndGeometries = new Triangle(new Point3D(1000,  -1000, 50),
+										  			      new Point3D( -1000, -1000, 50),
+										  			      new Point3D( 1000, 1000, 50));
+		tBetweenCameraAndGeometries.setEmmission(new Color(20, 20, 20));
+		tBetweenCameraAndGeometries.setKd(0);
+		tBetweenCameraAndGeometries.setKs(0);
+		tBetweenCameraAndGeometries.setKr(0);
+		tBetweenCameraAndGeometries.setKt(1);
+
+//		scene.addGeometry(tBetweenCameraAndGeometries);
+		
+//*********************************** Not in use  ********************************** //       	
+		
+		Tube t = new Tube(new Material(19,0.3,0.3,0.5,0.5), new Color(120,120,120), 150, 
+						  new Point3D(-100,0,200), new Point3D(100,0,200));
+		
+//		scene.addGeometry(t);
+     	
+//**************************** Rendering  ********************************** //     	
+     	ImageWriter imageWriter = new ImageWriter("", 1000, 1000, 1000, 1000);
+		Render render = new Render(imageWriter,scene);
+		
+//		render.multipleRaysOn = false;
+
+		String FileName= "Spheres".concat(scene.boxing?"Boxing":"").
+								   concat(render.multipleRaysOn?"MultipleRays":"")
+								   /*.concat(Calendar.getInstance().getTime().toString())*/
+										   ;
+	    render.setImageWriterName(FileName);
+	    
+		render.renderImage();
+		render.writeToImage(); 
+
+		String path = render.getImageWriter().getRenderingDirectory();
+		Runtime.getRuntime().exec("explorer.exe /open, " + path+"\\" + FileName +".jpg");
+	}
+	//************************************************** End Of Test *********************************** //	
+	
+	
+	
+	
+//	@Test
 	public void HighResolutionWithTriangle() throws Exception {
 		
 		Scene scene = new Scene();
@@ -54,6 +194,24 @@ public class IzakTest {
      	qFloor.setShininess(80);
      	qFloor.setKr(0.8);
      	qFloor.setKt(0);
+
+     	Quadrangle qGlass = new Quadrangle(new Point3D(-200,-150, 200), // left-down corner
+				   						   new Point3D( 200, -150, 200),//right-down corner 
+				   						   new Point3D( 200, -150, 300), // right-up-Opp corner
+				   						   new Point3D( -200, -150, 300));// left-up corner
+     	qGlass.setEmmission(new Color(20,20,20));
+     	qGlass.setShininess(80);
+     	qGlass.setKr(1);
+     	qGlass.setKt(0.3);
+     	scene.addGeometry(qGlass);
+     	
+     	Triangle tGlass = new Triangle( new Point3D(-100,-100,75),
+     									new Point3D(100,-100,125),
+     									new Point3D(-100,-100,125),
+     									new Color(198,198,220),
+     									new Material(0.1,1,0.5,0.0,99));
+//     	scene.addGeometry(tGlass);
+     	
      	
      	Quadrangle qLeftWall=new Quadrangle(new Point3D( -600, 600, 200), // left-up corner
      									new Point3D( -600, -650, 200),//right-down corner 
@@ -94,7 +252,7 @@ public class IzakTest {
 
      	
      	scene.addGeometry(qFloor);
-//     	scene.addGeometry(qOppWall);
+     	scene.addGeometry(qOppWall);
 //     	scene.addGeometry(qRoof);
 //     	scene.addGeometry(qLeftWall);
 //     	scene.addGeometry(qRightWall);
@@ -126,9 +284,9 @@ public class IzakTest {
 		leftLittleBlue.setKr(1);
 		leftLittleBlue.setKt(0.4);
 		
-//		scene.addGeometry(leftLittleBlue);
-//		scene.addGeometry(blueBig);
- //    	scene.addGeometry(rightRightBack);
+		scene.addGeometry(leftLittleBlue);
+		scene.addGeometry(blueBig);
+     	scene.addGeometry(rightRightBack);
 	
 //*********************************** Lights  ********************************** //  
 
@@ -175,13 +333,13 @@ public class IzakTest {
 		Tube t = new Tube(new Material(19,0.3,0.3,0.5,0.5), new Color(120,120,120), 150, 
 						  new Point3D(-100,0,200), new Point3D(100,0,200));
 		
-		scene.addGeometry(t);
+//		scene.addGeometry(t);
      	
 //**************************** Rendering  ********************************** //     	
      	ImageWriter imageWriter = new ImageWriter("", 1000, 1000, 1000, 1000);
 		Render render = new Render(imageWriter,scene);
 		
-		render.multipleRaysOn = false;
+//		render.multipleRaysOn = false;
 
 		String FileName= "Spheres".concat(scene.boxing?"Boxing":"").
 								   concat(render.multipleRaysOn?"MultipleRays":"")
@@ -198,91 +356,4 @@ public class IzakTest {
 	//************************************************** End Of Test *********************************** //	
 
 	
-	
-	
-	
-//@Test
-	  public void bigImageTest() throws Exception {    
-	    Scene scene = new Scene();
-	    
-//	    scene.boxing = true;
-
-	    scene.setCamera((new Camera(new Point3D(-5000,0,0), new Vector(1,0,0), new Vector(0,1,0),1))); //NOTE: in this test, vTo is NOT the usual 0,0,-1. It is 1,0,0!!
-	    scene.setScreenDistance(5300);
-	    scene.addLight(new PointLight(new Color(200,200,200), new Point3D(-30,50,60), 1, 0.00005, 0.000003));
-	    scene.addLight(new PointLight(new Color(00,00,200), new Point3D(80,80,120), 1, 0.00005, 0.000003));
-	    scene.addLight(new SpotLight(new Color(200,00,000), new Point3D(30,0,-60), new Vector(2,0,1), 1, 0.00005, 0.00003));
-	    
-	    scene.addLight(new DirectionalLight(new Color(10, 100, 10), new Vector(-0.5,0,0)));
-	    
-	    Sphere s;
-	    
-
-	    // Remove this loop and all it's contents if you wish the rendering to take less than 30 minutes!!
-	    for (double x = -50; x<=50; x+=5)
-	    	for (double y = -(50-Math.abs(x)); y<=50-Math.abs(x); y+=5) {
-	    		double z = Math.sqrt(2500 - x*x - y*y);
-	    		s = new Sphere(5, new Point3D(x + 60, y, z),new Color((int)Math.abs(x+y+z)%25,
-	    				(int)Math.abs(x+y+z+10)%25,
-	    				(int)Math.abs(x+y+z+20)%25));
-	    		s.setMaterial(new Material(1.0,0.1,0,0.6,99));
-	    		//s.setShininess(99);
-	    		scene.addGeometry(s);
-	    		if (z != 0 ) {
-	    			s = new Sphere(5, new Point3D(x + 60, y,-z),new Color((int)Math.abs(x+y+z)%25,
-	    					(int)Math.abs(x+y+z+10)%25,
-	    					(int)Math.abs(x+y+z+20)%25));
-	    			s.setMaterial(new Material(1.0,0.1,0,0.6,99));
-	    		//	s.setShininess(99);
-	    			scene.addGeometry(s);
-	    		}
-	        
-	      }
-
-	    s = new Sphere(70, new Point3D(80, 0,120),new Color(0,0,0));
-	    s.setMaterial(new Material(0.05,1,1,0,15));
-	    scene.addGeometry(s);
-	    
-	    s = new Sphere(30, new Point3D(60,0,0),new Color(75,0,25));
-	    s.setMaterial(new Material(0.2,1,1,0,15));
-	    scene.addGeometry(s);
-	    
-	    s = new Sphere(800, new Point3D(60,-900,0),new Color(0,0,0));
-	    s.setMaterial(new Material(0.1,1,1,0,15));
-	    scene.addGeometry(s);
-	    
-	    s = new Sphere(800, new Point3D(60,900,0),new Color(0,0,0));
-	    s.setMaterial(new Material(0.1,1,1,0,15));
-	    scene.addGeometry(s);
-
-	    Plane p = new Plane(new Point3D(250, -200, -150),
-				  new Point3D(250,200,-150),
-				  new Point3D(250, -200, 200),new Color(15,15,15), 
-				  new Material(0.7,1,0.3,0.0,99));
-	    scene.addGeometry(p);
-
-	    Triangle t =new Triangle(new Point3D(-5000, -200, -70),
-	    						 new Point3D(150, 200, -70),
-	    						 new Point3D(150, -200, -70),
-	    						 new Color(7,7,7), new Material(0.1,1,0.5,0.0,99));
-	    scene.addGeometry(t);
-	    
-	    t= new Triangle(new Point3D(-5000,200,-70),
-	    				new Point3D(150,200,-70),
-	    				new Point3D(-5000,-200,-70),
-	    				new Color(7,7,7), new Material(0.1,1,0.5,0.0,99));
-	    scene.addGeometry(t);
-
-	    scene.setAmbientLight(new AmbientLight(new Color(0,0,0), 0));
-	    
-  
-	    String FileName= "RRRNoBoxing";
-	    ImageWriter imageWriter = new ImageWriter(FileName, 500, 500, 500, 500);
-	    Render render = new Render(imageWriter,scene);
-	    render.multipleRaysOn = false;
-	    render.renderImage();
-	    render.writeToImage();
-		String path = render.getImageWriter().getRenderingDirectory();
-		Runtime.getRuntime().exec("explorer.exe /open, " + path+"\\" + FileName +".jpg");	  
-	}
 }

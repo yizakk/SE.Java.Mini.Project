@@ -91,22 +91,22 @@ public class Point3D extends Point2D
 	 * @return copy of the updated point3d
 	 */
 	public Point3D subtract(Vector vector) {
-		return new Point3D(_x.subtract(vector.getHead().getX()),
-						   _y.subtract(vector.getHead().getY()),
-						   _z.subtract(vector.getHead().getZ()));			
+		Point3D otherHead = vector.getHead();
+		return new Point3D(_x.subtract(otherHead.getX()),
+						   _y.subtract(otherHead.getY()),
+						   _z.subtract(otherHead.getZ()));			
 	}
 	
 	/**
 	 * subtracting a point from another (left-right), without changing the origin point
-	 * 
 	 * @param point
 	 * @return updated point
 	 */
 	public Point3D subtract(Point3D point) {
 		if(point!=null) {
 			return new Point3D( _x.subtract(point._x),
-					_y.subtract(point._y),
-					_z.subtract(point._z));
+								_y.subtract(point._y),
+								_z.subtract(point._z));
 		}
 		else
 			return new Point3D(0,0,0);
@@ -119,16 +119,16 @@ public class Point3D extends Point2D
 	 */
 
 	public double distance(Point3D point) {
-		double X=new Coordinate(_x).subtract(point._x).getCoordinate();
-		double Y=new Coordinate(_y).subtract(point._y).getCoordinate();
-		double Z=new Coordinate(_z).subtract(point._z).getCoordinate();
+		double X=_x.subtract(point._x).getCoordinate();
+		double Y=_y.subtract(point._y).getCoordinate();
+		double Z=_z.subtract(point._z).getCoordinate();
 		return sqrt(X*X+Y*Y+Z*Z);
 	}
 
 	//Calculate the squared Distance
 
 	public double poweredDistance(Point3D p) {
-		double distance= distance(p);
+		double distance = distance(p);
 		return distance*distance;
 	}
 
@@ -143,7 +143,21 @@ public class Point3D extends Point2D
 						   _y.scale(num),
 						   _z.scale(num));
 	}
+	/**
+	 * Creating new vector, from the instance into a given point (this-point3d)
+	 * @param point3d
+	 * @return Vector
+	 */
 	public Vector vector(Point3D point3d) {
 		return new Vector (this, point3d);
+	}
+	
+	/**
+	 * Adding a point3D to the instance, Not changing the origin
+	 * @param point3d
+	 * @return
+	 */
+	public Point3D add(Point3D point3d) {
+		return new Point3D(_x.add(point3d._x), _y.add(point3d._y), _z.add(point3d._z));
 	}
 }

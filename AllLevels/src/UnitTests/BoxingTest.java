@@ -3,6 +3,7 @@ package UnitTests;
 import static org.junit.Assert.*;
 
 import java.awt.Color;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -32,7 +33,7 @@ public class BoxingTest {
 	  public void bigImageTest() throws Exception {    
 	    Scene scene = new Scene();
 	    
-	    scene.boxing = true;
+	//    scene.boxing = true;
 
 	    scene.setCamera((new Camera(new Point3D(-5000,0,0), new Vector(1,0,0), new Vector(0,1,0),1))); //NOTE: in this test, vTo is NOT the usual 0,0,-1. It is 1,0,0!!
 	    scene.setScreenDistance(5300);
@@ -87,7 +88,7 @@ public class BoxingTest {
 				  new Point3D(250,200,-150),
 				  new Point3D(250, -200, 200),new Color(15,15,15), 
 				  new Material(0.7,1,0.3,0.0,99));
-	    scene.addGeometry(p);
+//	    scene.addGeometry(p);
 
 	    Triangle t =new Triangle(new Point3D(-5000, -200, -70),
 	    						 new Point3D(150, 200, -70),
@@ -95,13 +96,12 @@ public class BoxingTest {
 	    						 new Color(7,7,7), new Material(0.1,1,0.5,0.0,99));
 	    scene.addGeometry(t);
 	    
-	    t= new Triangle(new Point3D(-5000,200,-70),
+	    t = new Triangle(new Point3D(-5000,200,-70),
 	    				new Point3D(150,200,-70),
 	    				new Point3D(-5000,-200,-70),
 	    				new Color(7,7,7), new Material(0.1,1,0.5,0.0,99));
 	    scene.addGeometry(t);
 
-//	    scene.setAmbientLight(new AmbientLight(new Color(0,0,0), 0));
 	
 	    /*
 	     * this function takes all the boxes in the scene and connecting    
@@ -118,8 +118,8 @@ public class BoxingTest {
 	     * The filename is changing by the mode of the "boxing" field in scene and "multipleRaysOn" in render
 	     * if you don't have this fields - simply change fileName into a string "....."
 	     */
-	    Date date = Calendar.getInstance().getTime();
-	    String FileName= "RR18061416"/*.concat(scene.boxing?"Boxing":"")*/ 
+	    String timeStamp = new SimpleDateFormat("yyyy.MM.dd_HHmm").format(Calendar.getInstance().getTime());
+	    String FileName= "RR"+timeStamp.concat(scene.boxing?"Boxing":"") 
 	    		.concat(render.multipleRaysOn?"MultipleRays":"").concat(boxesBoxed?"BoxesBoxed":"");
 	    render.setImageWriterName(FileName);
 	    

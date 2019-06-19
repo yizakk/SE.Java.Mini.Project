@@ -28,6 +28,7 @@ public class Render {
 	private ImageWriter _imagewriter;
 	private final int RECURSION_LEVEL = 3;
 	public boolean multipleRaysOn = true;
+	private Map<Geometry, List<Point3D>> rayInterserctions = null;
 	
 	// ***************** Constructors ********************** //
 	/**
@@ -335,7 +336,7 @@ public class Render {
         		if (refractedEntry != null) {
         			Color temp = calcColor(refractedEntry.getKey(), refractedEntry.getValue(), refractedRay, level + 1, k*kt);
         			temp = MyColor.scaleColor(temp,kt);
-        			double numOfRaysFraction = ((double)1/refractedRays.size());
+        			double numOfRaysFraction = (1.0/refractedRays.size());
         			temp = MyColor.scaleColor(temp, numOfRaysFraction );
         			refractedColor=MyColor.addColors(refractedColor,temp);
         		}
@@ -410,22 +411,23 @@ public class Render {
     private List<Ray> constructRefractedRayList(Geometry geometry, Point3D point, Ray inRay) throws Exception{
     	List<Ray> rays = new ArrayList<Ray>();
     	Vector eps = geometry.getNormal(point);
+    	Vector rayDirection = inRay.getDirection();
     	double angle = eps.dotProduct(inRay.getDirection());
     	eps = angle<0? eps.scale(-2) : eps.scale(2);
         Point3D p = point.add(eps);
         Ray mainRay = new Ray(p, inRay.getDirection());
         rays.add(mainRay);
-        rays.add(new Ray (p, inRay.getDirection().add(new Vector (getRandomOffset(),getRandomOffset(),0))));
-        rays.add(new Ray (p, inRay.getDirection().add(new Vector (getRandomOffset(),getRandomOffset(),0))));
-        rays.add(new Ray (p, inRay.getDirection().add(new Vector (getRandomOffset(),getRandomOffset(),0))));
-        rays.add(new Ray (p, inRay.getDirection().add(new Vector (getRandomOffset(),getRandomOffset(),0))));
+        rays.add(new Ray (p, rayDirection.add(new Point3D (getRandomOffset(),getRandomOffset(),0))));
+        rays.add(new Ray (p, rayDirection.add(new Point3D (getRandomOffset(),getRandomOffset(),0))));
+        rays.add(new Ray (p, rayDirection.add(new Point3D (getRandomOffset(),getRandomOffset(),0))));
+        rays.add(new Ray (p, rayDirection.add(new Point3D (getRandomOffset(),getRandomOffset(),0))));
         return rays;
     }
     
     private Double getRandomOffset() {
-    	Double offset = 0.025;
+    	Double offset = 0.095;
     	Random rand = new Random();
-    	return (Double) ((rand.nextDouble()*(offset*2))-offset);
+    	return ((rand.nextDouble()*(offset*2))-offset);
     }
     
 	/*************************************************
@@ -495,26 +497,38 @@ public class Render {
             intersectionPoints.remove(geometry);
         }
         
-        Map<Geometry, List<Point3D>> temp = new HashMap<Geometry, List<Point3D>>();
-        if (L instanceof PointLight)
+//        Map<Geometry, List<Point3D>> temp = new HashMap<Geometry, List<Point3D>>();
+        if (L instanceof PointLight) // trying to solve the problem of rays returnning back
+        							// to the camera and "disappear"
         {
         	PointLight light = (PointLight)L;
         	double distance = light.getPosition().distance(point);
+        	List<Geometry> PLList = new ArrayList<Geometry>();
         	for(Entry<Geometry, List<Point3D>> entryPerGeo : intersectionPoints.entrySet())
         		if (entryPerGeo.getValue().get(0).distance(point) <= distance)
-        			 temp.put(entryPerGeo.getKey(), entryPerGeo.getValue());       	
+        		{
+        			//temp.put(entryPerGeo.getKey(), entryPerGeo.getValue());
+        			PLList.add(entryPerGeo.getKey());
+        		}
+        	double ktr = 1;
+        	for (Geometry geo : PLList)
+        		ktr *= geo.getMaterial().getKt();
+        	return ktr;
+        }
+        else
+        {
+        	double ktr = 1;
+        	for (Entry<Geometry, List<Point3D>> entry : intersectionPoints.entrySet())
+        		ktr *= entry.getKey().getMaterial().getKt();
+        	return ktr;
         }
 
-        double ktr = 1;
-        for (Entry<Geometry, List<Point3D>> entry : temp.entrySet())
-           ktr *= entry.getKey().getMaterial().getKt();
  
 //        double ktr = 1;
 //      for (Entry<Geometry, List<Point3D>> entry : intersectionPoints.entrySet())
 //         ktr *= entry.getKey().getMaterial().getKt();
         //return 1;
       
-        return ktr;
     }
     
 	/*************************************************

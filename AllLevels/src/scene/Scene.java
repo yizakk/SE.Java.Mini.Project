@@ -170,7 +170,7 @@ public class Scene {
 								Box anotherBox =(Box)_anotherBox;
 								Vector anotherBoxMidVec = new Vector(new Point3D(anotherBox.getDepth()/2,anotherBox.getHeight()/2,anotherBox.getWidth()/2));
 								Point3D anotherCenter = anotherBox.getLocation().add(anotherBoxMidVec);
-								if (new Vector (anotherCenter.subtract(center)).length() < 5*Math.min(boxMidVec.length(), anotherBoxMidVec.length()))
+								if (new Vector (anotherCenter, center).length() < 5*Math.min(boxMidVec.length(), anotherBoxMidVec.length()))
 									boxesToPutTogether.add(anotherBox);
 							}
 						}
@@ -200,8 +200,8 @@ public class Scene {
 								minZ = Math.min(minZ, bZ);
 								maxZ = Math.max(maxZ, bZ +b.getWidth());
 							}
-							Box bigBox = new Box(new Point3D (minX, minY, minZ),
-									maxX - minX, maxY - minY, maxZ - minZ);
+							Box bigBox = new Box(new Point3D (minX, minY, minZ), maxY - minY,
+									  maxZ - minZ,maxX - minX);
 							for (Box b : boxesToPutTogether) 
 							{
 								bigBox.addGeometry(b);

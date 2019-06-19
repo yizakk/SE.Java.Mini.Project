@@ -64,11 +64,19 @@ public final class Coordinate
 	public Coordinate add(Coordinate coordinate) {
 		return new Coordinate(uadd(_coordinate, coordinate._coordinate));
 	}
-	//subtract coordinate one to another 
+	/**
+	 * Subtracting a Coordinate from another. NOT changing the origin 
+	 * @param coordinate - the RHS of the calculation
+	 * @return Coordinate - new instance
+	 */
 	public Coordinate subtract(Coordinate coordinate) {
 		return new Coordinate(usubtract(_coordinate, coordinate._coordinate));
 	}
-	//multiply coordinate by number
+	/**
+	 * multiply coordinate by number. NOT changing the origin
+	 * @param num
+	 * @return
+	 */
 	public Coordinate scale(double num) {
 		return new Coordinate(uscale(_coordinate, num));
 	}
