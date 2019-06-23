@@ -44,14 +44,12 @@ public class MultipleRefractionRaysTest {
 								   new Vector(0,1,0),
 								   new Vector(0,0,1)));
      	scene.setScreenDistance(400);
- //    	scene.setAmbientLight(new Color(255,255,255), 0);
- //    	scene.setBackground(Color.WHITE);
 //	**************************** Background  **********************************   	//
      	
      	Quadrangle qFloor = new Quadrangle(new Point3D(-600,-200, 200), // left-down corner
      								   new Point3D( 600, -200, 200),//right-down corner 
-     					 			   new Point3D( 200, -300, 500), // right-up corner
-     					 			   new Point3D( -200, -300, 500));// left-up corner
+     					 			   new Point3D( 200, -140, 500), // right-up corner
+     					 			   new Point3D( -200, -140, 500));// left-up corner
      	qFloor.setEmmission(new Color(100,60,20));
      	qFloor.setShininess(80);
      	qFloor.setKr(1);
@@ -80,27 +78,27 @@ public class MultipleRefractionRaysTest {
      	qOppWall.setKt(0.6);
      	
      	scene.addGeometry(qGlass);
-//     	scene.addGeometry(qFloor);
- //    	scene.addGeometry(qOppWall);
+     	scene.addGeometry(qFloor);
+    	scene.addGeometry(qOppWall);
      	
 //**************************** Spheres  ********************************** //
      	
 
      	// mirror sphere 2 - left up
-     	Sphere rightRightBack = new Sphere(new Color (140,30,180), 60, new Point3D(130,-110,350));
+     	Sphere rightRightBack = new Sphere(new Color (140,30,180), 60, new Point3D(130,-100,350));
      	rightRightBack.setShininess(10);
      	rightRightBack.setKr(0.2);
      	rightRightBack.setKt(0.2);
     
 
      	// main blue circle
-		Sphere blueBig = new Sphere(new Color(0, 0, 150), 60, new Point3D(0, -110, 350));
+		Sphere blueBig = new Sphere(new Color(0, 0, 150), 60, new Point3D(0, -100, 350));
 		blueBig.setShininess(20);
 		blueBig.setKr(0.8);
         blueBig.setKt(0.2);
 		
         // Inner little sphere 
-		Sphere leftLittleBlue = new Sphere(new Color(30, 60, 160), 60, new Point3D(-130, -110, 350));
+		Sphere leftLittleBlue = new Sphere(new Color(30, 60, 160), 60, new Point3D(-130, -100, 350));
 		leftLittleBlue.setShininess(40);
 		leftLittleBlue.setKr(0.2);
 		leftLittleBlue.setKt(0.2);
@@ -118,11 +116,13 @@ public class MultipleRefractionRaysTest {
 		
 		SpotLight spotRightBack = new SpotLight(new Color(40,40,20), new Point3D(200,100,250), 
 												new Vector(-1,-1,1), 0, 0.00001, 0.000005);
-			
+		
+		PointLight up = new PointLight(new Color(100,30,30), new Point3D(0,100,300), 0, 0.00001, 0.000005);
 		scene.addLight(spotRightBack);
-		scene.addLight(spotLeftMiddle);
-//		scene.addLight(pointLeftUP);
-		scene.addLight(dir);
+		scene.addLight(up);
+//		scene.addLight(spotLeftMiddle);
+		//scene.addLight(pointLeftUP);
+//		scene.addLight(dir);
 				
 //************************************* Triangles  ********************************** //   		
 		
@@ -144,13 +144,6 @@ public class MultipleRefractionRaysTest {
 		tBetweenCameraAndGeometries.setKt(1);
 
 //		scene.addGeometry(tBetweenCameraAndGeometries);
-		
-//*********************************** Not in use  ********************************** //       	
-		
-		Tube t = new Tube(new Material(19,0.3,0.3,0.5,0.5), new Color(120,120,120), 150, 
-						  new Point3D(-100,0,200), new Point3D(100,0,200));
-		
-//		scene.addGeometry(t);
      	
 //**************************** Rendering  ********************************** //     	
      	ImageWriter imageWriter = new ImageWriter("", 1000, 1000, 1000, 1000);

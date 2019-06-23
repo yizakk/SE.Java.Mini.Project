@@ -33,7 +33,7 @@ public class BoxingTest {
 	  public void bigImageTest() throws Exception {    
 	    Scene scene = new Scene();
 	    
-	//    scene.boxing = true;
+//	    scene.boxing = true;
 
 	    scene.setCamera((new Camera(new Point3D(-5000,0,0), new Vector(1,0,0), new Vector(0,1,0),1))); //NOTE: in this test, vTo is NOT the usual 0,0,-1. It is 1,0,0!!
 	    scene.setScreenDistance(5300);
@@ -47,26 +47,25 @@ public class BoxingTest {
 	    
 
 	    // Remove this loop and all it's contents if you wish the rendering to take less than 30 minutes!!
-//	    for (double x = -50; x<=50; x+=5)
-//	    	for (double y = -(50-Math.abs(x)); y<=50-Math.abs(x); y+=5) {
-//	    		double z = Math.sqrt(2500 - x*x - y*y);
-//	    		s = new Sphere(5, new Point3D(x + 60, y, z),new Color((int)Math.abs(x+y+z)%25,
-//	    				(int)Math.abs(x+y+z+10)%25,
-//	    				(int)Math.abs(x+y+z+20)%25));
-//	    		s.setMaterial(new Material(1.0,0.1,0,0.6,99));
-//	    		//s.setShininess(99);
-//	    		scene.addGeometry(s);
-//	    		if (z != 0 ) {
-//	    			
-//	    			s = new Sphere(5, new Point3D(x + 60, y,-z),new Color((int)Math.abs(x+y+z)%25,
-//	    					(int)Math.abs(x+y+z+10)%25,
-//	    					(int)Math.abs(x+y+z+20)%25));
-//	    			s.setMaterial(new Material(1.0,0.1,0,0.6,99));
-//	    		//	s.setShininess(99);
-//	    			scene.addGeometry(s);
-//	    		}
-//	        
-//	      }
+	    for (double x = -50; x<=50; x+=5)
+	    	for (double y = -(50-Math.abs(x)); y<=50-Math.abs(x); y+=5) {
+	    		double z = Math.sqrt(2500 - x*x - y*y);
+	    		s = new Sphere(5, new Point3D(x + 60, y, z),new Color((int)Math.abs(x+y+z)%25,
+	    				(int)Math.abs(x+y+z+10)%25,
+	    				(int)Math.abs(x+y+z+20)%25));
+	    		s.setMaterial(new Material(1.0,0.1,0,0.6,99));
+	    		//s.setShininess(99);
+	    		scene.addGeometry(s);
+	    		if (z != 0 ) {
+	    			
+	    			s = new Sphere(5, new Point3D(x + 60, y,-z),new Color((int)Math.abs(x+y+z)%25,
+	    					(int)Math.abs(x+y+z+10)%25,
+	    					(int)Math.abs(x+y+z+20)%25));
+	    			s.setMaterial(new Material(1.0,0.1,0,0.6,99));
+	    		//	s.setShininess(99);
+	    			scene.addGeometry(s);
+	    		}
+	      }
 
 	    s = new Sphere(70, new Point3D(80, 0,120),new Color(0,0,0));
 	    s.setMaterial(new Material(0.05,1,1,0,15));

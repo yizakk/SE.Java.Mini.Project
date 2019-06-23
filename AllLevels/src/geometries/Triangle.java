@@ -54,9 +54,9 @@ public class Triangle extends Geometry implements FlatGeometry, Boxable {
 	public Point3D getP1() {return new Point3D(_p1);}
 	public Point3D getP2() {return new Point3D(_p2);}
 	public Point3D getP3() {return new Point3D(_p3);}
-	public void setP1(Point3D p1) {p1=new Point3D(_p1);}
-	public void setP2(Point3D p2) {p2=new Point3D(_p2);}
-	public void setP3(Point3D p3) {p3=new Point3D(_p3);}
+	public void setP1(Point3D p1) {_p1=new Point3D(p1);}
+	public void setP2(Point3D p2) {_p2=new Point3D(p2);}
+	public void setP3(Point3D p3) {_p3=new Point3D(p3);}
 
 	// ***************** Operations ******************** //
 	@Override
