@@ -27,8 +27,8 @@ public class Render {
 	private Scene _scene;
 	private ImageWriter _imagewriter;
 	private final int RECURSION_LEVEL = 3;
-	public boolean multipleRaysOn = true;
-	private Map<Geometry, List<Point3D>> rayInterserctions = null;
+	public boolean multipleRefractionRaysOn = true;
+	public boolean multipleReflectionRaysOn = true;
 	
 	// ***************** Constructors ********************** //
 	/**
@@ -312,19 +312,38 @@ public class Render {
         // Recursive calls
         // Recursive call for a reflected ray
         double kr = geometry.getMaterial().getKr();
-        Ray reflectedRay = constructReflectedRay(normal, point, inRay);
-        Entry<Geometry, Point3D> reflectedEntry = findClosestIntersection(reflectedRay);
         Color reflected = new Color(0, 0, 0);
-
-        if (reflectedEntry != null) {
-            reflected = MyColor.scaleColor(calcColor(reflectedEntry.getKey(), reflectedEntry.getValue(), reflectedRay, level + 1, k*kr),kr);
+        if(multipleReflectionRaysOn)
+        {
+        	List<Ray> reflectedRays = constructReflectedRayList(normal, point, inRay);
+        	for(Ray ray: reflectedRays)
+        	{
+        		Entry<Geometry,Point3D> reflectedEntry = findClosestIntersection(ray);
+        		if(reflectedEntry!=null)
+        		{
+        			Color temp = calcColor(reflectedEntry.getKey(), reflectedEntry.getValue(), ray, level + 1, k*kr);
+        			temp = MyColor.scaleColor(temp,kr);
+        			double numOfRaysFraction = (1.0/reflectedRays.size());
+        			temp = MyColor.scaleColor(temp, numOfRaysFraction );
+        			reflected=MyColor.addColors(reflected,temp);
+        		}
+        	}
         }
 
+        else {
+        	Ray reflectedRay = constructReflectedRay(normal, point, inRay);
+        	Entry<Geometry, Point3D> reflectedEntry = findClosestIntersection(reflectedRay);
+
+        	if (reflectedEntry != null) {
+        		reflected = MyColor.scaleColor(calcColor(reflectedEntry.getKey(), reflectedEntry.getValue(), reflectedRay, level + 1, k*kr),kr);
+        	}
+
+        }
         // Recursive call for refracted ray/rays
         Color refractedColor = new Color(0, 0, 0);
         double kt = geometry.getMaterial().getKt();
         
-        if(multipleRaysOn)
+        if(multipleRefractionRaysOn)
         {
         	// Getting a List of Rays created by constructRefractedRayList function
         	List<Ray> refractedRays = constructRefractedRayList(geometry, point, inRay);
@@ -425,7 +444,7 @@ public class Render {
     }
     
     private Double getRandomOffset() {
-    	Double offset = 0.095;
+    	Double offset = 0.025;
     	Random rand = new Random();
     	return ((rand.nextDouble()*(offset*2))-offset);
     }
@@ -462,6 +481,40 @@ public class Render {
         return new Ray(p, R);
     }
 
+    
+	/*************************************************
+	 * FUNCTION
+	 * constructReflectedRay
+	 * 
+	 * PARAMETERS
+	 * Geometry, Point3D, Ray
+	 * 
+	 * RETURN VALUE
+	 * Ray
+	 * 
+	 * MEANING
+	 * The function calculates the ray created from the reflected light ray sended from 
+	 * light source. (normal to the geometry * Ray direction), than adding epsilon vector.
+	 * 
+	 * SEE ALSO
+	 * Render.calcColor
+	 **************************************************/
+    private List<Ray> constructReflectedRayList(Vector normal, Point3D point, Ray inRay) throws Exception {
+
+        Ray main = constructReflectedRay(normal, point, inRay);
+        List<Ray> list = new ArrayList<Ray>();
+        list.add(main);
+        
+        Point3D p = main.getPOO();
+        Vector rayDirection = main.getDirection();
+        list.add(new Ray (p, rayDirection.add(new Point3D (getRandomOffset(),getRandomOffset(),0))));
+        list.add(new Ray (p, rayDirection.add(new Point3D (getRandomOffset(),getRandomOffset(),0))));
+        list.add(new Ray (p, rayDirection.add(new Point3D (getRandomOffset(),getRandomOffset(),0))));
+        list.add(new Ray (p, rayDirection.add(new Point3D (getRandomOffset(),getRandomOffset(),0))));
+        
+        return list;
+    }
+    
 	/*************************************************
 	 * FUNCTION
 	 * transparency
@@ -522,13 +575,11 @@ public class Render {
         		ktr *= entry.getKey().getMaterial().getKt();
         	return ktr;
         }
-
  
 //        double ktr = 1;
 //      for (Entry<Geometry, List<Point3D>> entry : intersectionPoints.entrySet())
 //         ktr *= entry.getKey().getMaterial().getKt();
         //return 1;
-      
     }
     
 	/*************************************************

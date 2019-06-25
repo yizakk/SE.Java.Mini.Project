@@ -169,10 +169,7 @@ public class Box extends Geometry {
 					if(!(geometryIntersectionPoints.isEmpty()))
 						intersectionPoints.putAll(geometryIntersectionPoints);
 				}
-				else
-				{
-					
-				}
+
 			}
 			else // find the intersections (in the last call for recursion, or geo is a plane)
 			{

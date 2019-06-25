@@ -111,7 +111,7 @@ public class BoxingTest {
 	    ImageWriter imageWriter = new ImageWriter("", 500, 500, 500, 500);
 	    Render render = new Render(imageWriter,scene);
 	    
-	    render.multipleRaysOn = false;
+	    render.multipleRefractionRaysOn = false;
 
 	    /*
 	     * The filename is changing by the mode of the "boxing" field in scene and "multipleRaysOn" in render
@@ -119,7 +119,7 @@ public class BoxingTest {
 	     */
 	    String timeStamp = new SimpleDateFormat("yyyy.MM.dd_HHmm").format(Calendar.getInstance().getTime());
 	    String FileName= "RR"+timeStamp.concat(scene.boxing?"Boxing":"") 
-	    		.concat(render.multipleRaysOn?"MultipleRays":"").concat(boxesBoxed?"BoxesBoxed":"");
+	    		.concat(render.multipleRefractionRaysOn?"MultipleRays":"").concat(boxesBoxed?"BoxesBoxed":"");
 	    render.setImageWriterName(FileName);
 	    
 	    render.renderImage();
@@ -211,7 +211,7 @@ public class BoxingTest {
 		  String FileName= "RBoxingLessBigSpheres";
 		  ImageWriter imageWriter = new ImageWriter(FileName, 500, 500, 500, 500);
 		  Render render = new Render(imageWriter,scene);
-		  render.multipleRaysOn = false;
+		  render.multipleRefractionRaysOn = false;
 		  render.renderImage();
 		  render.writeToImage();
 		  String path = render.getImageWriter().getRenderingDirectory();
