@@ -2,6 +2,7 @@ package geometries;
 import java.awt.Color;
 
 import primitives.Material;
+import primitives.MyColor;
 public abstract class RadialGeometry extends Geometry
 {
 	protected double _radius;
@@ -20,12 +21,18 @@ public abstract class RadialGeometry extends Geometry
 		_radius = radius;
 	}
 
-	public RadialGeometry(Color c, double _rad)
+	public RadialGeometry(MyColor c, double _rad)
 	{
 		super(c);
 		_radius = _rad;
 	}
 
+	public RadialGeometry(Color c, double _rad)
+	{
+		super(c);
+		_radius = _rad;
+	}
+	
 	//copy_constractor
 	public RadialGeometry(RadialGeometry R)
 	{
@@ -33,7 +40,7 @@ public abstract class RadialGeometry extends Geometry
 		_radius=R._radius;
 	}
 
-	public RadialGeometry(Material material, Color emission , double radius) {
+	public RadialGeometry(Material material, MyColor emission , double radius) {
 		super(emission,material);
 		_radius = radius;
 	}

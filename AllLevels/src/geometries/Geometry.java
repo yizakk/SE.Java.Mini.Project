@@ -5,7 +5,7 @@ import java.util.List;
 public abstract class Geometry {
 	
 	private double _nShininess = 1;
-	private Color _emmission = new Color(0, 0, 0);
+	private MyColor _emmission = new MyColor(0, 0, 0);
 	protected Material _material;
 
  //****************Constructor****************/
@@ -19,22 +19,34 @@ public abstract class Geometry {
 	 * _color=color, Material={Kd=1, Ks=1, Kr=0, Kt=0 index=19}, shininess=1
 	 * @param color
 	 */
+	public Geometry(MyColor color) 
+	{ 
+		_emmission = color.copyColor(); 
+		_material = new Material();
+	}
+
 	public Geometry(Color color) 
-	{ _emmission = MyColor.copyColor(color); _material=new Material();}
+	{ 
+		_emmission = new MyColor(color); 
+		_material = new Material();
+	}
 	
-	public Geometry(Color color, Material m) {
-		_emmission = MyColor.copyColor(color); 
+	public Geometry(MyColor color, Material m) {
+		_emmission = color; 
 		_material=new Material(m);
 		}
 	
 	// ***************** Getters/Setters ********************** //
 	public double getShininess() { return _nShininess; }
 	public void setShininess(double n) { _nShininess = n; }
-	public Color getEmmission() {return new Color(_emmission.getRed(),_emmission.getGreen(),_emmission.getBlue());}
+	public MyColor getEmmission() {return new MyColor(_emmission);}
 	public Material getMaterial() { return new Material(_material); }
 	
+	public void setEmmission(MyColor emmission) 
+	{ this._emmission = emmission.copyColor(); }
+	
 	public void setEmmission(Color emmission) 
-	{ this._emmission = MyColor.copyColor(emmission); }
+	{ this._emmission = new MyColor(emmission); }
 	
 	/**
 	 * 

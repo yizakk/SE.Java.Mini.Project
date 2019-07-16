@@ -33,7 +33,7 @@ public class DirectionalLight extends Light
 	
 	// Intensity of directional light - always the same
 	@Override
-	public Color getIntensity(Point3D point) {
-		return MyColor.copyColor(this._color);
+	public MyColor getIntensity(Point3D point) {
+		return new MyColor(this._color);
 	}
 }

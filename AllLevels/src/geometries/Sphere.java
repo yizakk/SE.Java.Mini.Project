@@ -40,12 +40,17 @@ public class Sphere extends RadialGeometry implements Boxable {
  * @param _radius
  * @param center
  */
+	public Sphere(MyColor c,double _radius, Point3D center) {
+		super(c,_radius);
+		this._center = new Point3D(center);
+	}
+	
 	public Sphere(Color c,double _radius, Point3D center) {
 		super(c,_radius);
 		this._center = new Point3D(center);
 	}
 	
-	public Sphere(double _radius, Point3D center,Color c) {
+	public Sphere(double _radius, Point3D center, MyColor c) {
 		super(c,_radius);
 		this._center = new Point3D(center);
 	}

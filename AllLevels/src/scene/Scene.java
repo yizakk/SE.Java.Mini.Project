@@ -17,7 +17,7 @@ import primitives.Vector;
 public class Scene {
 
 	String _sceneName = "scene";
-	Color _background;
+	MyColor _background;
 	AmbientLight _ambientLight;
 	List<Geometry> _geometries = new ArrayList<Geometry>();
 	List<LightSource> _lights = new ArrayList<LightSource>();
@@ -29,13 +29,13 @@ public class Scene {
 	 * default constructor setting background =black.  distance=100
 	 */
 	public Scene() {
-		this._background = Color.BLACK;
+		this._background = new MyColor(0,0,0);
 		this._ambientLight = new AmbientLight();
 		this._camera = new Camera();
 		this._screenDistance = 100;
 	}
 	// ***************** Constructors ********************** //
-	public Scene(String sceneName, Color background, AmbientLight ambientLight, ArrayList<Geometry> geometries, Camera camera, double screenDistance) throws Exception 
+	public Scene(String sceneName, MyColor background, AmbientLight ambientLight, ArrayList<Geometry> geometries, Camera camera, double screenDistance) throws Exception 
 	{
 		this._sceneName = sceneName;
 		this._background = background;
@@ -58,8 +58,8 @@ public class Scene {
 
 	//****************************** Getters / Setters *******************//
 
-	public Color getBackground() {
-		return MyColor.copyColor(this._background);
+	public MyColor getBackground() {
+		return _background.copyColor();
 	}
 	public AmbientLight getAmbientLight() {
 		return new AmbientLight(this._ambientLight);
@@ -68,7 +68,7 @@ public class Scene {
 	public String getSceneName() {	return _sceneName;	}
 	public double getScreenDistance() {	return _screenDistance; }
 	
-	public void setBackground(Color background){_background = background;}
+	public void setBackground(MyColor background){_background = background;}
 	public void setCamera(Camera camera) {_camera= camera;	}
 	public void setSceneName(String sceneName) { _sceneName=sceneName; }
 	public void setScreenDistance(double screenDistance) {_screenDistance=screenDistance;}

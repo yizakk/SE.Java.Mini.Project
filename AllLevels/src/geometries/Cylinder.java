@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import primitives.Material;
+import primitives.MyColor;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Util;
@@ -24,7 +25,7 @@ public class Cylinder extends RadialGeometry {
 		this._Point = new Point3D(axisPoint);
 		this._Direction = new Vector(axisDirection);
 	}
-	public Cylinder(Color c, double r,Point3D axisPoint, Vector axisDirection) {
+	public Cylinder(MyColor c, double r,Point3D axisPoint, Vector axisDirection) {
 		super(c,r);
 		this._Point = new Point3D(axisPoint);
 		this._Direction = new Vector(axisDirection);
@@ -38,7 +39,7 @@ public class Cylinder extends RadialGeometry {
 		this._Point = cylinder._Point;
 		this._Direction = cylinder._Direction;
 	}
-	public Cylinder(Material material, Color emission, double radius, Vector vector, Point3D p1) {
+	public Cylinder(Material material, MyColor emission, double radius, Vector vector, Point3D p1) {
 		super(material,emission, radius);
 		_Point = new Point3D (p1);
 		_Direction = new Vector(vector);

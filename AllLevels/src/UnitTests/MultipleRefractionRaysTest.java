@@ -3,24 +3,16 @@ package UnitTests;
 import java.awt.Color;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.zone.ZoneOffsetTransitionRule.TimeDefinition;
-import java.util.Calendar;
-
 import org.junit.Test;
-
-import elements.AmbientLight;
 import elements.Camera;
 import elements.DirectionalLight;
 import elements.LightSource;
 import elements.PointLight;
 import elements.SpotLight;
-import geometries.Plane;
 import geometries.Quadrangle;
 import geometries.Sphere;
 import geometries.Triangle;
-import geometries.Tube;
-import primitives.Coordinate;
-import primitives.Material;
+import primitives.MyColor;
 import primitives.Point3D;
 import primitives.Vector;
 import renderer.ImageWriter;
@@ -45,14 +37,14 @@ public class MultipleRefractionRaysTest {
 		scene.setCamera(new Camera(new Point3D(0,0,0),
 								   new Vector(0,1,0),
 								   new Vector(0,0,1)));
-     	scene.setScreenDistance(400);
+     	scene.setScreenDistance(250);
 //	**************************** Background  **********************************   	//
      	
      	Quadrangle qFloor = new Quadrangle(new Point3D(-600,-200, 200), // left-down corner
      								   new Point3D( 600, -200, 200),//right-down corner 
      					 			   new Point3D( 200, -140, 500), // right-up corner
      					 			   new Point3D( -200, -140, 500));// left-up corner
-     	qFloor.setEmmission(new Color(100,60,20));
+     	qFloor.setEmmission(new MyColor(100,60,20));
      	qFloor.setShininess(80);
      	qFloor.setKr(1);
      	qFloor.setKt(0);
@@ -113,13 +105,13 @@ public class MultipleRefractionRaysTest {
 
 		LightSource dir = new DirectionalLight(new Color(40,20,20), new Vector(1,1.5,1));
 		
-		SpotLight spotLeftMiddle = new SpotLight(new Color(90,20,20), new Point3D(-200,100,450), 
+		SpotLight spotLeftMiddle = new SpotLight(new MyColor(90,20,20), new Point3D(-200,100,450), 
 												 new Vector(1,-1,-1), 0, 0.00001, 0.000005);
 		
-		SpotLight spotRightBack = new SpotLight(new Color(40,40,20), new Point3D(200,100,250), 
+		SpotLight spotRightBack = new SpotLight(new MyColor(40,40,20), new Point3D(200,100,250), 
 												new Vector(-1,-1,1), 0, 0.00001, 0.000005);
 		
-		PointLight up = new PointLight(new Color(100,30,30), new Point3D(0,100,300), 0, 0.00001, 0.000005);
+		PointLight up = new PointLight(new MyColor(100,30,30), new Point3D(0,100,300), 0, 0.00001, 0.000005);
 		scene.addLight(spotRightBack);
 		scene.addLight(up);
 //		scene.addLight(spotLeftMiddle);
@@ -141,14 +133,15 @@ public class MultipleRefractionRaysTest {
 //		scene.addGeometry(tBetweenCameraAndGeometries);
      	
 //**************************** Rendering  ********************************** //     	
-     	ImageWriter imageWriter = new ImageWriter("", 1000, 1000, 1000, 1000);
+     	ImageWriter imageWriter = new ImageWriter("", 500, 500, 500, 500);
 		Render render = new Render(imageWriter,scene);
 		
 //		render.multipleRefractionRaysOn = false;
-
+//		render.multipleReflectionRaysOn = false;
 		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm").format(new Timestamp(0));
 		String FileName= "Spheres".concat(scene.boxing?"Boxing":"").
-								   concat(render.multipleRefractionRaysOn?"MultipleRays":"").concat(timeStamp)
+								   concat(render.multipleRefractionRaysOn?"MultipleRays":"")
+								   .concat(timeStamp)
 								   /*.concat(Calendar.getInstance().getTime().toString())*/
 										   ;
 	    render.setImageWriterName(FileName);

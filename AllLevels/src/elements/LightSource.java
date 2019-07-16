@@ -1,7 +1,6 @@
 package elements;
 
-import java.awt.Color;
-
+import primitives.MyColor;
 import primitives.Point3D;
 import primitives.Vector;
 
@@ -22,7 +21,7 @@ public interface LightSource
 	 * SEE ALSO
 	 * 
 	 **************************************************/
-	public abstract Color getIntensity(Point3D point);
+	public abstract MyColor getIntensity(Point3D point);
 
 	/*************************************************
 	 * FUNCTION

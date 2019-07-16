@@ -1,9 +1,9 @@
 package geometries;
 import java.util.List;
-import java.awt.Color;
 import java.util.ArrayList;
 
 import primitives.Material;
+import primitives.MyColor;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
@@ -37,14 +37,14 @@ public class Triangle extends Geometry implements FlatGeometry, Boxable {
 		_p2=new Point3D(p2);
 		_p3=new Point3D(p3);
 	}
-	public Triangle(Color c,Point3D p1, Point3D p2, Point3D p3)
+	public Triangle(MyColor c,Point3D p1, Point3D p2, Point3D p3)
 	{
 		super(c);
 		_p1=new Point3D(p1);
 		_p2=new Point3D(p2);
 		_p3=new Point3D(p3);
 	}
-	public Triangle(Point3D p1, Point3D p2, Point3D p3, Color color, Material material) {
+	public Triangle(Point3D p1, Point3D p2, Point3D p3, MyColor color, Material material) {
 		super(color, material);
 		_p1=new Point3D(p1);
 		_p2=new Point3D(p2);

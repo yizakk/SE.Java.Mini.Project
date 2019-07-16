@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Test;
 
 import geometries.Plane;
+import primitives.MyColor;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
@@ -30,7 +31,7 @@ public class PlaneTest { //
 			
 		Vector direction = new Vector(directionPoint);
 		
-		Plane plane = new Plane(Color.white, direction, planePoint);
+		Plane plane = new Plane(MyColor.white, direction, planePoint);
 		// building the ray that will intersect the plane
 		
 		Point3D centerPoint = new Point3D(0,0,0);

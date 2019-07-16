@@ -27,13 +27,19 @@ public class Plane extends Geometry implements FlatGeometry
 		_Q = new Point3D(q);
 	}
 
-	public Plane(Color c, Vector normal, Point3D q) {
+	public Plane(MyColor c, Vector normal, Point3D q) {
 		super(c);
 		_normal = new Vector(normal);
 		_Q = new Point3D(q);
 	}
 
-	public Plane(Point3D p1, Point3D p2, Point3D p3, Color color, Material material) {
+	public Plane(Color c, Vector normal, Point3D q) {
+		super(c);
+		_normal = new Vector(normal);
+		_Q = new Point3D(q);
+	}
+	
+	public Plane(Point3D p1, Point3D p2, Point3D p3, MyColor color, Material material) {
 		super(color,material);
 		_Q = p1;
 		_normal = new Vector(p1,p2).crossProduct(new Vector(p1,p3));

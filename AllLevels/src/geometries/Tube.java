@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import primitives.Material;
+import primitives.MyColor;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Util;
@@ -29,7 +30,7 @@ public class Tube extends Cylinder{
 //*************************CONSTRUCTORS***********************//
 
 
-    public Tube(Material material,Color emission,double radius, Point3D p1, Point3D p2) throws Exception {
+    public Tube(Material material, MyColor emission,double radius, Point3D p1, Point3D p2) throws Exception {
        
     	super(material,emission, radius, new Vector(new Point3D(1,0,0)), p1);
 

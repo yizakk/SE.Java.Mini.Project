@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Test;
 //import geometries.Plane;
 import geometries.Triangle;
+import primitives.MyColor;
 import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
@@ -25,7 +26,7 @@ public class TriangleTest {
 		Point3D p2 = new Point3D(100, -100, -200);
 		Point3D p3 = new Point3D(-100, -100, -200);
 		
-		Triangle t1 = new Triangle(Color.white, p1, p2, p3);
+		Triangle t1 = new Triangle(new MyColor(Color.white), p1, p2, p3);
 		Triangle t2 = new Triangle(t1);			
 
 		// building the ray that will intersect the triangle

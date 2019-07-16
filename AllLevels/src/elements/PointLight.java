@@ -13,7 +13,7 @@ public class PointLight extends Light {
 	
 	// ***************** Constructors ********************** //
 		
-	public PointLight(Color color, Point3D position, double kc, double kl, double kq) {
+	public PointLight(MyColor color, Point3D position, double kc, double kl, double kq) {
 		super(color);
 		setPosition(position);
 		_Kc = kc;
@@ -52,12 +52,12 @@ public class PointLight extends Light {
 	 **************************************************/
 	
 	@Override
-	public Color getIntensity(Point3D point) {
+	public MyColor getIntensity(Point3D point) {
 		double attenuation = getAttenuation(point);
 		
 		if((1/attenuation)>1)
 			attenuation=1;		
-		return MyColor.scaleColor(_color, 1/attenuation);
+		return _color.scaleColor(1/attenuation);
 	}
 	
 	/*************************************************

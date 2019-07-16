@@ -15,10 +15,10 @@ public class AmbientLight extends Light
 	 * default constructor, setting color=black, _Ka=1.0
 	 */
 	public AmbientLight() {
-		super(new Color(0,0,0));
+		super(new MyColor(0,0,0));
 		this._Ka = 1.0; 
 	}	
-	public AmbientLight(Color color, double _ka) {
+	public AmbientLight(MyColor color, double _ka) {
 		super(color);
 		this._Ka = _ka;
 	}
@@ -29,7 +29,7 @@ public class AmbientLight extends Light
 	}
 	public AmbientLight(int r,int g, int b) 
 	{
-		super(new Color(r,g,b)); 
+		super(new MyColor(r,g,b)); 
 		//this._Ka=1.0;
 	}
 	
@@ -40,24 +40,16 @@ public class AmbientLight extends Light
 	
 	//*******************GETTES & SETTERS *******************//
 	public Color getColor() {return _color;}
-	public void setColor(Color _color) {this._color = _color;}
+	public void setColor(MyColor _color) {this._color = _color;}
 	public double getKa() {return _Ka;}
 	public void setKa(double _ka) {this._Ka = _ka;}
 	
 	@Override
-	public Color getIntensity(Point3D p){
-		return MyColor.scaleColor(_color,_Ka);
-
+	public MyColor getIntensity(Point3D p){
+		return _color.scaleColor(_Ka);
 	}
 	
-    public AmbientLight(Map<String, String> attributes) {
-        String[] ambientLightColors = attributes
-                .get("color").split("\\s+");
-        _color = new Color((int) (255 * Double.valueOf(ambientLightColors[0])),
-                (int) (255 * Double.valueOf(ambientLightColors[1])),
-                (int) (255 * Double.valueOf(ambientLightColors[2])));
-    }
-	
+
 	//*************************  Administration   *******************//
 	@Override
 	public int hashCode() {
